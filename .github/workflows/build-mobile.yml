@@ -16,7 +16,7 @@ permissions:
 
 jobs:
   # ============================================================================
-  # JOB 1: Cloud macOS Xcode Build -> ChanhPhap-iOS.ipa (Dành cho iPhone)
+  # JOB 1: Cloud macOS Xcode Build -> ChanhPhap-iOS-Unsigned.ipa (Dành cho iPhone)
   # ============================================================================
   build-ios:
     name: Build iOS App (.ipa) on macOS 15
@@ -27,7 +27,7 @@ jobs:
       - name: Checkout mã nguồn
         uses: actions/checkout@v4
 
-      - name: Cài đặt Python 3.11 & Node.js 20
+      - name: Cài đặt Python 3.11
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
@@ -54,12 +54,50 @@ jobs:
             --core-pack /tmp/mobile-packs/core-bundled.pack.db \
             --allow-in-repo
 
-      - name: Cài đặt Capacitor & Khởi tạo dự án Xcode iOS
+      - name: Cài đặt Capacitor & Khởi tạo dự án Xcode iOS (Deployment Target 15.0)
         working-directory: mobile
         run: |
           npm install --no-audit --no-fund
           if [ ! -d ios ]; then
-            npx cap add ios
+            npx cap add ios || true
+          fi
+
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          podfile = Path("ios/App/Podfile")
+          txt = podfile.read_text(encoding="utf-8")
+          txt = re.sub(r"platform :ios, '[0-9.]+'", "platform :ios, '15.0'", txt)
+          post_hook = """
+            installer.pods_project.targets.each do |target|
+              target.build_configurations.each do |config|
+                if config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'].to_f < 15.0
+                  config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.0'
+                end
+                config.build_settings['ENABLE_USER_SCRIPT_SANDBOXING'] = 'NO'
+              end
+            end
+          """
+          if "ENABLE_USER_SCRIPT_SANDBOXING" not in txt:
+              txt = txt.replace("assertDeploymentTarget(installer)", "assertDeploymentTarget(installer)\n" + post_hook)
+          podfile.write_text(txt, encoding="utf-8")
+
+          pbx = Path("ios/App/App.xcodeproj/project.pbxproj")
+          ptxt = pbx.read_text(encoding="utf-8")
+          ptxt = re.sub(r"IPHONEOS_DEPLOYMENT_TARGET = [0-9.]+;", "IPHONEOS_DEPLOYMENT_TARGET = 15.0;", ptxt)
+          pbx.write_text(ptxt, encoding="utf-8")
+          PY
+
+          set +e
+          npx cap sync ios > /tmp/cap-sync-ios.log 2>&1
+          RC=$?
+          cat /tmp/cap-sync-ios.log
+          if [ $RC -ne 0 ]; then
+            tail -n 30 /tmp/cap-sync-ios.log | while IFS= read -r line; do
+              [ -n "$line" ] && echo "::error::$line"
+            done
+            exit $RC
           fi
 
       - name: Tạo Biểu tượng Ứng dụng (App Icons 1024x1024) & Màn hình Khởi động
@@ -85,21 +123,36 @@ jobs:
           /usr/libexec/PlistBuddy -c "Add :UIBackgroundModes:1 string fetch" "$PLIST"
           /usr/libexec/PlistBuddy -c "Delete :ITSAppUsesNonExemptEncryption" "$PLIST" 2>/dev/null || true
           /usr/libexec/PlistBuddy -c "Add :ITSAppUsesNonExemptEncryption bool false" "$PLIST"
-          npx cap sync ios
+          npx cap copy ios
 
       - name: Biên dịch ChanhPhap-iOS-Unsigned.ipa (Cài miễn phí qua Sideloadly trên Windows)
         working-directory: mobile/ios/App
         run: |
+          set +e
           xcodebuild clean build \
             -workspace App.xcworkspace \
             -scheme App \
             -configuration Release \
             -sdk iphoneos \
+            -destination 'generic/platform=iOS' \
             -derivedDataPath /tmp/ChanhPhapDerived \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGN_IDENTITY="" \
-            AD_HOC_CODE_SIGNING_ALLOWED=YES
+            AD_HOC_CODE_SIGNING_ALLOWED=YES \
+            ENABLE_USER_SCRIPT_SANDBOXING=NO > /tmp/xcodebuild.log 2>&1
+          RC=$?
+          tail -n 120 /tmp/xcodebuild.log
+          if [ $RC -ne 0 ]; then
+            grep -E "error:|fatal error:" /tmp/xcodebuild.log | head -n 25 | while IFS= read -r line; do
+              [ -n "$line" ] && echo "::error::$line"
+            done
+            tail -n 20 /tmp/xcodebuild.log | while IFS= read -r line; do
+              [ -n "$line" ] && echo "::error::$line"
+            done
+            exit $RC
+          fi
+          set -e
 
           mkdir -p /tmp/ipa-unsigned/Payload
           cp -R /tmp/ChanhPhapDerived/Build/Products/Release-iphoneos/App.app /tmp/ipa-unsigned/Payload/
@@ -168,7 +221,8 @@ jobs:
             -archivePath /tmp/ChanhPhap.xcarchive \
             DEVELOPMENT_TEAM="$APPLE_TEAM_ID" \
             CODE_SIGN_STYLE=Manual \
-            PROVISIONING_PROFILE_SPECIFIER="$UUID"
+            PROVISIONING_PROFILE_SPECIFIER="$UUID" \
+            ENABLE_USER_SCRIPT_SANDBOXING=NO
 
           xcodebuild -exportArchive \
             -archivePath /tmp/ChanhPhap.xcarchive \
@@ -199,18 +253,21 @@ jobs:
   # JOB 2: Cloud Android Gradle Build -> ChanhPhap-Android.apk
   # ============================================================================
   build-android:
-    name: Build Android App (.apk) on Ubuntu
-    runs-on: ubuntu-latest
+    name: Build Android App (.apk) on Ubuntu 24.04
+    runs-on: ubuntu-24.04
     timeout-minutes: 35
 
     steps:
       - name: Checkout mã nguồn
         uses: actions/checkout@v4
 
-      - name: Cài đặt Python 3.11
+      - name: Cài đặt Python 3.11 & Pillow
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+
+      - name: Cài đặt Pillow (Xử lý biểu tượng ứng dụng Android)
+        run: python3 -m pip install --upgrade pip pillow
 
       - name: Cài đặt Node.js 20
         uses: actions/setup-node@v4
@@ -222,9 +279,7 @@ jobs:
         with:
           distribution: "temurin"
           java-version: "17"
-
-      - name: Cài đặt Android SDK
-        uses: android-actions/setup-android@v3
+          cache: "gradle"
 
       - name: Đóng gói Gói Kinh Cốt Lõi & Web Shell (mobile/www)
         env:
@@ -243,13 +298,37 @@ jobs:
             --core-pack /tmp/mobile-packs/core-bundled.pack.db \
             --allow-in-repo
 
-      - name: Cài đặt Capacitor & Khởi tạo dự án Android
+      - name: Cài đặt Capacitor, Tạo Biểu tượng & Khởi tạo dự án Android
         working-directory: mobile
         run: |
           npm install --no-audit --no-fund
           if [ ! -d android ]; then
             npx cap add android
           fi
+
+          python3 - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+
+          assets = Path("assets")
+          assets.mkdir(parents=True, exist_ok=True)
+          src = Image.open("../app/web/design/library-icon-512.png").convert("RGBA")
+          icon1024 = src.resize((1024, 1024), Image.Resampling.LANCZOS)
+          icon1024.save(assets / "icon.png")
+          icon1024.save(assets / "icon-only.png")
+          icon1024.save(assets / "icon-foreground.png")
+
+          splash = Image.new("RGBA", (2732, 2732), (247, 244, 236, 255))
+          splash.paste(icon1024, ((2732 - 1024) // 2, (2732 - 1024) // 2), icon1024)
+          splash.save(assets / "splash.png")
+
+          splash_dark = Image.new("RGBA", (2732, 2732), (23, 28, 25, 255))
+          splash_dark.paste(icon1024, ((2732 - 1024) // 2, (2732 - 1024) // 2), icon1024)
+          splash_dark.save(assets / "splash-dark.png")
+          PY
+
+          npx capacitor-assets generate --android --iconBackgroundColor '#F7F4EC' --splashBackgroundColor '#F7F4EC' --splashBackgroundColorDark '#171C19' || true
+
           # Nâng minSdkVersion = 24 để hỗ trợ trọn vẹn ONNX Runtime & Jetpack Media3
           sed -i 's/minSdkVersion = [0-9]*/minSdkVersion = 24/g' android/variables.gradle
           npx cap sync android
@@ -258,7 +337,17 @@ jobs:
         working-directory: mobile/android
         run: |
           chmod +x gradlew
-          ./gradlew assembleDebug --no-daemon
+          set +e
+          ./gradlew assembleDebug --no-daemon > /tmp/gradle-build.log 2>&1
+          RC=$?
+          tail -n 120 /tmp/gradle-build.log
+          if [ $RC -ne 0 ]; then
+            grep -E "e: |FAILURE:|What went wrong|> " /tmp/gradle-build.log | tail -n 25 | while IFS= read -r line; do
+              [ -n "$line" ] && echo "::error::$line"
+            done
+            exit $RC
+          fi
+          set -e
           cp app/build/outputs/apk/debug/app-debug.apk /tmp/ChanhPhap-Android.apk
 
       - name: Tải lên gói cài đặt Android (ChanhPhap-Android.apk)
@@ -267,4 +356,3 @@ jobs:
           name: ChanhPhap-Android-APK
           path: /tmp/ChanhPhap-Android.apk
           retention-days: 30
-

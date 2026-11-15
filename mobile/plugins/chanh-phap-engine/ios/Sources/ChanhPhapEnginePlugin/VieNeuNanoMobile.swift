@@ -1,8 +1,5 @@
 import Foundation
 import CryptoKit
-#if canImport(onnxruntime_objc)
-import onnxruntime_objc
-#endif
 
 public final class VieNeuNanoMobile {
     public static let shared = VieNeuNanoMobile()
@@ -26,15 +23,12 @@ public final class VieNeuNanoMobile {
     private var nullStyleShape: [NSNumber] = [1, 50, 256]
     private var voices: [String: (spk: [Float], style: [Float], styleShape: [NSNumber])] = [:]
 
-    #if canImport(onnxruntime_objc)
-    private var ortEnv: ORTEnv?
-    private var sText: ORTSession?
-    private var sDur: ORTSession?
-    private var sVe: ORTSession?
-    private var sDec: ORTSession?
-    private var nullCtxValue: ORTValue?
-    private var nullMaskData: NSMutableData?
-    #endif
+    private var sText: ChanhPhapOrtSession?
+    private var sDur: ChanhPhapOrtSession?
+    private var sVe: ChanhPhapOrtSession?
+    private var sDec: ChanhPhapOrtSession?
+    private var nullCtxTensor: ChanhPhapOrtTensor?
+    private var nullMaskTensor: ChanhPhapOrtTensor?
 
     private static let digitsVi = ["không", "một", "hai", "ba", "bốn", "năm", "sáu", "bảy", "tám", "chín"]
 
@@ -49,11 +43,7 @@ public final class VieNeuNanoMobile {
     }
 
     public func isAvailable() -> Bool {
-        #if canImport(onnxruntime_objc)
-        return ChanhPhapVault.shared.isTtsInstalled()
-        #else
-        return false
-        #endif
+        return ChanhPhapOrtSession.isRuntimeAvailable() && ChanhPhapVault.shared.isTtsInstalled()
     }
 
     public func unload() {
@@ -76,15 +66,27 @@ public final class VieNeuNanoMobile {
         loaded = false
         words.removeAll(keepingCapacity: false)
         voices.removeAll(keepingCapacity: false)
-        #if canImport(onnxruntime_objc)
-        nullCtxValue = nil
-        nullMaskData = nil
+        nullCtxTensor = nil
+        nullMaskTensor = nil
         sText = nil
         sDur = nil
         sVe = nil
         sDec = nil
-        ortEnv = nil
-        #endif
+    }
+
+    private static func makeFloatTensor(_ values: [Float], shape: [NSNumber]) -> ChanhPhapOrtTensor {
+        let data = values.withUnsafeBufferPointer { Data(buffer: $0) }
+        return ChanhPhapOrtTensor(data: data, dtype: .float32, shape: shape)
+    }
+
+    private static func makeInt64Tensor(_ values: [Int64], shape: [NSNumber]) -> ChanhPhapOrtTensor {
+        let data = values.withUnsafeBufferPointer { Data(buffer: $0) }
+        return ChanhPhapOrtTensor(data: data, dtype: .int64, shape: shape)
+    }
+
+    private static func makeBoolTensor(_ values: [UInt8], shape: [NSNumber]) -> ChanhPhapOrtTensor {
+        let data = Data(values)
+        return ChanhPhapOrtTensor(data: data, dtype: .bool8, shape: shape)
     }
 
     public static func numberToVietnamese(_ n: Int) -> String {
@@ -180,7 +182,10 @@ public final class VieNeuNanoMobile {
 
     private func ensureLoadedLocked() throws {
         if loaded { return }
-        #if canImport(onnxruntime_objc)
+        guard ChanhPhapOrtSession.isRuntimeAvailable() else {
+            throw NSError(domain: "VieNeuNanoMobile", code: 501, userInfo: [NSLocalizedDescriptionKey: "ONNX Runtime chưa khả dụng."])
+        }
+
         let dir = ChanhPhapVault.shared.ttsDir
         guard let lexGz = try? Data(contentsOf: dir.appendingPathComponent("vi_lexicon.json.gz")),
               let lexRaw = ChanhPhapVault.gunzip(lexGz),
@@ -215,38 +220,23 @@ public final class VieNeuNanoMobile {
             }
         }
 
-        let env = try ORTEnv(loggingLevel: .warning)
-        let opts = try ORTSessionOptions()
-        try opts.setIntraOpNumThreads(2)
-        try opts.setGraphOptimizationLevel(.all)
+        let textSess = try ChanhPhapOrtSession(modelPath: dir.appendingPathComponent("text_encoder.onnx").path, intraThreads: 2)
+        let durSess = try ChanhPhapOrtSession(modelPath: dir.appendingPathComponent("duration_predictor.onnx").path, intraThreads: 2)
+        let veSess = try ChanhPhapOrtSession(modelPath: dir.appendingPathComponent("vector_estimator.onnx").path, intraThreads: 2)
+        let decSess = try ChanhPhapOrtSession(modelPath: dir.appendingPathComponent("codec_decoder.onnx").path, intraThreads: 2)
 
-        let textSess = try ORTSession(env: env, modelPath: dir.appendingPathComponent("text_encoder.onnx").path, sessionOptions: opts)
-        let durSess = try ORTSession(env: env, modelPath: dir.appendingPathComponent("duration_predictor.onnx").path, sessionOptions: opts)
-        let veSess = try ORTSession(env: env, modelPath: dir.appendingPathComponent("vector_estimator.onnx").path, sessionOptions: opts)
-        let decSess = try ORTSession(env: env, modelPath: dir.appendingPathComponent("codec_decoder.onnx").path, sessionOptions: opts)
+        let nullIdsVal = Self.makeInt64Tensor([bosId, eosId], shape: [1, 2])
+        let nullStyleVal = Self.makeFloatTensor(self.nullStyle, shape: self.nullStyleShape)
+        let nullCtxOut = try textSess.runFirstOutput(withInputs: ["ids": nullIdsVal, "style": nullStyleVal])
 
-        var nullIdsArr: [Int64] = [bosId, eosId]
-        let nullIdsData = NSMutableData(bytes: &nullIdsArr, length: nullIdsArr.count * MemoryLayout<Int64>.size)
-        let nullIdsVal = try ORTValue(tensorData: nullIdsData, elementType: .int64, shape: [1, 2])
-
-        var nullStyleCopy = self.nullStyle
-        let nullStyleData = NSMutableData(bytes: &nullStyleCopy, length: nullStyleCopy.count * MemoryLayout<Float>.size)
-        let nullStyleVal = try ORTValue(tensorData: nullStyleData, elementType: .float, shape: self.nullStyleShape)
-
-        let nullOut = try textSess.run(withInputs: ["ids": nullIdsVal, "style": nullStyleVal], outputNames: ["ctx"], runOptions: nil)
-        var nullMaskBytes: [UInt8] = [bosId != padId ? 1 : 0, eosId != padId ? 1 : 0]
-        self.nullMaskData = NSMutableData(bytes: &nullMaskBytes, length: 2)
-        self.nullCtxValue = nullOut["ctx"] ?? nullOut.values.first
-
-        self.ortEnv = env
+        let nullMaskBytes: [UInt8] = [bosId != padId ? 1 : 0, eosId != padId ? 1 : 0]
+        self.nullMaskTensor = Self.makeBoolTensor(nullMaskBytes, shape: [1, 2])
+        self.nullCtxTensor = nullCtxOut
         self.sText = textSess
         self.sDur = durSess
         self.sVe = veSess
         self.sDec = decSess
         self.loaded = true
-        #else
-        throw NSError(domain: "VieNeuNanoMobile", code: 501, userInfo: [NSLocalizedDescriptionKey: "ONNX Runtime framework not linked."])
-        #endif
     }
 
     public func synthesizeToWavFile(text: String, voiceId: String, speed: Double = 1.0) throws -> URL {
@@ -258,7 +248,6 @@ public final class VieNeuNanoMobile {
             return outURL
         }
 
-        // Split long paragraphs into <= 170-char clauses just like NANO_MAX_CHARS on desktop
         let clauses = Self.splitClauses(text, maxChars: 170)
         var allSamples: [Float] = []
 
@@ -271,7 +260,6 @@ public final class VieNeuNanoMobile {
             let pcm = try inferSingleClauseLocked(clause, voiceId: cleanVoice, speed: speed)
             allSamples.append(contentsOf: pcm)
             if idx + 1 < clauses.count {
-                // Natural 140ms breath between clauses
                 allSamples.append(contentsOf: [Float](repeating: 0, count: Int(0.14 * Double(sampleRate))))
             }
         }
@@ -283,14 +271,15 @@ public final class VieNeuNanoMobile {
     }
 
     private func inferSingleClauseLocked(_ clause: String, voiceId: String, speed: Double) throws -> [Float] {
-        #if canImport(onnxruntime_objc)
         guard let sText = sText, let sDur = sDur, let sVe = sVe, let sDec = sDec,
-              let nullCtx = nullCtxValue, let nullMaskData = nullMaskData,
+              let nullCtxVal = nullCtxTensor, let nullMaskVal = nullMaskTensor,
               let preset = voices[voiceId] else {
             return []
         }
 
         let phones = phonemize(clause)
+        if phones.isEmpty { return [] }
+
         var seq: [Int64] = [bosId]
         for ch in phones {
             if let id = vocab[String(ch)] { seq.append(id) }
@@ -298,35 +287,22 @@ public final class VieNeuNanoMobile {
         seq.append(eosId)
         let seqLen = seq.count
 
-        let idsData = NSMutableData(bytes: &seq, length: seqLen * MemoryLayout<Int64>.size)
-        let idsVal = try ORTValue(tensorData: idsData, elementType: .int64, shape: [1, NSNumber(value: seqLen)])
+        let idsVal = Self.makeInt64Tensor(seq, shape: [1, NSNumber(value: seqLen)])
+        let maskBytes = seq.map { UInt8($0 != padId ? 1 : 0) }
+        let maskVal = Self.makeBoolTensor(maskBytes, shape: [1, NSNumber(value: seqLen)])
+        let spkVal = Self.makeFloatTensor(preset.spk, shape: [1, NSNumber(value: preset.spk.count)])
+        let styleVal = Self.makeFloatTensor(preset.style, shape: preset.styleShape)
 
-        var maskBytes = seq.map { UInt8($0 != padId ? 1 : 0) }
-        let maskData = NSMutableData(bytes: &maskBytes, length: seqLen)
-        let maskVal = try ORTValue(tensorData: maskData, elementType: .bool, shape: [1, NSNumber(value: seqLen)])
-
-        var spkArr = preset.spk
-        let spkData = NSMutableData(bytes: &spkArr, length: spkArr.count * MemoryLayout<Float>.size)
-        let spkVal = try ORTValue(tensorData: spkData, elementType: .float, shape: [1, NSNumber(value: spkArr.count)])
-
-        var styleArr = preset.style
-        let styleData = NSMutableData(bytes: &styleArr, length: styleArr.count * MemoryLayout<Float>.size)
-        let styleVal = try ORTValue(tensorData: styleData, elementType: .float, shape: preset.styleShape)
-
-        let textOut = try sText.run(withInputs: ["ids": idsVal, "style": styleVal], outputNames: ["ctx"], runOptions: nil)
-        guard let ctxVal = textOut["ctx"] ?? textOut.values.first else { return [] }
-
-        let durOut = try sDur.run(withInputs: ["ctx": ctxVal, "ctx_mask": maskVal, "spk": spkVal], outputNames: ["log_s"], runOptions: nil)
-        guard let durVal = durOut.values.first,
-              let durTensorData = try? durVal.tensorData() as Data,
-              durTensorData.count >= 4 else { return [] }
-        let logS = durTensorData.withUnsafeBytes { $0.load(as: Float.self) }
+        let ctxVal = try sText.runFirstOutput(withInputs: ["ids": idsVal, "style": styleVal])
+        let durVal = try sDur.runFirstOutput(withInputs: ["ctx": ctxVal, "ctx_mask": maskVal, "spk": spkVal])
+        guard durVal.data.count >= 4 else { return [] }
+        let logS = durVal.data.withUnsafeBytes { $0.load(as: Float.self) }
 
         let secs = min(exp(Double(logS)) / max(speed, 0.25), 15.0)
         let frames = max(2, Int((secs * flowFps).rounded()))
         let latentCount = 144 * frames
 
-        // Box-Muller standard normal initialization
+        // Box-Muller deterministic normal initialization
         var x = [Float](repeating: 0, count: latentCount)
         var rngState: UInt64 = 0x5DEECE66D
         func nextUniform() -> Double {
@@ -344,14 +320,8 @@ public final class VieNeuNanoMobile {
             i += 2
         }
 
-        var nullSpkCopy = self.nullSpk
-        let nullSpkData = NSMutableData(bytes: &nullSpkCopy, length: nullSpkCopy.count * MemoryLayout<Float>.size)
-        let nullSpkVal = try ORTValue(tensorData: nullSpkData, elementType: .float, shape: [1, NSNumber(value: nullSpkCopy.count)])
-
-        var nullStyleCopy = self.nullStyle
-        let nullStyleData = NSMutableData(bytes: &nullStyleCopy, length: nullStyleCopy.count * MemoryLayout<Float>.size)
-        let nullStyleVal = try ORTValue(tensorData: nullStyleData, elementType: .float, shape: self.nullStyleShape)
-        let nullMaskVal = try ORTValue(tensorData: nullMaskData, elementType: .bool, shape: [1, 2])
+        let nullSpkVal = Self.makeFloatTensor(self.nullSpk, shape: [1, NSNumber(value: self.nullSpk.count)])
+        let nullStyleVal = Self.makeFloatTensor(self.nullStyle, shape: self.nullStyleShape)
 
         let steps = 8
         let cfgLimit = 6
@@ -364,33 +334,32 @@ public final class VieNeuNanoMobile {
         let xShape: [NSNumber] = [1, 144, NSNumber(value: frames)]
 
         for step in 0..<steps {
-            var tScalar = [tg[step]]
-            let tData = NSMutableData(bytes: &tScalar, length: MemoryLayout<Float>.size)
-            let tVal = try ORTValue(tensorData: tData, elementType: .float, shape: [1])
+            let tVal = Self.makeFloatTensor([tg[step]], shape: [1])
+            let xVal = Self.makeFloatTensor(x, shape: xShape)
 
-            let xData = NSMutableData(bytes: &x, length: latentCount * MemoryLayout<Float>.size)
-            let xVal = try ORTValue(tensorData: xData, elementType: .float, shape: xShape)
-
-            let condOut = try sVe.run(
-                withInputs: ["x": xVal, "t": tVal, "ctx": ctxVal, "ctx_mask": maskVal, "spk": spkVal, "style": styleVal],
-                outputNames: ["v"],
-                runOptions: nil
-            )
-            guard let vCondData = try? condOut.values.first?.tensorData() as Data else { break }
-            var vel = vCondData.withUnsafeBytes { Array($0.bindMemory(to: Float.self)) }
+            let condOut = try sVe.runFirstOutput(withInputs: [
+                "x": xVal,
+                "t": tVal,
+                "ctx": ctxVal,
+                "ctx_mask": maskVal,
+                "spk": spkVal,
+                "style": styleVal
+            ])
+            var vel = condOut.data.withUnsafeBytes { Array($0.bindMemory(to: Float.self)) }
 
             if step < cfgLimit {
-                let uncondOut = try sVe.run(
-                    withInputs: ["x": xVal, "t": tVal, "ctx": nullCtx, "ctx_mask": nullMaskVal, "spk": nullSpkVal, "style": nullStyleVal],
-                    outputNames: ["v"],
-                    runOptions: nil
-                )
-                if let vUncondData = try? uncondOut.values.first?.tensorData() as Data {
-                    vUncondData.withUnsafeBytes { rawU in
-                        let vu = rawU.bindMemory(to: Float.self)
-                        for j in 0..<min(vel.count, vu.count) {
-                            vel[j] = vu[j] + cfgScale * (vel[j] - vu[j])
-                        }
+                let uncondOut = try sVe.runFirstOutput(withInputs: [
+                    "x": xVal,
+                    "t": tVal,
+                    "ctx": nullCtxVal,
+                    "ctx_mask": nullMaskVal,
+                    "spk": nullSpkVal,
+                    "style": nullStyleVal
+                ])
+                uncondOut.data.withUnsafeBytes { rawU in
+                    let vu = rawU.bindMemory(to: Float.self)
+                    for j in 0..<min(vel.count, vu.count) {
+                        vel[j] = vu[j] + cfgScale * (vel[j] - vu[j])
                     }
                 }
             }
@@ -401,15 +370,10 @@ public final class VieNeuNanoMobile {
             }
         }
 
-        let finalXData = NSMutableData(bytes: &x, length: latentCount * MemoryLayout<Float>.size)
-        let finalXVal = try ORTValue(tensorData: finalXData, elementType: .float, shape: xShape)
-        let decOut = try sDec.run(withInputs: ["x": finalXVal], outputNames: ["wav"], runOptions: nil)
-        guard let wavData = try? decOut.values.first?.tensorData() as Data else { return [] }
-        let rawSamples = wavData.withUnsafeBytes { Array($0.bindMemory(to: Float.self)) }
+        let finalXVal = Self.makeFloatTensor(x, shape: xShape)
+        let decOut = try sDec.runFirstOutput(withInputs: ["x": finalXVal])
+        let rawSamples = decOut.data.withUnsafeBytes { Array($0.bindMemory(to: Float.self)) }
         return Self.trimAndFade(rawSamples, sampleRate: sampleRate)
-        #else
-        return []
-        #endif
     }
 
     private static func splitClauses(_ text: String, maxChars: Int) -> [String] {
@@ -476,11 +440,10 @@ public final class VieNeuNanoMobile {
         appendASCII("data")
         appendU32(UInt32(dataBytes))
 
-        var pcm = samples.map { Int16(clamping: Int(($0 * 32767.0).rounded())).littleEndian }
-        pcm.withUnsafeBufferPointer { ptr in
-            header.append(UnsafeBufferPointer(start: UnsafeRawPointer(ptr.baseAddress)?.assumingMemoryBound(to: UInt8.self), count: dataBytes))
+        let pcm = samples.map { Int16(clamping: Int(($0 * 32767.0).rounded())).littleEndian }
+        pcm.withUnsafeBytes { rawBuf in
+            header.append(contentsOf: rawBuf)
         }
         return header
     }
 }
-

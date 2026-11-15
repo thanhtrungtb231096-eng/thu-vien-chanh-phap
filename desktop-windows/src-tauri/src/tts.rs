@@ -1,6 +1,6 @@
 use crate::vault::{gunzip_utf8, ChanhPhapVault};
 use base64::{engine::general_purpose::STANDARD as BASE64_STD, Engine};
-use ort::session::{builder::GraphOptimizationLevel, Session};
+use ort::session::{builder::GraphOptimizationLevel, Session, SessionInputValue};
 use ort::value::Tensor;
 use regex::Regex;
 use serde::Serialize;
@@ -297,11 +297,10 @@ impl InnerState {
             .map_err(|e| format!("Lỗi tạo null_style tensor: {}", e))?;
 
         {
-            let inputs = ort::inputs![
-                "ids" => null_ids_t.view(),
-                "style" => null_sty_t.view(),
-            ]
-            .map_err(|e| format!("Lỗi đóng gói input null_ctx: {}", e))?;
+            let inputs = vec![
+                ("ids", SessionInputValue::from(null_ids_t.view())),
+                ("style", SessionInputValue::from(null_sty_t.view())),
+            ];
             let outputs = s_text
                 .run(inputs)
                 .map_err(|e| format!("Lỗi suy luận null_ctx: {}", e))?;
@@ -369,11 +368,10 @@ impl InnerState {
 
         // Stage 1: Text Encoder
         let (ctx_shape, ctx_flat) = {
-            let inputs = ort::inputs![
-                "ids" => ids_t.view(),
-                "style" => style_t.view(),
-            ]
-            .map_err(|e| format!("Lỗi input text_encoder: {}", e))?;
+            let inputs = vec![
+                ("ids", SessionInputValue::from(ids_t.view())),
+                ("style", SessionInputValue::from(style_t.view())),
+            ];
             let res = sess
                 .s_text
                 .run(inputs)
@@ -390,12 +388,11 @@ impl InnerState {
 
         // Stage 2: Duration Predictor
         let log_s = {
-            let inputs = ort::inputs![
-                "ctx" => ctx_t.view(),
-                "ctx_mask" => mask_t.view(),
-                "spk" => spk_t.view(),
-            ]
-            .map_err(|e| format!("Lỗi input duration_predictor: {}", e))?;
+            let inputs = vec![
+                ("ctx", SessionInputValue::from(ctx_t.view())),
+                ("ctx_mask", SessionInputValue::from(mask_t.view())),
+                ("spk", SessionInputValue::from(spk_t.view())),
+            ];
             let res = sess
                 .s_dur
                 .run(inputs)
@@ -452,15 +449,14 @@ impl InnerState {
                 .map_err(|e| format!("Lỗi x tensor: {}", e))?;
 
             let mut vel: Vec<f32> = {
-                let inputs = ort::inputs![
-                    "x" => x_t.view(),
-                    "t" => t_t.view(),
-                    "ctx" => ctx_t.view(),
-                    "ctx_mask" => mask_t.view(),
-                    "spk" => spk_t.view(),
-                    "style" => style_t.view(),
-                ]
-                .map_err(|e| format!("Lỗi input vector_estimator: {}", e))?;
+                let inputs = vec![
+                    ("x", SessionInputValue::from(x_t.view())),
+                    ("t", SessionInputValue::from(t_t.view())),
+                    ("ctx", SessionInputValue::from(ctx_t.view())),
+                    ("ctx_mask", SessionInputValue::from(mask_t.view())),
+                    ("spk", SessionInputValue::from(spk_t.view())),
+                    ("style", SessionInputValue::from(style_t.view())),
+                ];
                 let res = sess
                     .s_ve
                     .run(inputs)
@@ -473,15 +469,14 @@ impl InnerState {
 
             if step < cfg_limit {
                 let vu: Vec<f32> = {
-                    let inputs = ort::inputs![
-                        "x" => x_t.view(),
-                        "t" => t_t.view(),
-                        "ctx" => null_ctx_t.view(),
-                        "ctx_mask" => null_mask_t.view(),
-                        "spk" => null_spk_t.view(),
-                        "style" => null_style_t.view(),
-                    ]
-                    .map_err(|e| format!("Lỗi input uncond vector_estimator: {}", e))?;
+                    let inputs = vec![
+                        ("x", SessionInputValue::from(x_t.view())),
+                        ("t", SessionInputValue::from(t_t.view())),
+                        ("ctx", SessionInputValue::from(null_ctx_t.view())),
+                        ("ctx_mask", SessionInputValue::from(null_mask_t.view())),
+                        ("spk", SessionInputValue::from(null_spk_t.view())),
+                        ("style", SessionInputValue::from(null_style_t.view())),
+                    ];
                     let res = sess
                         .s_ve
                         .run(inputs)
@@ -506,10 +501,7 @@ impl InnerState {
         let final_x_t = Tensor::from_array((x_shape, x))
             .map_err(|e| format!("Lỗi final_x tensor: {}", e))?;
         let raw_wav: Vec<f32> = {
-            let inputs = ort::inputs![
-                "x" => final_x_t.view(),
-            ]
-            .map_err(|e| format!("Lỗi input codec_decoder: {}", e))?;
+            let inputs = vec![("x", SessionInputValue::from(final_x_t.view()))];
             let res = sess
                 .s_dec
                 .run(inputs)

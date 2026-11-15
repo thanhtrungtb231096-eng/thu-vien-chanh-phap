@@ -9,13 +9,13 @@ Pod::Spec.new do |s|
   s.license = 'MIT'
   s.homepage = 'https://thuvienchanhphap.duckdns.org'
   s.author = 'Thư Viện Chánh Pháp'
-  s.source = { :git => 'https://github.com/chanhphap/thuvien.git', :tag => s.version.to_s }
+  s.source = { :git => 'https://github.com/thanhtrungtb231096-eng/thu-vien-chanh-phap.git', :tag => s.version.to_s }
   s.source_files = 'ios/Sources/**/*.{swift,h,m,c,cc,mm,cpp}'
+  s.public_header_files = 'ios/Sources/**/*.h'
   s.ios.deployment_target = '15.0'
   s.dependency 'Capacitor'
-  s.dependency 'onnxruntime-objc', '~> 1.19.2'
-  s.libraries = 'sqlite3', 'z'
+  s.dependency 'onnxruntime-c', '1.19.2'
+  s.libraries = 'sqlite3', 'z', 'c++'
   s.frameworks = 'AVFoundation', 'MediaPlayer', 'UserNotifications', 'Accelerate'
   s.swift_version = '5.9'
 end
-

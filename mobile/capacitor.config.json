@@ -2,7 +2,6 @@
   "appId": "org.chanhphap.thuvien",
   "appName": "Chánh Pháp",
   "webDir": "www",
-  "bundledWebRuntime": false,
   "backgroundColor": "#F7F4EC",
   "server": {
     "androidScheme": "https",
@@ -21,7 +20,6 @@
   },
   "plugins": {
     "LocalNotifications": {
-      "smallIcon": "ic_stat_dharma_wheel",
       "iconColor": "#285A46"
     }
   }

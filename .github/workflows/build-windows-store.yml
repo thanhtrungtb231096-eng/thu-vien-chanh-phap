@@ -69,7 +69,7 @@ jobs:
           MS_VERSION: ${{ inputs.app_version || '1.0.0.0' }}
         run: |
           $packsTmp = Join-Path $env:RUNNER_TEMP "windows-packs"
-          $stagingDir = Join-Path $env:RUNNER_TEMP "windows-staging"
+          $stagingDir = "desktop-windows/staging"
           New-Item -ItemType Directory -Force -Path $packsTmp | Out-Null
 
           $coreDb = Join-Path $packsTmp "core-bundled.pack.db"
@@ -89,7 +89,20 @@ jobs:
             --core-pack "$coreDb" `
             --identity-name "$env:MS_IDENTITY" `
             --publisher "$env:MS_PUBLISHER" `
-            --version "$env:MS_VERSION"
+            --version "$env:MS_VERSION" `
+            --allow-in-repo
+
+          $confPath = (Resolve-Path "desktop-windows/src-tauri/tauri.conf.json").Path
+          $cfg = [IO.File]::ReadAllText($confPath, [Text.Encoding]::UTF8) | ConvertFrom-Json
+          $cfg.build.frontendDist = "../staging/www"
+          $cfg.bundle.icon = @(
+            "../staging/icons/32x32.png",
+            "../staging/icons/128x128.png",
+            "../staging/icons/128x128@2x.png",
+            "../staging/icons/icon.ico"
+          )
+          $jsonOut = ($cfg | ConvertTo-Json -Depth 10) + "`n"
+          [IO.File]::WriteAllText($confPath, $jsonOut, [Text.UTF8Encoding]::new($false))
 
       - name: Biên dịch Tauri v2 Native Rust & Bộ cài đặt độc lập (NSIS .exe)
         working-directory: desktop-windows
@@ -97,24 +110,21 @@ jobs:
         run: |
           npm install --no-audit --no-fund
 
-          $stagingDir = (Join-Path $env:RUNNER_TEMP "windows-staging") -replace '\\', '/'
-          $ciConfPath = Join-Path $env:RUNNER_TEMP "tauri.ci.conf.json"
-          $ciConf = @{
-            build = @{
-              frontendDist = "$stagingDir/www"
+          $logFile = Join-Path $env:RUNNER_TEMP "tauri-build.log"
+          cmd /c "npx tauri build --bundles nsis > `"$logFile`" 2>&1"
+          $exitCode = $LASTEXITCODE
+          Get-Content -Path $logFile -Tail 120
+          if ($exitCode -ne 0) {
+            $errLines = Select-String -Path $logFile -Pattern "error\[|error:|panicked|failed" | Select-Object -Last 25
+            foreach ($m in $errLines) {
+              Write-Host "::error::$($m.Line)"
             }
-            bundle = @{
-              icon = @(
-                "$stagingDir/icons/32x32.png",
-                "$stagingDir/icons/128x128.png",
-                "$stagingDir/icons/128x128@2x.png",
-                "$stagingDir/icons/icon.ico"
-              )
+            $tailLines = Get-Content -Path $logFile -Tail 15
+            foreach ($l in $tailLines) {
+              if ($l.Trim()) { Write-Host "::error::$l" }
             }
-          } | ConvertTo-Json -Depth 6
-          Set-Content -Path $ciConfPath -Value $ciConf -Encoding UTF8
-
-          npx tauri build --bundles nsis --config "$ciConfPath"
+            exit $exitCode
+          }
 
           $nsisExe = Get-ChildItem -Path "src-tauri/target/release/bundle/nsis/*-setup.exe" | Select-Object -First 1
           if (-not $nsisExe) {
@@ -125,7 +135,7 @@ jobs:
       - name: Đóng gói Gói chuẩn Microsoft Store (ChanhPhap-Windows-Store_x64.msix) bằng Windows SDK
         shell: pwsh
         run: |
-          $stagingDir = Join-Path $env:RUNNER_TEMP "windows-staging"
+          $stagingDir = "desktop-windows/staging"
           $msixLayout = Join-Path $env:RUNNER_TEMP "msix-layout"
           $releaseDir = "desktop-windows/src-tauri/target/release"
 
@@ -193,4 +203,3 @@ jobs:
           name: ChanhPhap-Windows-Store-MSIX
           path: ${{ runner.temp }}/ChanhPhap-Windows-Store_x64.msix
           retention-days: 30
-
