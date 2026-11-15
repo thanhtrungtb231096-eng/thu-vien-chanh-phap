@@ -229,15 +229,16 @@ jobs:
           - **iPhone / iPad**: Mở `https://thuvienchanhphap.duckdns.org` bằng Safari → **Chia sẻ** → **Thêm vào Màn hình chính** (10 giây, không bao giờ hết hạn), hoặc cài gói Native **`ChanhPhap-iOS-Unsigned.ipa`** qua Sideloadly / SideStore.
           "@
 
-          gh release view "$env:TAG_NAME" *> $null
+          $relTag = $env:TAG_NAME -replace '^windows-', ''
+          gh release view "$relTag" *> $null
           if ($LASTEXITCODE -ne 0) {
-            gh release create "$env:TAG_NAME" --title "Đại Thư Viện Chánh Pháp $($env:TAG_NAME)" --notes "$notes"
+            gh release create "$relTag" --title "Đại Thư Viện Chánh Pháp $relTag" --notes "$notes"
           }
           for ($i = 1; $i -le 4; $i++) {
-            gh release upload "$env:TAG_NAME" "$exeFile" "$msixFile" --clobber
+            gh release upload "$relTag" "$exeFile" "$msixFile" --clobber
             if ($LASTEXITCODE -eq 0) { break }
             Start-Sleep -Seconds 3
           }
           if ($LASTEXITCODE -ne 0) {
-            throw "Không thể tải tệp cài đặt Windows lên GitHub Release $($env:TAG_NAME)."
+            throw "Không thể tải tệp cài đặt Windows lên GitHub Release $relTag."
           }
