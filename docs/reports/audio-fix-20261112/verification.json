@@ -1,0 +1,222 @@
+{
+  "date": "2026-11-12",
+  "version": "ux-20261010-89aefaa23777",
+  "browserSuites": [
+    {
+      "test": "playback_continuity_check.py",
+      "result": "passed"
+    },
+    {
+      "test": "audio_recovery_check.py",
+      "result": "passed"
+    },
+    {
+      "test": "test_spotify_player.py",
+      "result": "passed"
+    },
+    {
+      "test": "library_upgrades_check.py",
+      "result": "passed"
+    },
+    {
+      "test": "read_listen_continuity_check.py",
+      "result": "passed"
+    },
+    {
+      "test": "listening_history_check.py",
+      "result": "passed"
+    },
+    {
+      "test": "unified_player_check.py",
+      "result": "passed"
+    },
+    {
+      "test": "reading_actions_check.py",
+      "result": "passed"
+    }
+  ],
+  "voiceSwitchChecks": [
+    "Saved male voice survives initial discovery",
+    "Four voice changes during playback resume the selected voice",
+    "Rapid voice changes while preparing cannot revive stale audio",
+    "Choosing another voice recovers an errored passage",
+    "Expanded pronunciation remains playable through bounded synthesis requests"
+  ],
+  "corpus": {
+    "result": "passed",
+    "editions": 2784,
+    "passages": 2363656,
+    "maxLength": 1800,
+    "groups": {
+      "daithua": 62,
+      "daitang": 1080,
+      "phucminh": 26,
+      "ebooks": 1616
+    },
+    "errors": []
+  },
+  "relay": {
+    "passed": true,
+    "decodedVoices": 4,
+    "relayRequests": 6,
+    "upstreamJobErrors": {
+      "ClientResponseError": 1
+    }
+  },
+  "speechTestPayload": "Authored test sentences; original collection responses were replaced inside isolated browser contexts and TTS payloads checked before sending. Corpus validation stayed local.",
+  "unitChecksValidatedDuringRepair": {
+    "audioService": 19,
+    "engine": 14,
+    "httpHandlers": 7,
+    "statsAndConfiguration": 2
+  },
+  "sources": [
+    "https://github.com/rany2/edge-tts/releases",
+    "https://github.com/rany2/edge-tts/issues/512"
+  ],
+  "result": "passed",
+  "running": {
+    "local": {
+      "version": "ux-20261010-89aefaa23777",
+      "indexReady": true,
+      "documents": 5348,
+      "passages": 3395798
+    },
+    "vps": {
+      "version": "ux-20261010-89aefaa23777",
+      "indexReady": true,
+      "documents": 5348,
+      "passages": 3395798
+    }
+  },
+  "deployment": {
+    "result": "passed",
+    "release": "audio-20261112-01",
+    "version": "ux-20261010-89aefaa23777",
+    "changedFiles": 8,
+    "databasesUnchanged": true,
+    "rollbackOutsideApplication": "/opt/thuvien-backups/audio-20261112-01",
+    "preflight": {
+      "version": "ux-20261010-89aefaa23777",
+      "edge_tts": "7.3.1",
+      "assetHashes": "passed",
+      "exportedImports": "passed"
+    }
+  },
+  "live": {
+    "local": {
+      "passed": true,
+      "collectionFlows": 4,
+      "decodedVoicesPerFlow": 2,
+      "pageErrors": [],
+      "coldStartOrSwitchSeconds": {
+        "min": 11.828,
+        "max": 46.5
+      },
+      "checks": [
+        {
+          "type": "daithua",
+          "id": "dt_10_1",
+          "title": "Bát Nhã Ba La Mật Đa Tâm Kinh",
+          "block": "b-j-1fsnq24",
+          "characters": 111,
+          "femaleStartSeconds": 12.578,
+          "maleSwitchSeconds": 14.047,
+          "samePassage": true,
+          "decodedBothVoices": true
+        },
+        {
+          "type": "daitang",
+          "id": "T08n0251",
+          "title": "Bát Nhã Ba La Mật Đa Tâm Kinh (Bát Nhã Tâm Kinh)",
+          "block": "b-j-ar7201",
+          "characters": 111,
+          "femaleStartSeconds": 13.672,
+          "maleSwitchSeconds": 46.5,
+          "samePassage": true,
+          "decodedBothVoices": true
+        },
+        {
+          "type": "phucminh",
+          "id": "hoi-dap-can-ban",
+          "title": "Hỏi đáp Phật pháp căn bản",
+          "block": "b-j-rcpqze",
+          "characters": 111,
+          "femaleStartSeconds": 11.828,
+          "maleSwitchSeconds": 22.516,
+          "samePassage": true,
+          "decodedBothVoices": true
+        },
+        {
+          "type": "ebooks",
+          "id": "ep-23e122313af8",
+          "title": "Đức Phật Vì Vua Rồng Biển Nói Pháp Ấn",
+          "block": "b-j-n3g4gf",
+          "characters": 111,
+          "femaleStartSeconds": 11.891,
+          "maleSwitchSeconds": 16.828,
+          "samePassage": true,
+          "decodedBothVoices": true
+        }
+      ]
+    },
+    "vps": {
+      "passed": true,
+      "collectionFlows": 4,
+      "decodedVoicesPerFlow": 2,
+      "pageErrors": [],
+      "coldStartOrSwitchSeconds": {
+        "min": 9.219,
+        "max": 16.453
+      },
+      "checks": [
+        {
+          "type": "daithua",
+          "id": "dt_10_1",
+          "title": "Bát Nhã Ba La Mật Đa Tâm Kinh",
+          "block": "b-j-p9tna1",
+          "characters": 111,
+          "femaleStartSeconds": 13.312,
+          "maleSwitchSeconds": 12.656,
+          "samePassage": true,
+          "decodedBothVoices": true
+        },
+        {
+          "type": "daitang",
+          "id": "T08n0251",
+          "title": "Bát Nhã Ba La Mật Đa Tâm Kinh (Bát Nhã Tâm Kinh)",
+          "block": "b-j-bcsz5o",
+          "characters": 111,
+          "femaleStartSeconds": 16.453,
+          "maleSwitchSeconds": 11.907,
+          "samePassage": true,
+          "decodedBothVoices": true
+        },
+        {
+          "type": "phucminh",
+          "id": "hoi-dap-can-ban",
+          "title": "Hỏi đáp Phật pháp căn bản",
+          "block": "b-j-1nx0fv3",
+          "characters": 111,
+          "femaleStartSeconds": 16.312,
+          "maleSwitchSeconds": 9.219,
+          "samePassage": true,
+          "decodedBothVoices": true
+        },
+        {
+          "type": "ebooks",
+          "id": "ep-23e122313af8",
+          "title": "Đức Phật Vì Vua Rồng Biển Nói Pháp Ấn",
+          "block": "b-j-gt59uy",
+          "characters": 111,
+          "femaleStartSeconds": 15.859,
+          "maleSwitchSeconds": 12.125,
+          "samePassage": true,
+          "decodedBothVoices": true
+        }
+      ]
+    }
+  },
+  "releaseCacheUpdate": "passed",
+  "unitChecksTotal": 42
+}

@@ -1,0 +1,51 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Chanh Phap",
+  "version": "1.0.0",
+  "identifier": "org.chanhphap.thuvien",
+  "build": {
+    "frontendDist": "../../../Kinh điển phật giáo - Mobile/windows-staging/www"
+  },
+  "app": {
+    "withGlobalTauri": true,
+    "windows": [
+      {
+        "label": "main",
+        "title": "Đại Thư Viện Chánh Pháp",
+        "width": 1360,
+        "height": 880,
+        "minWidth": 380,
+        "minHeight": 600,
+        "resizable": true,
+        "center": true
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["nsis"],
+    "publisher": "Thư Viện Chánh Pháp",
+    "shortDescription": "Đại Thư Viện Kinh Điển Phật Giáo Chánh Pháp",
+    "longDescription": "Đọc, tra cứu 5.348 bản kinh Việt – Hán – Pāḷi và nghe tụng đọc AI ngoại tuyến trên Windows 10/11.",
+    "icon": [
+      "../../../Kinh điển phật giáo - Mobile/windows-staging/icons/32x32.png",
+      "../../../Kinh điển phật giáo - Mobile/windows-staging/icons/128x128.png",
+      "../../../Kinh điển phật giáo - Mobile/windows-staging/icons/128x128@2x.png",
+      "../../../Kinh điển phật giáo - Mobile/windows-staging/icons/icon.ico"
+    ],
+    "windows": {
+      "webviewInstallMode": {
+        "type": "downloadBootstrapper"
+      },
+      "nsis": {
+        "installMode": "currentUser",
+        "languages": ["Vietnamese", "English"],
+        "displayLanguageSelector": false
+      }
+    }
+  }
+}
+

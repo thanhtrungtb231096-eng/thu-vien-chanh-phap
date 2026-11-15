@@ -1,0 +1,44 @@
+/* Use the same shelf, jackets, buttons and detail layouts as Phúc Minh. */
+.ep-hero { background: radial-gradient(ellipse at 95% 20%,#bc9d6c30,transparent 60%),#443b2d; }
+.ep-hero .r-primary { color: #443b2d; }
+.ep-home-entry .pm-home-symbol { background: #62543c; }
+.ep-filter-bar { grid-template-columns: minmax(0,1.6fr) minmax(120px,1fr) 150px 140px; }
+.ep-categories button span { opacity: .7; margin-left: 4px; font-variant-numeric: tabular-nums; }
+.ep-catalog-tools { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; margin-top: 18px; }
+.ep-catalog-tools > div { display: flex; gap: 4px; }
+.ep-catalog-tools button[aria-pressed=true] { color: var(--accent); border-color: var(--accent); background: var(--bg-hover); }
+.ep-state-partial,.ep-state-missing { color: var(--accent); }
+.ep-card .pm-card-secondary a { text-decoration: none; }
+.ep-pagination { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 12px; padding: 28px 0; }
+.ep-pagination > span,.ep-pagination label { color: var(--text-secondary); font-size: 11px; }
+.ep-pagination label { display: inline-flex; align-items: center; gap: 8px; }
+.ep-pagination input { width: 62px; min-height: 44px; background: var(--bg-surface); color: var(--text-primary); border: 1px solid var(--border-subtle); border-radius: 6px; text-align: center; }
+.ep-sources { margin-top: 20px; color: var(--text-secondary); font-size: 12px; }
+.ep-sources summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; }
+.ep-sources a { display: flex; justify-content: flex-start !important; text-decoration: none; overflow-wrap: anywhere; margin: 8px 0; }
+.ep-detail [hidden],.reader-ebooks .reader-mode-switch { display: none !important; }
+.ep-list-view { display: flex; flex-direction: column; }
+.ep-list-view .ep-card { display: grid; grid-template-columns: 150px minmax(0,1fr); }
+.ep-list-view .pm-cover-button { padding: 14px; align-self: start; }
+.ep-list-view .pm-cover { min-height: 200px; }
+.ep-list-view .edition-cover { height: 220px; }
+.ep-list-view .pm-card-actions,.ep-list-view .pm-card-secondary { max-width: 390px; }
+.ep-list-view .pm-card-actions { margin-top: 8px; }
+.ep-module .pm-catalog-heading { flex-wrap: wrap; }
+#reader-word-link[hidden] { display: none !important; }
+@media(max-width:1100px) { .ep-filter-bar { grid-template-columns: minmax(0,1fr) 1fr; } .ep-filter-bar .pm-search-label { grid-column: 1/-1; } }
+@media(max-width:640px) {
+  .ep-catalog-tools { align-items: stretch; }
+  .ep-list-view .ep-card { grid-template-columns: 96px minmax(0,1fr); }
+  .ep-list-view .pm-cover-button { padding: 10px 0 10px 10px; }
+  .ep-list-view .edition-cover { height: 175px; min-height: 0; }
+  .ep-list-view .edition-imprint,.ep-list-view .edition-seal,.ep-list-view .edition-footer { display: none; }
+  .ep-list-view .edition-title-area { min-height: 70px; }
+  .ep-list-view .edition-title { font-size: 11px !important; }
+  .ep-list-view .edition-credit b { font-size: 8px; }
+  .ep-list-view .pm-card-body { padding: 12px; }
+  .ep-list-view .pm-card-actions { flex-wrap: wrap; }
+  .ep-list-view .pm-card-actions button { flex: 1 1 100%; }
+  .ep-list-view .pm-card-secondary { flex-wrap: wrap; }
+  .ep-filter-bar { grid-template-columns: minmax(0,1fr) minmax(0,1fr); }
+}

@@ -1,0 +1,270 @@
+name: Build Chánh Pháp Mobile Apps (iOS .ipa & Android .apk)
+
+on:
+  workflow_dispatch:
+    inputs:
+      remote_server_url:
+        description: "Địa chỉ máy chủ Thư viện / CDN chứa gói Kinh & AI TTS"
+        required: false
+        default: "https://thuvienchanhphap.duckdns.org"
+  push:
+    tags:
+      - "mobile-v*"
+
+permissions:
+  contents: read
+
+jobs:
+  # ============================================================================
+  # JOB 1: Cloud macOS Xcode Build -> ChanhPhap-iOS.ipa (Dành cho iPhone)
+  # ============================================================================
+  build-ios:
+    name: Build iOS App (.ipa) on macOS 15
+    runs-on: macos-15
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout mã nguồn
+        uses: actions/checkout@v4
+
+      - name: Cài đặt Python 3.11 & Node.js 20
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Cài đặt Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Đóng gói Gói Kinh Cốt Lõi (core-bundled.pack.db) & Web Shell (mobile/www)
+        env:
+          REMOTE_BASE: ${{ inputs.remote_server_url || 'https://thuvienchanhphap.duckdns.org' }}
+        run: |
+          mkdir -p /tmp/mobile-packs
+          if [ -f local/storage/state/search.sqlite3 ]; then
+            python3 -X utf8 tools/mobile/build_text_packs.py --only core-bundled --out /tmp/mobile-packs --allow-in-repo || true
+          fi
+          if [ ! -f /tmp/mobile-packs/core-bundled.pack.db ] || [ "$(wc -c < /tmp/mobile-packs/core-bundled.pack.db)" -lt 1000000 ]; then
+            echo "Đang tải core-bundled.pack.db từ máy chủ từ xa (${REMOTE_BASE})..."
+            curl -fsSL "${REMOTE_BASE}/mobile-packs/text-packs/core-bundled.pack.db" -o /tmp/mobile-packs/core-bundled.pack.db
+          fi
+          python3 -X utf8 tools/mobile/build_mobile_shell.py \
+            --out mobile/www \
+            --core-pack /tmp/mobile-packs/core-bundled.pack.db \
+            --allow-in-repo
+
+      - name: Cài đặt Capacitor & Khởi tạo dự án Xcode iOS
+        working-directory: mobile
+        run: |
+          npm install --no-audit --no-fund
+          if [ ! -d ios ]; then
+            npx cap add ios
+          fi
+
+      - name: Tạo Biểu tượng Ứng dụng (App Icons 1024x1024) & Màn hình Khởi động
+        working-directory: mobile
+        run: |
+          mkdir -p assets
+          cp ../app/web/design/library-icon-512.png assets/icon.png
+          sips -z 1024 1024 assets/icon.png --out assets/icon-only.png
+          cp assets/icon-only.png assets/icon-foreground.png
+          sips -z 2732 2732 assets/icon.png --out assets/splash.png
+          cp assets/splash.png assets/splash-dark.png
+          npx capacitor-assets generate --ios --iconBackgroundColor '#F7F4EC' --splashBackgroundColor '#F7F4EC' --splashBackgroundColorDark '#171C19' || true
+
+      - name: Cấu hình Info.plist (Chạy nền Tắt màn hình UIBackgroundModes + Tiếng Việt)
+        working-directory: mobile
+        run: |
+          PLIST="ios/App/App/Info.plist"
+          /usr/libexec/PlistBuddy -c "Set :CFBundleDisplayName 'Chánh Pháp'" "$PLIST" || \
+            /usr/libexec/PlistBuddy -c "Add :CFBundleDisplayName string 'Chánh Pháp'" "$PLIST"
+          /usr/libexec/PlistBuddy -c "Delete :UIBackgroundModes" "$PLIST" 2>/dev/null || true
+          /usr/libexec/PlistBuddy -c "Add :UIBackgroundModes array" "$PLIST"
+          /usr/libexec/PlistBuddy -c "Add :UIBackgroundModes:0 string audio" "$PLIST"
+          /usr/libexec/PlistBuddy -c "Add :UIBackgroundModes:1 string fetch" "$PLIST"
+          /usr/libexec/PlistBuddy -c "Delete :ITSAppUsesNonExemptEncryption" "$PLIST" 2>/dev/null || true
+          /usr/libexec/PlistBuddy -c "Add :ITSAppUsesNonExemptEncryption bool false" "$PLIST"
+          npx cap sync ios
+
+      - name: Biên dịch ChanhPhap-iOS-Unsigned.ipa (Cài miễn phí qua Sideloadly trên Windows)
+        working-directory: mobile/ios/App
+        run: |
+          xcodebuild clean build \
+            -workspace App.xcworkspace \
+            -scheme App \
+            -configuration Release \
+            -sdk iphoneos \
+            -derivedDataPath /tmp/ChanhPhapDerived \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            AD_HOC_CODE_SIGNING_ALLOWED=YES
+
+          mkdir -p /tmp/ipa-unsigned/Payload
+          cp -R /tmp/ChanhPhapDerived/Build/Products/Release-iphoneos/App.app /tmp/ipa-unsigned/Payload/
+          cd /tmp/ipa-unsigned
+          zip -qry /tmp/ChanhPhap-iOS-Unsigned.ipa Payload
+
+      - name: Tải lên gói cài đặt iPhone (ChanhPhap-iOS-Unsigned.ipa)
+        uses: actions/upload-artifact@v4
+        with:
+          name: ChanhPhap-iOS-Unsigned-IPA
+          path: /tmp/ChanhPhap-iOS-Unsigned.ipa
+          retention-days: 30
+
+      - name: Ký số Chính thức & Đẩy lên Apple TestFlight (Tự động chạy khi có Apple Secrets)
+        if: ${{ env.APPLE_CERTIFICATE_P12_BASE64 != '' && env.APPLE_PROVISIONING_PROFILE_BASE64 != '' }}
+        env:
+          APPLE_CERTIFICATE_P12_BASE64: ${{ secrets.APPLE_CERTIFICATE_P12_BASE64 }}
+          APPLE_P12_PASSWORD: ${{ secrets.APPLE_P12_PASSWORD }}
+          APPLE_PROVISIONING_PROFILE_BASE64: ${{ secrets.APPLE_PROVISIONING_PROFILE_BASE64 }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          APPSTORE_API_KEY_ID: ${{ secrets.APPSTORE_API_KEY_ID }}
+          APPSTORE_API_ISSUER_ID: ${{ secrets.APPSTORE_API_ISSUER_ID }}
+          APPSTORE_API_PRIVATE_KEY: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
+        working-directory: mobile/ios/App
+        run: |
+          KEYCHAIN_PATH="$RUNNER_TEMP/chanhphap-signing.keychain-db"
+          KEYCHAIN_PASS="$(uuidgen)"
+          security create-keychain -p "$KEYCHAIN_PASS" "$KEYCHAIN_PATH"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
+          security unlock-keychain -p "$KEYCHAIN_PASS" "$KEYCHAIN_PATH"
+
+          echo "$APPLE_CERTIFICATE_P12_BASE64" | base64 --decode > "$RUNNER_TEMP/cert.p12"
+          security import "$RUNNER_TEMP/cert.p12" -P "$APPLE_P12_PASSWORD" -A -t cert -f pkcs12 -k "$KEYCHAIN_PATH"
+          security list-keychain -d user -s "$KEYCHAIN_PATH"
+
+          mkdir -p "$HOME/Library/MobileDevice/Provisioning Profiles"
+          PROFILE_PATH="$RUNNER_TEMP/profile.mobileprovision"
+          echo "$APPLE_PROVISIONING_PROFILE_BASE64" | base64 --decode > "$PROFILE_PATH"
+          UUID=$(/usr/libexec/PlistBuddy -c "Print UUID" /dev/stdin <<< $(/usr/bin/security cms -D -i "$PROFILE_PATH"))
+          cp "$PROFILE_PATH" "$HOME/Library/MobileDevice/Provisioning Profiles/$UUID.mobileprovision"
+
+          cat > "$RUNNER_TEMP/ExportOptions.plist" <<EOF
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>method</key>
+            <string>app-store-connect</string>
+            <key>teamID</key>
+            <string>${APPLE_TEAM_ID}</string>
+            <key>signingStyle</key>
+            <string>manual</string>
+            <key>provisioningProfiles</key>
+            <dict>
+              <key>org.chanhphap.thuvien</key>
+              <string>${UUID}</string>
+            </dict>
+          </dict>
+          </plist>
+          EOF
+
+          xcodebuild archive \
+            -workspace App.xcworkspace \
+            -scheme App \
+            -configuration Release \
+            -archivePath /tmp/ChanhPhap.xcarchive \
+            DEVELOPMENT_TEAM="$APPLE_TEAM_ID" \
+            CODE_SIGN_STYLE=Manual \
+            PROVISIONING_PROFILE_SPECIFIER="$UUID"
+
+          xcodebuild -exportArchive \
+            -archivePath /tmp/ChanhPhap.xcarchive \
+            -exportOptionsPlist "$RUNNER_TEMP/ExportOptions.plist" \
+            -exportPath /tmp/ipa-signed
+
+          if [ -n "$APPSTORE_API_KEY_ID" ] && [ -n "$APPSTORE_API_PRIVATE_KEY" ]; then
+            mkdir -p ~/.private_keys
+            echo "$APPSTORE_API_PRIVATE_KEY" > ~/.private_keys/AuthKey_${APPSTORE_API_KEY_ID}.p8
+            xcrun altool --upload-app \
+              --type ios \
+              -f /tmp/ipa-signed/*.ipa \
+              --apiKey "$APPSTORE_API_KEY_ID" \
+              --apiIssuer "$APPSTORE_API_ISSUER_ID"
+          fi
+
+      - name: Tải lên gói iOS Đã ký số (Signed IPA)
+        if: ${{ env.APPLE_CERTIFICATE_P12_BASE64 != '' }}
+        env:
+          APPLE_CERTIFICATE_P12_BASE64: ${{ secrets.APPLE_CERTIFICATE_P12_BASE64 }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: ChanhPhap-iOS-Signed-IPA
+          path: /tmp/ipa-signed/*.ipa
+          retention-days: 30
+
+  # ============================================================================
+  # JOB 2: Cloud Android Gradle Build -> ChanhPhap-Android.apk
+  # ============================================================================
+  build-android:
+    name: Build Android App (.apk) on Ubuntu
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+
+    steps:
+      - name: Checkout mã nguồn
+        uses: actions/checkout@v4
+
+      - name: Cài đặt Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Cài đặt Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Cài đặt Java 17 (Temurin)
+        uses: actions/setup-java@v4
+        with:
+          distribution: "temurin"
+          java-version: "17"
+
+      - name: Cài đặt Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Đóng gói Gói Kinh Cốt Lõi & Web Shell (mobile/www)
+        env:
+          REMOTE_BASE: ${{ inputs.remote_server_url || 'https://thuvienchanhphap.duckdns.org' }}
+        run: |
+          mkdir -p /tmp/mobile-packs
+          if [ -f local/storage/state/search.sqlite3 ]; then
+            python3 -X utf8 tools/mobile/build_text_packs.py --only core-bundled --out /tmp/mobile-packs --allow-in-repo || true
+          fi
+          if [ ! -f /tmp/mobile-packs/core-bundled.pack.db ] || [ "$(wc -c < /tmp/mobile-packs/core-bundled.pack.db)" -lt 1000000 ]; then
+            echo "Đang tải core-bundled.pack.db từ máy chủ từ xa (${REMOTE_BASE})..."
+            curl -fsSL "${REMOTE_BASE}/mobile-packs/text-packs/core-bundled.pack.db" -o /tmp/mobile-packs/core-bundled.pack.db
+          fi
+          python3 -X utf8 tools/mobile/build_mobile_shell.py \
+            --out mobile/www \
+            --core-pack /tmp/mobile-packs/core-bundled.pack.db \
+            --allow-in-repo
+
+      - name: Cài đặt Capacitor & Khởi tạo dự án Android
+        working-directory: mobile
+        run: |
+          npm install --no-audit --no-fund
+          if [ ! -d android ]; then
+            npx cap add android
+          fi
+          # Nâng minSdkVersion = 24 để hỗ trợ trọn vẹn ONNX Runtime & Jetpack Media3
+          sed -i 's/minSdkVersion = [0-9]*/minSdkVersion = 24/g' android/variables.gradle
+          npx cap sync android
+
+      - name: Biên dịch Gói Cài đặt ChanhPhap-Android.apk
+        working-directory: mobile/android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon
+          cp app/build/outputs/apk/debug/app-debug.apk /tmp/ChanhPhap-Android.apk
+
+      - name: Tải lên gói cài đặt Android (ChanhPhap-Android.apk)
+        uses: actions/upload-artifact@v4
+        with:
+          name: ChanhPhap-Android-APK
+          path: /tmp/ChanhPhap-Android.apk
+          retention-days: 30
+

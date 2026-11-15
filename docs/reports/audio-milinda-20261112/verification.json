@@ -1,0 +1,77 @@
+{
+  "date": "2026-11-12",
+  "version": "ux-20261010-0967464ad970",
+  "result": "passed",
+  "localAssetHashes": 80,
+  "unitTests": 59,
+  "browserSuites": 8,
+  "corpus": {
+    "result": "passed",
+    "editions": 2784,
+    "passages": 2363656,
+    "maxLength": 1800,
+    "groups": {
+      "daithua": 62,
+      "daitang": 1080,
+      "phucminh": 26,
+      "ebooks": 1616
+    },
+    "errors": []
+  },
+  "wholeBookFixturePlayback": {
+    "source": "ebooks:ep-c2f5222bc69d",
+    "payload": "Actual book stays local; every synthesis uses a local deterministic fixture",
+    "runs": [
+      {
+        "voice": "vi-VN-NamMinhNeural",
+        "segments": 1154,
+        "finished": 1,
+        "seconds": 277.33,
+        "errors": []
+      },
+      {
+        "voice": "vi-VN-HoaiMyNeural",
+        "segments": 1154,
+        "finished": 1,
+        "seconds": 284.39,
+        "errors": []
+      }
+    ],
+    "pageErrors": [],
+    "passed": true,
+    "providerRetries": 70
+  },
+  "liveSourceExcerpts": {
+    "local": {
+      "exactCaseChecks": 6,
+      "collectionFlows": 4,
+      "decodedBothVoices": true,
+      "samePassage": true,
+      "pageErrors": [],
+      "playerErrors": [],
+      "httpErrors": []
+    },
+    "vps": {
+      "exactCaseChecks": 6,
+      "collectionFlows": 4,
+      "decodedBothVoices": true,
+      "samePassage": true,
+      "pageErrors": [],
+      "playerErrors": [],
+      "httpErrors": []
+    }
+  },
+  "additionalEvidence": {
+    "prefixStartup": "tests/artifacts/audio-milinda-20261112/long-startup.json",
+    "prefixRecovery": "tests/artifacts/audio-milinda-20261112/long-retry.json",
+    "serviceWorkerUpdate": "tests/artifacts/ux-upgrade-20261010/stage9-update.json",
+    "bufferedContinuity": "tests/artifacts/audio-continuity/buffered-runtime.json",
+    "voiceSwitches": "tests/artifacts/audio-fix-20261111/voice-switch.json"
+  },
+  "limits": [
+    "Whole-corpus audit checks text structure, not 2363656 online synthesis requests.",
+    "Whole-book 1154-segment playback uses an isolated local audio provider; actual Microsoft source excerpts are tested separately.",
+    "Cached playback timings do not represent first synthesis latency. Upstream Microsoft can still be slow or unavailable.",
+    "No claim of subjective voice quality from automated decoding; HoaiMy and NamMinh remain selected voices."
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "name": "chanh-phap-engine",
+  "version": "1.0.0",
+  "description": "Native Lock-Screen Audio Queue, SQLite Sutra Vault & On-Device VieNeu-TTS-v3-Nano ONNX Engine for Thư viện Chánh Pháp",
+  "main": "dist/plugin.cjs.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/esm/index.d.ts",
+  "capacitor": {
+    "ios": {
+      "src": "ios"
+    },
+    "android": {
+      "src": "android"
+    }
+  },
+  "files": [
+    "dist/",
+    "ios/",
+    "android/",
+    "ChanhPhapEngine.podspec"
+  ]
+}
+

@@ -1,0 +1,15 @@
+{
+  "result": "passed",
+  "moves": 64,
+  "originalFilesPreserved": 12422,
+  "criticalFilesSHA256Verified": 7265,
+  "documents": 5348,
+  "passages": 3395798,
+  "localServerRestarted": true,
+  "localPort": 8090,
+  "vpsExportCompatible": true,
+  "temporaryValidationTreesRemoved": true,
+  "recoverySnapshot": "storage/backups/restructure",
+  "existingArchive": "dist/vps/thuvien.7z",
+  "existingArchiveSha256": "08745ed0d27e3977fad16c0e21eb1bc6e1ed0a079a42ef219431ab93eefbe11e"
+}

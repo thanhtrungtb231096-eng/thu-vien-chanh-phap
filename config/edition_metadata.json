@@ -1,0 +1,27 @@
+{
+  "Kinh-Vien-Giac-Luan-Giang-TK-Thich-Thong-Hue.doc": {
+    "title": "Kinh Viên Giác · Luận Giảng",
+    "credits": [{"role":"Luận giảng","name":"TK. Thích Thông Huệ","cover":true}],
+    "publication": {"publisher":"Nhà xuất bản Tôn Giáo","place":"Hà Nội","year":"2006"},
+    "evidence": ["Kinh Viên Giác", "Luận Giảng", "TK.Thích Thông Huệ"],
+    "metadataVerified": "2026-10-10"
+  },
+  "Luan-Giai-Trung-Luan-Vien-Cao-Dang-Phat-Hoc-Hai-Duc.doc": {
+    "title": "Luận Giải Trung Luận · Tánh Khởi và Duyên Khởi",
+    "credits": [{"role":"Luận giải","name":"Hồng Dương Nguyễn Văn Hai","cover":true}],
+    "publication": {"publisher":"Ban Tu Thư Phật Học","year":"2003"},
+    "evidence": ["Hồng Dương Nguyễn Văn Hai", "LUẬN GIẢI TRUNG LUẬN", "TÁNH KHỞI VÀ DUYÊN KHỞI"],
+    "metadataVerified": "2026-10-10"
+  },
+  "Cau-Xa-Luan-Tung-Luoc-Thich-I-Phat-Hoc-Vien-Trung-Phan.doc": {
+    "title": "Câu Xá Luận Tụng Lược Thích · Tập I",
+    "credits": [
+      {"role":"Nguyên tác Nhật ngữ","name":"Trai Đằng Duy Tín","cover":true},
+      {"role":"Hán dịch","name":"Huệ Viên Cư Sĩ","cover":true},
+      {"role":"Việt dịch","name":"Học Tăng Lớp Chuyên Khoa Phật Học Viện Trung Phần","cover":true},
+      {"role":"Biên tập","name":"Thích Phước Viên","cover":true}
+    ],
+    "evidence": ["CÂU XÁ LUẬN TỤNG LƯỢC THÍCH I", "Biên tập: Thích Phước Viên"],
+    "metadataVerified": "2026-10-10"
+  }
+}

@@ -1,0 +1,103 @@
+[
+  {
+    "Path": "local\\storage\\backups\\learning-depth-20261011",
+    "Files": 6,
+    "Bytes": 146468
+  },
+  {
+    "Path": "local\\storage\\backups\\learning-narrative-20261011",
+    "Files": 10,
+    "Bytes": 551153
+  },
+  {
+    "Path": "local\\storage\\backups\\module-study-20261011",
+    "Files": 8,
+    "Bytes": 181243
+  },
+  {
+    "Path": "local\\storage\\backups\\operations",
+    "Files": 1,
+    "Bytes": 9485
+  },
+  {
+    "Path": "local\\storage\\backups\\ux-upgrade-20261010",
+    "Files": 102,
+    "Bytes": 17960065
+  },
+  {
+    "Path": "local\\storage\\backups\\vps-20261012-220823",
+    "Files": 24,
+    "Bytes": 3116245725
+  },
+  {
+    "Path": "local\\storage\\cache\\legacy-bytecode",
+    "Files": 13,
+    "Bytes": 240274
+  },
+  {
+    "Path": "local\\storage\\cache\\work\\ebooks-integration-backup",
+    "Files": 13,
+    "Bytes": 321071
+  },
+  {
+    "Path": "local\\storage\\cache\\work\\ui-redesign-backup",
+    "Files": 9,
+    "Bytes": 300130
+  },
+  {
+    "Path": "local\\storage\\cache\\work\\audio-fix-backup",
+    "Files": 12,
+    "Bytes": 225630
+  },
+  {
+    "Path": "local\\storage\\cache\\work\\audio-root-fix-backup",
+    "Files": 8,
+    "Bytes": 134431
+  },
+  {
+    "Path": "vps\\output\\thuvien.7z",
+    "Files": 1,
+    "Bytes": 1209263553
+  },
+  {
+    "Path": "vps\\output\\thuvien.7z.sha256",
+    "Files": 1,
+    "Bytes": 77
+  },
+  {
+    "Path": "vps\\output\\package-manifest.json",
+    "Files": 1,
+    "Bytes": 1462854
+  },
+  {
+    "Path": "vps\\output\\cai_dat_vps.sh",
+    "Files": 1,
+    "Bytes": 5134
+  },
+  {
+    "Path": "vps\\output\\cap_nhat_vps.sh",
+    "Files": 1,
+    "Bytes": 5192
+  },
+  {
+    "Path": "vps\\output\\verify_vps.py",
+    "Files": 1,
+    "Bytes": 6378
+  },
+  {
+    "Path": "local\\storage\\rehearsals\\ux-20261010-personal\\personal.sqlite3",
+    "Files": 1,
+    "Bytes": 94208
+  },
+  {
+    "Path": "local\\storage\\rehearsals\\vps-20261012-220823\\personal.sqlite3",
+    "Files": 1,
+    "Bytes": 94208
+  },
+  {
+    "Path": "local/xoa_thu_muc_rac_tmp.cmd",
+    "Files": 1,
+    "Bytes": 1216,
+    "Reason": "Obsolete one-off helper referencing an old temporary directory"
+  }
+]

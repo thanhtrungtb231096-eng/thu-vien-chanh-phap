@@ -1,0 +1,34 @@
+# Restart the library server after changing settings.
+# Environment overrides use NARRATION_<SETTING>, e.g. NARRATION_WORKERS=3.
+workers=3
+retries=3
+backoff_ms=500,1200,2500
+first_byte_timeout=35
+receive_timeout=20
+provider_first_audio_timeout=25
+idle_timeout=30
+prefetch_depth=3
+recovery_stall_ms=15000
+warmup=true
+progressive=true
+# Download complete passages before playback; keep upcoming speech buffered.
+buffered=true
+buffer_seconds=45
+prefetch_max=12
+prefetch_concurrency=2
+startup_buffer_seconds=6
+startup_wait_ms=1500
+# Leave at least one synthesis worker reserved for the passage being played.
+background_workers=2
+# Sentence-first bounded transport parts; prevents comma intonation breaks.
+transport_limit=220
+# Persistent disk cache limit in MB (O(1) LRU eviction).
+cache_mb=8192
+# Offline Vietnamese AI TTS (VieNeu-TTS v3 Turbo on PC / v3 Nano on VPS) with automatic lazy cache.
+offline_tts=true
+offline_fallback=true
+# Optional HTTPS CDN base URL (e.g. Cloudflare R2) for pre-rendered audio packs.
+pack_cdn_url=
+# Local only: use this library's VPS if the direct speech provider fails.
+# Exported VPS installations never relay, preventing recursive requests.
+relay_url=https://thuvienchanhphap.duckdns.org

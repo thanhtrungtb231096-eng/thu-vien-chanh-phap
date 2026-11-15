@@ -1,0 +1,14 @@
+{
+  "result": "passed",
+  "release": "audio-20261112-01",
+  "version": "ux-20261010-89aefaa23777",
+  "changedFiles": 8,
+  "databasesUnchanged": true,
+  "rollbackOutsideApplication": "/opt/thuvien-backups/audio-20261112-01",
+  "preflight": {
+    "version": "ux-20261010-89aefaa23777",
+    "edge_tts": "7.3.1",
+    "assetHashes": "passed",
+    "exportedImports": "passed"
+  }
+}

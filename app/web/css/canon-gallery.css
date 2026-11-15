@@ -1,0 +1,160 @@
+/* Home canon gallery: quiet manuscript ornament and three distinct bindings. */
+#home-content-modules.canon-gallery { margin-top: 34px; scroll-margin-top: calc(var(--dharma-header) + 20px); }
+#home-content-modules .canon-invitation {
+  display: flex; align-items: center; gap: 18px; margin: 0 0 30px; padding: 22px 0;
+  border-top: 1px solid var(--border-gold); border-bottom: 1px solid var(--border-subtle);
+}
+#home-content-modules .canon-invitation-seal {
+  display: grid; place-items: center; flex: 0 0 56px; width: 56px; height: 56px;
+  color: var(--gold-dark); border: 1px solid var(--border-subtle); border-radius: 50%;
+  background: color-mix(in srgb, var(--gold-pure) 5%, var(--bg-card));
+}
+#home-content-modules .canon-invitation-seal svg { width: 36px; height: 30px; stroke-width: 1.3; }
+#home-content-modules .canon-invitation-copy { flex: 1; min-width: 0; }
+#home-content-modules .canon-invitation-copy .eyebrow { font-size: 9px; letter-spacing: .18em; color: var(--gold-dark); }
+#home-content-modules .canon-invitation-copy p { margin: 5px 0 0; color: var(--text-primary); font: 500 clamp(17px, 1.5vw, 21px)/1.65 var(--font-serif); }
+#home-content-modules .canon-invitation-copy em { font-style: normal; color: var(--text-secondary); }
+#home-content-modules .dw-presence { gap: 12px; font: 400 12px/1.6 var(--font-serif); }
+#home-content-modules .dw-presence svg { width: 37px; height: 31px; }
+#home-content-modules .canon-gallery-heading { align-items: center; margin: 0 0 12px; }
+#home-content-modules .canon-gallery-heading .eyebrow { color: var(--gold-dark); font-size: 10px; letter-spacing: .2em; }
+#home-content-modules .canon-gallery-heading h2 { margin: 7px 0 0; font: 500 clamp(28px, 2.4vw, 36px)/1.4 var(--font-serif); letter-spacing: -.025em; }
+#home-content-modules .canon-gallery-heading h2 em { color: var(--gold-dark); font-style: normal; }
+#home-content-modules .canon-heading-note { padding-left: 18px; border-left: 1px solid var(--border-gold); font: 400 12px/1.8 var(--font-serif); color: var(--text-secondary); }
+#home-content-modules .content-intro { margin: 0 0 26px; max-width: 65ch; font-size: 13px; line-height: 1.85; }
+#home-content-modules .content-canon-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: stretch; gap: 20px; }
+#home-content-modules .canon-card {
+  --canon-ink: #344b51; --canon-field: #e9eeeb; --canon-gold: #dfc491;
+  position: relative; isolation: isolate; display: flex; flex-direction: column; flex-wrap: nowrap;
+  gap: 0; align-items: stretch; min-height: 0; padding: 0; overflow: hidden;
+  border: 1px solid var(--border-subtle); border-radius: 4px 4px 16px 4px;
+  background: var(--bg-card); box-shadow: 0 4px 18px #21372b05;
+  transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+}
+#home-content-modules .canon-card[data-canon="tang-dai-thua"] { --canon-ink: #62434a; --canon-field: #f1e8e5; }
+#home-content-modules .canon-card[data-canon="tang-nam-tong"] { --canon-ink: #6c5335; --canon-field: #f0e9dc; }
+#home-content-modules .canon-card::before { display: none; }
+#home-content-modules .canon-card-visual {
+  position: relative; display: block; width: 100%; height: 184px; flex: 0 0 184px; overflow: hidden;
+  color: var(--canon-ink); background: radial-gradient(ellipse at 48% 66%, #fff9, transparent 68%), var(--canon-field);
+  border-bottom: 1px solid var(--border-subtle);
+}
+#home-content-modules .canon-card-topline { position: absolute; inset: 17px 20px auto; display: flex; justify-content: space-between; align-items: center; gap: 10px; z-index: 2; }
+#home-content-modules .canon-card-topline > span:first-child { font: 500 15px/1 var(--font-serif); }
+#home-content-modules .canon-card-topline > span:last-child { font: 500 8px/1.5 var(--font-body); letter-spacing: .12em; }
+#home-content-modules .canon-card-motif { position: absolute; right: -28px; top: 10px; width: 196px; height: 196px; opacity: .14; }
+#home-content-modules .canon-card-motif svg { display: block; width: 100%; height: 100%; stroke-width: 1; }
+#home-content-modules .canon-card-corner { position: absolute; left: 15px; bottom: 15px; width: 30px; height: 30px; opacity: .4; }
+#home-content-modules .canon-card-corner svg { width: 100%; height: 100%; stroke-width: 1; transform: rotate(-90deg); }
+#home-content-modules .canon-book-stack { position: absolute; width: 92px; height: 123px; left: calc(50% - 46px); top: 42px; perspective: 700px; }
+#home-content-modules .canon-book-back {
+  position: absolute; inset: 2px 4px 2px -5px; transform: rotate(-10deg); border-radius: 2px 5px 5px 2px;
+  border: 1px solid color-mix(in srgb, var(--canon-ink) 60%, #ded1b4);
+  background: repeating-linear-gradient(90deg, #e6d9bd 0 1px, #faf0d8 1px 3px); box-shadow: 0 5px 12px #23372912;
+}
+#home-content-modules .canon-book {
+  position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+  padding: 13px 9px 10px; color: #fff3dc; background: linear-gradient(90deg, #0003, transparent 7%, #ffffff0a 9%, transparent 12%), var(--canon-ink);
+  border-radius: 2px 7px 7px 2px; border: 1px solid #f7e4b930; transform: rotate(5deg);
+  box-shadow: 7px 12px 15px #243a3029, inset -2px 0 2px #0003; transition: transform .25s ease;
+}
+#home-content-modules .canon-book::before { content: ''; position: absolute; inset: 5px; border: 1px solid #dfc49180; border-radius: 1px 3px 3px 1px; pointer-events: none; }
+#home-content-modules .canon-book-imprint { font: 500 5px/1.5 var(--font-body); letter-spacing: .15em; color: var(--canon-gold); }
+#home-content-modules .canon-book-symbol { display: grid; place-items: center; width: 29px; height: 29px; color: var(--canon-gold); }
+#home-content-modules .canon-book-symbol svg { width: 100%; height: 100%; stroke-width: 1.4; }
+#home-content-modules .canon-book-title { font: 500 15px/1.45 var(--font-serif); text-align: center; }
+#home-content-modules .canon-book-colophon { display: block; width: 100%; padding-top: 5px; border-top: 1px solid #dfc49150; text-align: center; font: 500 5px/1.5 var(--font-body); letter-spacing: .16em; color: var(--canon-gold); }
+#home-content-modules .canon-visual-caption { position: absolute; bottom: 14px; right: 18px; font: 500 7px/1.5 var(--font-body); letter-spacing: .2em; opacity: .8; }
+#home-content-modules .canon-card-body { display: flex; flex-direction: column; gap: 0; width: auto; flex: 1; padding: 25px 23px 20px; }
+#home-content-modules .canon-card-family { font: 500 9px/1.7 var(--font-body); letter-spacing: .18em; color: var(--gold-dark); }
+#home-content-modules .canon-card-body > strong { margin: 5px 0 12px; color: var(--text-primary); font: 500 28px/1.35 var(--font-serif); letter-spacing: -.025em; }
+#home-content-modules .canon-card-description { display: block; flex: 1; font: 400 13px/1.9 var(--font-body); color: var(--text-secondary); }
+#home-content-modules .canon-card-counts { display: flex; flex-wrap: wrap; gap: 5px 12px; align-items: center; margin-top: 20px; font: 400 11px/1.8 var(--font-body); color: var(--text-secondary); }
+#home-content-modules .canon-card-counts > span { display: inline-flex; align-items: baseline; gap: 5px; }
+#home-content-modules .canon-card-counts > span + span { padding-left: 12px; border-left: 1px solid var(--border-subtle); }
+#home-content-modules .canon-card-counts b { font: 500 16px/1.4 var(--font-serif); color: var(--text-primary); }
+#home-content-modules .canon-card-footer { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 59px; padding: 14px 23px; border-top: 1px solid var(--border-subtle); font: 500 12px/1.5 var(--font-body); color: var(--accent); background: color-mix(in srgb, var(--gold-pure) 4%, var(--bg-card)); }
+#home-content-modules .canon-card .content-card-arrow { position: static; align-self: auto; display: grid; place-items: center; flex: 0 0 28px; width: 28px; height: 28px; border: 1px solid var(--border-subtle); border-radius: 50%; font-size: 17px; color: inherit; transition: background .2s, color .2s; }
+#home-content-modules .canon-card:hover { transform: translateY(-4px); border-color: var(--gold-pure); background: var(--bg-card); box-shadow: 0 12px 28px #253c3012; }
+#home-content-modules .canon-card:hover .canon-book { transform: rotate(0deg) translateY(-3px); }
+#home-content-modules .canon-card:hover .content-card-arrow { color: var(--on-accent); background: var(--accent); border-color: var(--accent); }
+#home-content-modules .canon-card:focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
+#home-content-modules .canon-collection-note { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-top: 20px; padding: 17px 0; border-bottom: 1px solid var(--border-subtle); color: var(--text-secondary); font: 400 11px/1.8 var(--font-body); }
+#home-content-modules .canon-collection-note > span:first-child { display: flex; align-items: center; gap: 11px; }
+#home-content-modules .canon-collection-note svg { width: 21px; height: 21px; flex: 0 0 21px; color: var(--gold-dark); }
+#home-content-modules .canon-collection-note b { color: var(--text-primary); font: 500 18px/1.5 var(--font-serif); margin-right: 4px; }
+#home-content-modules .canon-collection-note > span:last-child { font-size: 10px; letter-spacing: .04em; }
+:root[data-theme="night"] #home-content-modules .canon-card-visual { color: #dfc491; background: radial-gradient(ellipse at 50% 75%, #d7bc8120, transparent 70%), color-mix(in srgb, var(--canon-ink) 45%, var(--bg-card)); }
+:root[data-theme="night"] #home-content-modules .canon-card { box-shadow: 0 4px 18px #0002; }
+@media (min-width: 1600px) {
+  #home-content-modules .canon-card-visual { height: 203px; flex-basis: 203px; }
+  #home-content-modules .canon-book-stack { top: 48px; width: 100px; height: 136px; left: calc(50% - 50px); }
+  #home-content-modules .canon-card-body { padding: 28px 27px 24px; }
+  #home-content-modules .canon-card-description { font-size: 13px; }
+  #home-content-modules .canon-card-footer { padding-inline: 27px; }
+}
+@media (max-width: 1150px) {
+  #home-content-modules .content-canon-grid { gap: 14px; }
+  #home-content-modules .canon-card-body { padding: 21px 17px 18px; }
+  #home-content-modules .canon-card-body > strong { font-size: 25px; }
+  #home-content-modules .canon-card-counts { gap: 4px; flex-direction: column; align-items: flex-start; }
+  #home-content-modules .canon-card-counts > span + span { border-left: 0; padding-left: 0; }
+  #home-content-modules .canon-card-footer { font-size: 11px; padding-inline: 17px; }
+  #home-content-modules .canon-card-topline { inset-inline: 15px; }
+}
+@media (max-width: 1000px) {
+  #home-content-modules .content-canon-grid { grid-template-columns: minmax(0, 1fr); }
+  #home-content-modules .canon-card { display: grid; grid-template-columns: 158px minmax(0, 1fr); }
+  #home-content-modules .canon-card-visual { height: 100%; min-height: 238px; grid-row: span 2; border-bottom: 0; border-right: 1px solid var(--border-subtle); }
+  #home-content-modules .canon-card-topline { flex-direction: column; align-items: flex-start; gap: 10px; }
+  #home-content-modules .canon-book-stack { top: calc(50% - 50px); }
+  #home-content-modules .canon-card-motif { right: -88px; top: 42px; }
+  #home-content-modules .canon-card-corner { width: 24px; height: 24px; }
+  #home-content-modules .canon-card-body { padding: 23px 25px 18px; }
+  #home-content-modules .canon-card-counts { flex-direction: row; gap: 8px 14px; margin-top: 16px; }
+  #home-content-modules .canon-card-counts > span + span { border-left: 1px solid var(--border-subtle); padding-left: 14px; }
+  #home-content-modules .canon-card-footer { padding-inline: 25px; }
+  #home-content-modules .canon-heading-note { display: none; }
+  #home-content-modules .canon-collection-note > span:last-child { display: none; }
+}
+@media (max-width: 600px) {
+  #home-content-modules.canon-gallery { margin-top: 26px; }
+  #home-content-modules .canon-invitation { gap: 12px; padding: 19px 0; margin-bottom: 24px; }
+  #home-content-modules .canon-invitation-seal { flex-basis: 43px; width: 43px; height: 43px; }
+  #home-content-modules .canon-invitation-seal svg { width: 28px; height: 25px; }
+  #home-content-modules .canon-invitation-copy .eyebrow { font-size: 8px; letter-spacing: .12em; }
+  #home-content-modules .canon-invitation-copy p { font-size: 16px; line-height: 1.65; }
+  #home-content-modules .canon-invitation-copy em { display: block; }
+  #home-content-modules .canon-gallery-heading h2 { font-size: 27px; }
+  #home-content-modules .content-intro { font-size: 12px; margin-bottom: 21px; }
+  #home-content-modules .canon-card { grid-template-columns: 94px minmax(0, 1fr); border-radius: 3px 3px 12px 3px; }
+  #home-content-modules .canon-card-visual { min-height: 270px; }
+  #home-content-modules .canon-card-topline { inset: 16px 12px auto; gap: 9px; }
+  #home-content-modules .canon-card-topline > span:last-child { font-size: 7px; letter-spacing: .04em; }
+  #home-content-modules .canon-book-stack { width: 58px; height: 89px; left: calc(50% - 29px); top: calc(50% - 29px); }
+  #home-content-modules .canon-book { padding: 10px 7px 8px; }
+  #home-content-modules .canon-book::before { inset: 4px; }
+  #home-content-modules .canon-book-imprint { font-size: 3.5px; letter-spacing: 0; }
+  #home-content-modules .canon-book-symbol { width: 20px; height: 20px; }
+  #home-content-modules .canon-book-title { font-size: 10px; }
+  #home-content-modules .canon-book-colophon { font-size: 3.5px; letter-spacing: .06em; }
+  #home-content-modules .canon-visual-caption { right: 10px; bottom: 15px; font-size: 5.5px; letter-spacing: .1em; }
+  #home-content-modules .canon-card-body { padding: 19px 16px 17px; }
+  #home-content-modules .canon-card-family { font-size: 8px; }
+  #home-content-modules .canon-card-body > strong { font-size: 25px; margin-bottom: 10px; }
+  #home-content-modules .canon-card-description { font-size: 12px; line-height: 1.85; }
+  #home-content-modules .canon-card-counts { flex-direction: column; gap: 3px; margin-top: 14px; font-size: 9px; }
+  #home-content-modules .canon-card-counts > span + span { padding-left: 0; border-left: 0; }
+  #home-content-modules .canon-card-counts b { font-size: 15px; }
+  #home-content-modules .canon-card-footer { min-height: 53px; padding: 12px 16px; font-size: 10px; }
+  #home-content-modules .canon-card .content-card-arrow { flex-basis: 24px; width: 24px; height: 24px; font-size: 15px; }
+  #home-content-modules .canon-collection-note { font-size: 10px; margin-top: 14px; padding-block: 16px; }
+  #home-content-modules .canon-collection-note b { font-size: 17px; }
+}
+@media (max-width: 359px) {
+  #home-content-modules .canon-card { grid-template-columns: 78px minmax(0, 1fr); }
+  #home-content-modules .canon-card-body, #home-content-modules .canon-card-footer { padding-inline: 13px; }
+  #home-content-modules .canon-card-body > strong { font-size: 23px; }
+  #home-content-modules .canon-card-topline { inset-inline: 9px; }
+  #home-content-modules .canon-card-topline > span:last-child { font-size: 6px; }
+}

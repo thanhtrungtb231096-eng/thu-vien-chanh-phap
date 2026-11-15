@@ -1,0 +1,15 @@
+{
+  "archive": "vps/output/thuvien.7z",
+  "archiveBytes": 1209263553,
+  "archivedFilesWithoutCurrentOriginal": [],
+  "changedSmallFiles": [
+    "web-thuvien/build_edition_migrations.cjs",
+    "web-thuvien/build_phuc_minh.py",
+    "web-thuvien/launch.py",
+    "web-thuvien/operations_backup.py",
+    "web-thuvien/project_paths.cjs",
+    "web-thuvien/project_paths.py"
+  ],
+  "auditVerifiedReferences": 7226,
+  "reason": "Export predates the local/VPS path change; every archived entry still has a current original and can be rebuilt."
+}

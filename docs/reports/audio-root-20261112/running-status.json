@@ -1,0 +1,32 @@
+{
+  "local": {
+    "version": "ux-20261010-129c6fc8d4c6",
+    "indexReady": true,
+    "documents": 5348,
+    "passages": 3395798,
+    "voiceIds": [
+      "vi-VN-HoaiMyNeural",
+      "vi-VN-NamMinhNeural",
+      "vi-VN-HoaiMyNeural:slow",
+      "vi-VN-NamMinhNeural:slow"
+    ],
+    "audioVersion": 7,
+    "buffered": true,
+    "liveAssetHashesMatch": true
+  },
+  "vps": {
+    "version": "ux-20261010-129c6fc8d4c6",
+    "indexReady": true,
+    "documents": 5348,
+    "passages": 3395798,
+    "voiceIds": [
+      "vi-VN-HoaiMyNeural",
+      "vi-VN-NamMinhNeural",
+      "vi-VN-HoaiMyNeural:slow",
+      "vi-VN-NamMinhNeural:slow"
+    ],
+    "audioVersion": 7,
+    "buffered": true,
+    "liveAssetHashesMatch": true
+  }
+}

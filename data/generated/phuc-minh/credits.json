@@ -1,0 +1,39 @@
+{
+  "hoi-dap-can-ban": [{"role": "Tác giả", "name": "Sư Thanh Minh", "sourcePages": [1], "cover": true}],
+  "so-tay-thien-dinh": [{"role": "Tác giả", "name": "Sư Thanh Minh", "sourcePages": [1], "cover": true}],
+  "thien-hoi-tho": [{"role": "Giảng", "name": "Sư Thanh Minh", "sourcePages": [1], "cover": true}],
+  "hanh-thien": [{"role": "Giảng", "name": "Sư Thanh Minh", "sourcePages": [5], "cover": true}],
+  "phap-hanh-thien": [{"role": "Giảng", "name": "Sư Thanh Minh", "sourcePages": [1], "cover": true}],
+  "thuc-hanh-thien-dinh": [{"role": "Tác giả", "name": "Sư Thanh Minh", "sourcePages": [1], "cover": true}],
+  "phap-duyen-sinh": [{"role": "Tác giả", "name": "Sư Thanh Minh", "sourcePages": [1], "cover": true}],
+  "phuc-hanh-tong": [
+    {"role": "Biên soạn", "name": "Bhikkhu Saddhammajotika Dhammacariya", "sourcePages": [1, 2], "cover": true},
+    {"role": "Việt dịch", "name": "Bhikkhu Abhisiddhi – TK. Siêu Thành", "sourcePages": [1, 2], "cover": true},
+    {"role": "Hiệu đính", "name": "Ācariya Maggabujjhano – thầy Ngộ Đạo", "sourcePages": [1, 2], "cover": false}
+  ],
+  "anh-sang-chan-tam": [
+    {"role": "Giáo huấn", "name": "Đức Đạt Lai Lạt Ma", "sourcePages": [1], "cover": true},
+    {"role": "Chuyển Việt ngữ", "name": "Tâm Bảo Đàn", "sourcePages": [1, 2], "cover": true},
+    {"role": "Chuyển Anh ngữ", "name": "Jeffrey Hopkins", "sourcePages": [1, 2], "cover": false}
+  ],
+  "mi-tien-van-dap": [
+    {"role": "Dịch giả", "name": "Hòa thượng Giới Nghiêm", "sourcePages": [1], "cover": true},
+    {"role": "Hiệu đính", "name": "Tỳ kheo Giới Đức", "sourcePages": [1], "cover": false}
+  ],
+  "dai-bat-niet-ban": [{"role": "Dịch & trực chỉ", "name": "Thích Từ Thông", "sourcePages": [1, 2, 49], "cover": true}],
+  "phat-ban-hanh-tap": [
+    {"role": "Việt dịch", "name": "Linh Sơn Pháp Bảo Đại Tạng Kinh", "sourcePages": [1], "cover": true},
+    {"role": "Hán dịch", "name": "Xà-na-quật-đa", "sourcePages": [1], "cover": false}
+  ],
+  "kinh-nhap-phap": [
+    {"role": "Việt dịch", "name": "Thích Nữ Huệ Dung", "sourcePages": [27], "cover": true},
+    {"role": "Hán dịch", "name": "Xà-na-quật-đa", "sourcePages": [27], "cover": false},
+    {"role": "Biên tập", "name": "Thích Phước Nghiêm", "sourcePages": [27], "cover": false}
+  ],
+  "bhikkhu-patimokkha": [{"role": "Dựa theo bản dịch", "name": "Đại Đức Indacanda", "sourcePages": [4], "cover": true}],
+  "ke-tu-tam-1": [{"role": "Tác giả", "name": "Sư Thanh Minh", "sourcePages": [1], "cover": true}],
+  "ke-tu-tam-2": [{"role": "Tác giả", "name": "Sư Thanh Minh", "sourcePages": [1], "cover": true}],
+  "thi-ke-phat-da": [{"role": "Tác giả", "name": "Sư Thanh Minh", "sourcePages": [1], "cover": true}],
+  "cau-doi-phap-1": [{"role": "Tác giả", "name": "Sư Thanh Minh", "sourcePages": [1], "cover": true}],
+  "cau-doi-phap-2": [{"role": "Tác giả", "name": "Sư Thanh Minh", "sourcePages": [1, 128], "cover": true}]
+}

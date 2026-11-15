@@ -1,0 +1,15 @@
+{
+  "result": "passed",
+  "checks": [
+    "iPhone header 44px drawer & mindfulness bell controls verified",
+    "5-pillar thumb-zone Bottom Navigation Bar ergonomics verified",
+    "Off-Canvas Slide-Over Sidebar, distinct canon icons & live theme switcher verified",
+    "Canon & Offline Quick-Switcher Bottom Sheet verified",
+    "Smart Collapsible Header verified (113px -> 61px on scroll)",
+    "Search & Shelf bottom tabs + personal quick-tabs verified",
+    "Compact floating Mini-Player & Swipe-Up Now Playing sheet verified",
+    "Reader Aa Bottom Sheet, Tap-Center Zen Mode & Hardware Back Stack verified",
+    "iPad Portrait Drawer & Landscape Collapsible Labeled Rail (214px <-> 82px) verified",
+    "Desktop 1680x950 3-column sanctuary zero-regression verified"
+  ]
+}

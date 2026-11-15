@@ -1,0 +1,28 @@
+# Local runtimes, caches & state
+local/
+vps/output/
+runtime/
+storage/
+dist/
+__pycache__/
+*.pyc
+debug.log
+tests/artifacts/
+
+# Heavy raw sutra/PDF/Word corpus (served by VPS & .pack.db vaults; keeps GitHub repo ~31 MB)
+data/sources/
+data/generated/dai-tang-kinh/originals/
+data/generated/dai-tang-kinh/text/
+data/generated/phuc-minh/text/
+data/generated/phuc-minh/ocr/*.md
+
+# Mobile (Capacitor iOS/Android) & Windows PC (Tauri v2 Rust) build outputs
+mobile/node_modules/
+mobile/www/
+mobile/ios/
+mobile/android/
+desktop-windows/node_modules/
+desktop-windows/staging/
+desktop-windows/dist/
+desktop-windows/src-tauri/target/
+desktop-windows/src-tauri/gen/

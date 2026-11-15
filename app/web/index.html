@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="parchment">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Đại Thư Viện Chánh Pháp - Universal Buddhist Digital Library</title>
+  <meta name="description" content="Thư viện Chánh Pháp: kinh Đại Thừa, Hán Tạng, A-Hàm & Nikāya cùng tủ sách Chùa Phúc Minh gồm 26 tài liệu. Đọc kinh, xem PDF, nghe tiếng Việt và lưu vị trí tu học.">
+  <!-- OpenGraph / Facebook / Zalo -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://thuvienchanhphap.duckdns.org/">
+  <meta property="og:title" content="Thư Viện Chánh Pháp - Kho Tàng Kinh Điển Phật Giáo">
+  <meta property="og:description" content="Kho tàng kinh điển Phật giáo: Đại Thừa, Hán Tạng, A-Hàm, Nikāya. Đọc kinh, xem PDF, nghe pháp thoại tiếng Việt. Hoàn toàn miễn phí.">
+  <meta property="og:image" content="https://thuvienchanhphap.duckdns.org/web-thuvien/opengraph.png?v=2">
+  <meta property="og:image:secure_url" content="https://thuvienchanhphap.duckdns.org/web-thuvien/opengraph.png?v=2">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Đại Thư Viện Chánh Pháp">
+  <meta property="og:locale" content="vi_VN">
+  <meta property="og:site_name" content="Thư Viện Chánh Pháp">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Thư Viện Chánh Pháp - Kho Tàng Kinh Điển Phật Giáo">
+  <meta name="twitter:description" content="Kho tàng kinh điển Phật giáo: Đại Thừa, Hán Tạng, A-Hàm, Nikāya. Đọc kinh, xem PDF, nghe pháp thoại tiếng Việt.">
+  <meta name="twitter:image" content="https://thuvienchanhphap.duckdns.org/web-thuvien/opengraph.png?v=2">
+  <link rel="stylesheet" href="css/library.bundle.css?v=d34d98e7f96c">
+<link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#285A46">
+  <link rel="apple-touch-icon" href="design/library-icon-192.png">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Đến nội dung chính</a>
+
+  <!-- 1. Thanh Tiêu Đề Hoàng Gia (Noble Header) -->
+  <header class="noble-header">
+    <div class="header-container">
+      <div class="brand-wrapper" onclick="switchTab('daithua')">
+        <!-- Bánh xe Pháp luân Dhammacakka SVG -->
+        <svg class="wheel-icon" viewBox="0 0 100 100" fill="currentColor">
+          <circle cx="50" cy="50" r="44" fill="none" stroke="currentColor" stroke-width="5"/>
+          <circle cx="50" cy="50" r="14" fill="none" stroke="currentColor" stroke-width="4"/>
+          <circle cx="50" cy="50" r="4" fill="currentColor"/>
+          <!-- 8 Nan hoa Bát Chánh Đạo -->
+          <line x1="50" y1="6" x2="50" y2="94" stroke="currentColor" stroke-width="4"/>
+          <line x1="6" y1="50" x2="94" y2="50" stroke="currentColor" stroke-width="4"/>
+          <line x1="18.9" y1="18.9" x2="81.1" y2="81.1" stroke="currentColor" stroke-width="4"/>
+          <line x1="18.9" y1="81.1" x2="81.1" y2="18.9" stroke="currentColor" stroke-width="4"/>
+        </svg>
+        <div class="brand-text">
+          <h1>ĐẠI THƯ VIỆN CHÁNH PHÁP</h1>
+          <span class="pali-sub">Universal Buddhist Digital Archive</span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <!-- Nút Thỉnh Chuông Web Audio API -->
+        <button id="btn-bell-header" class="bell-btn" title="Thỉnh tiếng chuông đồng thanh tịnh nhắc chánh niệm">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="bell-text">Thỉnh Chuông</span>
+        </button>
+
+        <!-- Nút Nghe Trọn Bộ Nổi Bật -->
+        <button id="btn-listen-header" class="bell-btn" title="Lắng nghe kinh trọn bộ theo từng chủ đề" onclick="window.CollectionPlayer?.startFromCategory('01')">
+          <span class="bell-icon">🎧</span>
+          <span class="bell-text">Nghe Trọn Bộ</span>
+        </button>
+
+        <!-- Bộ chuyển đổi giao diện Thiền -->
+        <div class="theme-selector">
+          <button class="theme-btn active" data-theme="parchment" title="Giấy Cổ Trang Nhã">📜</button>
+          <button class="theme-btn" data-theme="amber" title="Vàng Hoàng Y">🍂</button>
+          <button class="theme-btn" data-theme="night" title="Đêm Thiền Tịch Tịnh">🌙</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- 2. Thanh Điều Hướng Các Phân Khu Chánh Pháp (Navigation Tabs) -->
+  <nav class="noble-nav-bar" role="navigation" aria-label="Điều hướng các phân khu Chánh Pháp">
+    <button class="nav-scroll-btn nav-scroll-left" id="nav-scroll-left" aria-label="Cuộn tab sang trái" style="display:none;">‹</button>
+    <div class="nav-tabs-container" id="nav-tabs-container" role="tablist">
+      <button class="nav-tab active" data-tab="daithua" role="tab" aria-selected="true" aria-controls="tab-daithua">
+        <span>🌸 Kinh Đại Thừa</span>
+        <span class="tab-badge">62 Bộ Toàn Bích</span>
+      </button>
+      <button class="nav-tab" data-tab="daitanghan" role="tab" aria-selected="false" aria-controls="tab-daitanghan">
+        <span>📜 Đại Tạng Kinh Hán</span>
+        <span class="tab-badge">25 Bộ · 2.471 Kinh</span>
+      </button>
+      <button class="nav-tab" data-tab="appendix" role="tab" aria-selected="false" aria-controls="tab-appendix">
+        <span>📚 Phụ Lục Minh Triết</span>
+        <span class="tab-badge">4 Đại Chuyên Khảo</span>
+      </button>
+      <button class="nav-tab" data-tab="roadmap" role="tab" aria-selected="false" aria-controls="tab-roadmap">
+        <span>☸ Lộ Trình Pháp Hành</span>
+        <span class="tab-badge">Giới - Định - Tuệ</span>
+      </button>
+      <button class="nav-tab" data-tab="milinda" role="tab" aria-selected="false" aria-controls="tab-milinda">
+        <span>❓ Vấn Đáp Mi Tiên</span>
+        <span class="tab-badge">244 Câu</span>
+      </button>
+      <button class="nav-tab" data-tab="practical" role="tab" aria-selected="false" aria-controls="tab-practical">
+        <span>🌿 Ứng Dụng Đời Thường</span>
+        <span class="tab-badge">218 Vấn Đáp</span>
+      </button>
+      <button class="nav-tab" data-tab="glossary" role="tab" aria-selected="false" aria-controls="tab-glossary">
+        <span>🔤 Từ Điển Pāḷi Cốt Tủy</span>
+        <span class="tab-badge">Tra Cứu</span>
+      </button>
+      <button class="nav-tab" data-tab="timer" role="tab" aria-selected="false" aria-controls="tab-timer">
+        <span>🧘 Tọa Thiền & Chuông</span>
+        <span class="tab-badge">Chánh Niệm</span>
+      </button>
+      <button class="nav-tab" data-tab="notes" role="tab" aria-selected="false" aria-controls="tab-notes">
+        <span>📝 Sổ Tay Tu Học</span>
+        <span class="tab-badge">Cá Nhân</span>
+      </button>
+    </div>
+    <button class="nav-scroll-btn nav-scroll-right" id="nav-scroll-right" aria-label="Cuộn tab sang phải">›</button>
+    <div class="nav-scroll-fade nav-fade-right" id="nav-fade-right"></div>
+    <div class="nav-scroll-fade nav-fade-left" id="nav-fade-left" style="display:none;"></div>
+  </nav>
+
+  <!-- 3. Khu Vực Nội Dung Chính (Main Wrapper) -->
+  <main class="main-wrapper" id="main-content">
+
+    <!-- Hero Grand Banner -->
+    <section class="dhamma-hero">
+      <div class="hero-pill">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        Kho Lưu Trữ Toàn Thư Kinh Điển: Đại Thừa, Hán Tạng & Nguyên Thủy A-Hàm
+      </div>
+      <h2 class="hero-title">Đại Kho Tàng <span>Chánh Pháp Số</span></h2>
+      <p class="hero-desc">
+        Hệ thống hóa toàn bộ văn hiến kinh điển Phật giáo: <strong>62 Bộ Kinh Tuyển Tập Đại Thừa</strong> (Thập Nhị Phân Giáo có đủ bản Việt, Hán, Ghi chú và PDF), 
+        <strong>Đại Tạng Kinh Hán Tạng</strong> (25 Bộ, 2.471 tác phẩm, 1.109 bản dịch Việt Linh Sơn Pháp Bảo), cùng bộ đối chiếu <strong>A-Hàm ↔ Nikāya Nguyên Thủy</strong>, 
+        244 vấn đáp Mi Tiên và bộ công cụ tọa thiền chánh niệm.
+      </p>
+
+      <div class="hero-stats-row">
+        <div class="hero-stat-card">
+          <div class="stat-num">62</div>
+          <div class="stat-label">Bộ Kinh Đại Thừa<br>Thập Nhị Phân Giáo</div>
+        </div>
+        <div class="hero-stat-card">
+          <div class="stat-num">2.471</div>
+          <div class="stat-label">Văn Bản Taishō<br>25 Bộ Hán Tạng</div>
+        </div>
+        <div class="hero-stat-card">
+          <div class="stat-num">1.109</div>
+          <div class="stat-label">Văn Bản Đã Có<br>Bản Dịch Tiếng Việt</div>
+        </div>
+        <div class="hero-stat-card">
+          <div class="stat-num">155</div>
+          <div class="stat-label">Kinh A-Hàm<br>Đối Chiếu Nikāya</div>
+        </div>
+        <div class="hero-stat-card">
+          <div class="stat-num">244</div>
+          <div class="stat-label">Câu Phá Nghi<br>Milinda Pañha</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Global Search & Filter Controls -->
+    <section class="search-filter-section">
+      <div class="search-input-wrapper">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="global-search" class="search-input" placeholder="Tìm kiếm tên kinh (Việt / Hán), mã Taishō (T01n0001, T08n0251...), thuật ngữ Pāḷi hoặc vấn đề pháp hành...">
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         TAB 1: TUYỂN TẬP 62 BỘ KINH ĐẠI THỪA (Thập Nhị Phân Giáo)
+         ==================================================================== -->
+    <section id="tab-daithua" class="tab-panel" role="tabpanel" aria-labelledby="tab-daithua" style="display: block;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+        <div>
+          <h3 style="font-family: var(--font-serif); font-size: 1.45rem;">62 Bộ Kinh Tuyển Tập Đại Thừa</h3>
+          <p style="color: var(--text-secondary); font-size: 0.92rem;">Phân loại theo Thập Nhị Phân Giáo (12 thể loại lời Phật thuyết) • Đầy đủ Bản Việt, Chữ Hán, Ghi chú khảo chứng và PDF</p>
+        </div>
+        <span class="hero-pill" id="daithua-count-badge">62 Bộ</span>
+      </div>
+
+      <!-- Featured Collection Launcher Banner -->
+      <section class="collection-launcher-card">
+        <div class="cl-header">
+          <div class="cl-badge">🎧 TÍNH NĂNG MỚI · NGHE KINH TRỌN BỘ</div>
+          <h3 class="cl-title">Lắng Nghe Chánh Pháp Trọn Bộ Theo Từng Thể Loại</h3>
+          <p class="cl-desc">Lắng nghe liên tục toàn bộ các bản kinh trong cùng một thể loại, tự động chuyển kinh tiếp theo, đếm thời gian nghe thực tế từng giây và ước tính thời gian còn lại đến khi hoàn tất.</p>
+        </div>
+        <div class="cl-quick-grid">
+          <div class="cl-pill-card" role="button" tabindex="0" onclick="window.CollectionPlayer?.startFromCategory('01')">
+            <span class="cl-pill-icon">📜</span>
+            <div class="cl-pill-text">
+              <strong>01. Khế Kinh (7 kinh)</strong>
+              <span>Quán Vô Lượng Thọ, Dược Sư, Phạm Võng, Di Lặc...</span>
+            </div>
+            <span class="cl-pill-btn">▶ Nghe trọn bộ</span>
+          </div>
+          <div class="cl-pill-card" role="button" tabindex="0" onclick="window.CollectionPlayer?.startFromCategory('07')">
+            <span class="cl-pill-icon">💎</span>
+            <div class="cl-pill-text">
+              <strong>07. Thí Dụ &amp; Bát Nhã (4 kinh)</strong>
+              <span>Kim Cương Bát Nhã, Bát Nhã Ba La Mật...</span>
+            </div>
+            <span class="cl-pill-btn">▶ Nghe trọn bộ</span>
+          </div>
+          <div class="cl-pill-card" role="button" tabindex="0" onclick="window.CollectionPlayer?.startFromCategory('10')">
+            <span class="cl-pill-icon">🌺</span>
+            <div class="cl-pill-text">
+              <strong>10. Phương Quảng (28 kinh)</strong>
+              <span>Hoa Nghiêm, Địa Tạng, Viên Giác, Lăng Nghiêm...</span>
+            </div>
+            <span class="cl-pill-btn">▶ Nghe trọn bộ</span>
+          </div>
+          <div class="cl-pill-card" role="button" tabindex="0" onclick="window.CollectionPlayer?.startFromCategory('06')">
+            <span class="cl-pill-icon">🌱</span>
+            <div class="cl-pill-text">
+              <strong>06. Nhân Duyên (4 kinh)</strong>
+              <span>Phổ Môn Quan Âm, Vô Lượng Thọ, A Di Đà...</span>
+            </div>
+            <span class="cl-pill-btn">▶ Nghe trọn bộ</span>
+          </div>
+          <div class="cl-pill-card" role="button" tabindex="0" onclick="window.CollectionPlayer?.startFromCategory('09')">
+            <span class="cl-pill-icon">🌿</span>
+            <div class="cl-pill-text">
+              <strong>09. Bổn Sinh (5 kinh)</strong>
+              <span>Đại Phương Tiện Phật Báo Ân, Tạp Bảo Tạng...</span>
+            </div>
+            <span class="cl-pill-btn">▶ Nghe trọn bộ</span>
+          </div>
+          <div class="cl-pill-card" role="button" tabindex="0" onclick="window.CollectionPlayer?.startFromReadingPath('cot-tuy')">
+            <span class="cl-pill-icon">☸</span>
+            <div class="cl-pill-text">
+              <strong>Lộ Trình Cốt Tủy (3 kinh)</strong>
+              <span>Bát Nhã Tâm Kinh, Pháp Cú, Vô Ngã Tướng</span>
+            </div>
+            <span class="cl-pill-btn">▶ Nghe lộ trình</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Category Filter Chips -->
+      <div class="filter-tags-row" style="margin-bottom: 1.5rem;">
+        <button class="filter-tag active daithua-filter-chip" data-cat="all">Tất Cả (62)</button>
+        <button class="filter-tag daithua-filter-chip" data-cat="01">01. Khế Kinh (7)</button>
+        <button class="filter-tag daithua-filter-chip" data-cat="02">02. Trùng Tụng (1)</button>
+        <button class="filter-tag daithua-filter-chip" data-cat="03">03. Thọ Ký (3)</button>
+        <button class="filter-tag daithua-filter-chip" data-cat="04">04. Phúng Tụng (2)</button>
+        <button class="filter-tag daithua-filter-chip" data-cat="05">05. Tự Thuyết (1)</button>
+        <button class="filter-tag daithua-filter-chip" data-cat="06">06. Nhân Duyên (4)</button>
+        <button class="filter-tag daithua-filter-chip" data-cat="07">07. Thí Dụ (4)</button>
+        <button class="filter-tag daithua-filter-chip" data-cat="08">08. Bổn Sự (1)</button>
+        <button class="filter-tag daithua-filter-chip" data-cat="09">09. Bổn Sinh (5)</button>
+        <button class="filter-tag daithua-filter-chip" data-cat="10">10. Phương Quảng (28)</button>
+        <button class="filter-tag daithua-filter-chip" data-cat="11">11. Vị Tằng Hữu (3)</button>
+        <button class="filter-tag daithua-filter-chip" data-cat="12">12. Luận Nghị (3)</button>
+      </div>
+
+      <div class="daithua-grid" id="daithua-grid-container">
+        <!-- Rendered by app.js -->
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         TAB 2: ĐẠI TẠNG KINH HÁN TẠNG (25 Bộ · 2.471 Văn Bản)
+         ==================================================================== -->
+    <section id="tab-daitanghan" class="tab-panel" role="tabpanel" aria-labelledby="tab-daitanghan" style="display: none;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+        <div>
+          <h3 style="font-family: var(--font-serif); font-size: 1.45rem;">Đại Chánh Tân Tu Đại Tạng Kinh (Taishō)</h3>
+          <p style="color: var(--text-secondary); font-size: 0.92rem;">25 Bộ chuẩn mực quốc tế • 2.471 văn bản chữ Hán (CBETA) • 1.109 văn bản dịch tiếng Việt (Linh Sơn Pháp Bảo)</p>
+        </div>
+        <span class="hero-pill" id="daitang-count-badge">2.471 Văn Bản</span>
+      </div>
+
+      <!-- Quick Filter Buttons -->
+      <div class="filter-tags-row" style="margin-bottom: 1.5rem;">
+        <button class="filter-tag active daitang-filter-btn" data-filter="all">Tất Cả 25 Bộ (2.471)</button>
+        <button class="filter-tag daitang-filter-btn" data-filter="viet">Đã Có Bản Dịch Tiếng Việt (1.109)</button>
+        <button class="filter-tag daitang-filter-btn" data-filter="aham">Bộ 01. A Hàm (Đối Chiếu Nikāya - 155)</button>
+      </div>
+
+      <!-- 25 Divisions Grid -->
+      <div style="margin-bottom: 1.5rem;">
+        <h4 style="font-size: 0.88rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); margin-bottom: 0.75rem;">
+          Duyệt Theo Từng Bộ (Bấm để lọc):
+        </h4>
+        <div class="daitang-divisions-grid" id="daitang-divisions-container">
+          <!-- Rendered by app.js -->
+        </div>
+      </div>
+
+      <!-- Taisho Texts List -->
+      <div>
+        <h4 style="font-size: 0.88rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-secondary); margin-bottom: 0.75rem;">
+          Danh Sách Văn Bản Kinh Điển:
+        </h4>
+        <div class="taisho-texts-container" id="taisho-texts-list">
+          <!-- Rendered by app.js -->
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination-controls" id="daitang-pagination">
+          <!-- Rendered by app.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         TAB 2.5: PHỤ LỤC MINH TRIẾT & KHẢO CHỨNG TAM TẠNG
+         ==================================================================== -->
+    <section id="tab-appendix" class="tab-panel" role="tabpanel" aria-labelledby="tab-appendix" style="display: none;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+        <div>
+          <h3 style="font-family: var(--font-serif); font-size: 1.45rem;">Phụ Lục Minh Triết & Khảo Chứng Tam Tạng</h3>
+          <p style="color: var(--text-secondary); font-size: 0.92rem;">
+            Chuyên đề khảo chứng A-Hàm ↔ Nikāya, giải nghĩa Thập Nhị Phân Giáo, đồ hình 25 Bộ Hán Tạng và hệ thống Pháp Số Cốt Tủy
+          </p>
+        </div>
+        <span class="hero-pill">4 Đại Chuyên Đề</span>
+      </div>
+
+      <!-- Appendix Subtab Switcher -->
+      <div class="appendix-subnav" style="display: flex; gap: 0.75rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
+        <button class="filter-tag active appendix-subtab-btn" data-subtab="aham" onclick="switchAppendixSubtab('aham')">
+          🏛 I. A-Hàm ↔ Nikāya
+        </button>
+        <button class="filter-tag appendix-subtab-btn" data-subtab="twelve" onclick="switchAppendixSubtab('twelve')">
+          📜 II. Thập Nhị Phân Giáo
+        </button>
+        <button class="filter-tag appendix-subtab-btn" data-subtab="taisho" onclick="switchAppendixSubtab('taisho')">
+          🗂 III. Cấu Trúc 25 Bộ Hán Tạng
+        </button>
+        <button class="filter-tag appendix-subtab-btn" data-subtab="numbers" onclick="switchAppendixSubtab('numbers')">
+          🔢 IV. Pháp Số Cốt Tủy
+        </button>
+      </div>
+
+      <!-- Container for dynamic appendix content -->
+      <div id="appendix-content-container">
+        <!-- Rendered by js/app.js via dhamma-appendices.js -->
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         TAB 3: LỘ TRÌNH PHÁP HÀNH TAM VÔ LẬU HỌC (Giới - Định - Tuệ)
+         ==================================================================== -->
+    <section id="tab-roadmap" class="tab-panel" role="tabpanel" aria-labelledby="tab-roadmap" style="display: none;">
+      <div class="roadmap-container">
+
+        <!-- Bước 1 -->
+        <div class="roadmap-step">
+          <div class="step-marker">
+            <div class="marker-circle">1</div>
+            <div class="marker-line"></div>
+          </div>
+          <div class="step-content">
+            <div class="step-subtitle">Giai Đoạn 1: Nền Tảng Giới Hạnh & Đoạn Trừ Buông Lung</div>
+            <h3>Dứt Trừ Phóng Dật (Pamāda) & Giữ Gìn Giới Luật Trong Sạch</h3>
+            <p style="margin-bottom: 1rem; color: var(--text-secondary);">
+              Đức Phật dạy: <em>"Appamādo amatapadaṃ, pamādo maccuno padaṃ"</em> - Không phóng dật là đường bất tử, phóng dật là đường tử vong. 
+              Người học Phật trước tiên phải thu thúc thân khẩu ý, đoạn trừ 6 cửa ngõ tiêu tán tài sản và hoàn thành bổn phận 6 phương theo 
+              <strong>Kinh Thiện Sanh (Sigālovāda Sutta, DN 31)</strong> tương ứng trong Hán tạng là <strong>Thi-ca-la-việt Lục Phương Lễ Kinh (T01n0016)</strong>.
+            </p>
+            <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+              <span class="glossary-cat">Sigālovāda Sutta (DN 31)</span>
+              <span class="glossary-cat">Thi-ca-la-việt (T01n0016)</span>
+              <span class="glossary-cat">Ngũ Giới & Chánh Mạng Bát Giới</span>
+              <span class="glossary-cat">4 Nghiệp Ô Nhiễm & 4 Ác Hành</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bước 2 -->
+        <div class="roadmap-step">
+          <div class="step-marker">
+            <div class="marker-circle">2</div>
+            <div class="marker-line"></div>
+          </div>
+          <div class="step-content">
+            <div class="step-subtitle">Giai Đoạn 2: Tích Lũy Ba-La-Mật & Vun Bồi Phước Thiện</div>
+            <h3>Thực Hành Thập Phúc Hành Tông (Puññakiriyavatthu)</h3>
+            <p style="margin-bottom: 1rem; color: var(--text-secondary);">
+              Theo Thắng Pháp Abhidhamma và truyền thống Phật giáo, việc tạo phước bao gồm trọn vẹn 10 nền tảng:
+              Bố thí (Dāna), Giữ giới (Sīla), Tu tiến (Bhāvanā), Cung kính (Apacāyana), Phục vụ (Veyyāvacca), Hồi hướng phước (Pattidāna), 
+              Tùy hỷ phước (Pattānumodāna), Thính pháp (Dhammasavana), Thuyết pháp (Dhammadesanā) và Tri kiến chánh trực (Diṭṭhujukamma).
+            </p>
+            <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+              <span class="glossary-cat">Tâm Thiện Hợp Trí (Ñāṇasampayutta)</span>
+              <span class="glossary-cat">Bố Thí Tam Nhân</span>
+              <span class="glossary-cat">Thọ Bát Quan Trai Giới</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bước 3 -->
+        <div class="roadmap-step">
+          <div class="step-marker">
+            <div class="marker-circle">3</div>
+            <div class="marker-line"></div>
+          </div>
+          <div class="step-content">
+            <div class="step-subtitle">Giai Đoạn 3: Khai Mở Chánh Tri Kiến & Bẻ Gãy Hoài Nghi</div>
+            <h3>Nắm Vững Vô Ngã, Nghiệp Báo & Pháp Số Qua Kinh Mi Tiên Vấn Đáp</h3>
+            <p style="margin-bottom: 1rem; color: var(--text-secondary);">
+              Đối thoại giữa Tỳ-kheo Na-tiên và Vua Mi-lan-đà giải mã 244 câu hỏi nan giải nhất của triết học và tâm lý học: 
+              Tại sao không có ngã mà vẫn có luân hồi tái sinh? Nghiệp lưu giữ ở đâu? Niết-bàn vô vi có bản chất như thế nào? 
+              Học kỹ 244 câu hỏi này giúp xây dựng Chánh tri kiến kiên cố như bàn thạch, không bị tà kiến dao động.
+            </p>
+            <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+              <span class="glossary-cat">Dụ Cỗ Xe & Vô Ngã (Anattā)</span>
+              <span class="glossary-cat">Ngọn Lửa Tái Sinh</span>
+              <span class="glossary-cat">Niết-bàn Vô Vi (Asaṅkhata)</span>
+            </div>
+            <div style="margin-top: 1.25rem;">
+              <button class="btn-read-viet" onclick="switchTab('milinda')" style="display: inline-flex; width: auto;">
+                Tra Cứu 244 Câu Hỏi Mi Tiên Vấn Đáp
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bước 4 -->
+        <div class="roadmap-step">
+          <div class="step-marker">
+            <div class="marker-circle">4</div>
+          </div>
+          <div class="step-content">
+            <div class="step-subtitle">Giai Đoạn 4: Tu Tiến Trí Tuệ & Minh Sát Giải Thoát</div>
+            <h3>Thiền Minh Sát (Vipassanā) & Trực Nhận Kinh Vô Ngã Tướng</h3>
+            <p style="margin-bottom: 1rem; color: var(--text-secondary);">
+              Đỉnh cao của việc tu học là thiền Tứ Niệm Xứ (Satipaṭṭhāna) và Minh sát tuệ (Vipassanā). 
+              Quán chiếu trực tiếp từng cảm thọ (Vedanānupassanā), danh sắc trong hiện tại. Nhận diện rõ Sắc, Thọ, Tưởng, Hành, Thức 
+              đều vô thường, khổ và vô ngã: <em>"N'etaṃ mama, n'eso'hamasmi, na meso attā"</em> (Cái này không phải của tôi, cái này không phải là tôi, cái này không phải tự ngã của tôi).
+            </p>
+            <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+              <span class="glossary-cat">Anattalakkhaṇa Sutta</span>
+              <span class="glossary-cat">Quán Cảm Thọ & Oai Nghi</span>
+              <span class="glossary-cat">Đoạn Diệt Triền Cái</span>
+            </div>
+            <div style="margin-top: 1.25rem; display: flex; gap: 1rem;">
+              <button class="bell-btn" onclick="switchTab('timer')">
+                Thực Hành Tọa Thiền Ngay
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         TAB 4: 244 VẤN ĐÁP MI TIÊN (Milinda Pañha)
+         ==================================================================== -->
+    <section id="tab-milinda" class="tab-panel" role="tabpanel" aria-labelledby="tab-milinda" style="display: none;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <div>
+          <h3 style="font-family: var(--font-serif); font-size: 1.45rem;">Kinh Mi Tiên Vấn Đáp (Milinda Pañha)</h3>
+          <p style="color: var(--text-secondary); font-size: 0.95rem;">244 Cuộc đàm đạo triết học - tâm lý học giữa Đại đức Na-tiên và Vua Mi-lan-đà</p>
+        </div>
+        <span class="hero-pill" id="milinda-count-badge">244 Câu</span>
+      </div>
+
+      <div class="qa-list-container" id="milinda-list-container">
+        <!-- Rendered by app.js -->
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         TAB 5: 218 VẤN ĐÁP THỰC HÀNH ĐỜI SỐNG
+         ==================================================================== -->
+    <section id="tab-practical" class="tab-panel" role="tabpanel" aria-labelledby="tab-practical" style="display: none;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <div>
+          <h3 style="font-family: var(--font-serif); font-size: 1.45rem;">Hỏi Đáp Phật Pháp Đời Thường</h3>
+          <p style="color: var(--text-secondary); font-size: 0.95rem;">218 Vấn đáp thực tiễn về Chánh niệm, Ăn uống Tam tịnh nhục, Nghiệp báo và Đời sống cư sĩ</p>
+        </div>
+        <span class="hero-pill" id="practical-count-badge">218 Câu</span>
+      </div>
+
+      <div class="qa-list-container" id="practical-list-container">
+        <!-- Rendered by app.js -->
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         TAB 6: TỪ ĐIỂN THUẬT NGỮ PĀḶI
+         ==================================================================== -->
+    <section id="tab-glossary" class="tab-panel" role="tabpanel" aria-labelledby="tab-glossary" style="display: none;">
+      <div style="margin-bottom: 1.5rem;">
+        <h3 style="font-family: var(--font-serif); font-size: 1.45rem;">Từ Điển Thuật Ngữ Pāḷi - Hán - Việt Cốt Tủy</h3>
+        <p style="color: var(--text-secondary); font-size: 0.95rem;">Tra cứu định nghĩa, phiên âm và ứng dụng thực hành của các danh số Phật học Nguyên thủy</p>
+      </div>
+
+      <div class="glossary-grid" id="glossary-grid-container">
+        <!-- Rendered by app.js -->
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         TAB 7: ĐỒNG HỒ TỌA THIỀN & CHUÔNG CHÁNH NIỆM
+         ==================================================================== -->
+    <section id="tab-timer" class="tab-panel" role="tabpanel" aria-labelledby="tab-timer" style="display: none;">
+      <div class="timer-container">
+        <h3 style="font-family: var(--font-serif); font-size: 1.8rem; margin-bottom: 0.5rem;">Thời Khóa Tọa Thiền</h3>
+        <p style="color: var(--text-secondary); margin-bottom: 2rem;">Thả lỏng thân tâm, an trú trong hiện tại với tiếng chuông đồng thiền môn thanh tịnh</p>
+
+        <!-- Vòng Tròn Thở Theo Nhịp Chánh Niệm (Mindful Breathing Circle) -->
+        <div class="breathing-circle-outer" id="breathing-circle">
+          <div class="breathing-halo" id="breathing-halo"></div>
+          <div class="timer-digits" id="timer-display-digits">15:00</div>
+          <div class="breathing-prompt" id="breathing-prompt">An trú trong chánh niệm</div>
+        </div>
+
+        <div class="timer-preset-row">
+          <button class="preset-btn active" data-mins="15">15 Phút</button>
+          <button class="preset-btn" data-mins="30">30 Phút</button>
+          <button class="preset-btn" data-mins="45">45 Phút</button>
+          <button class="preset-btn" data-mins="60">60 Phút</button>
+        </div>
+
+        <!-- Tùy Chọn Âm Nền Thiên Nhiên Thuần Khiết -->
+        <div class="timer-ambient-row">
+          <span class="ambient-label">Âm nền tự nhiên:</span>
+          <div class="ambient-options">
+            <button class="ambient-btn active" data-ambient="off">Tĩnh Lặng</button>
+            <button class="ambient-btn" data-ambient="stream">🌊 Suối Ngàn</button>
+            <button class="ambient-btn" data-ambient="rain">🌧 Mưa Thiền</button>
+          </div>
+        </div>
+
+        <div class="timer-controls-row">
+          <button class="btn-timer-action btn-start" id="btn-timer-start">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            Bắt Đầu Tọa Thiền
+          </button>
+          <button class="btn-timer-action btn-pause" id="btn-timer-pause" style="display: none;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+            Tạm Dừng
+          </button>
+          <button class="btn-timer-action btn-reset" id="btn-timer-reset">
+            Thiết Lập Lại
+          </button>
+          <button class="btn-timer-action" style="background: var(--saffron-100); color: var(--saffron-800);" onclick="window.zenBell.ring(432, 6.0)">
+            🔔 Thử Chuông
+          </button>
+        </div>
+
+        <div style="margin-top: 2.5rem; background: var(--bg-surface-elevated); padding: 1.25rem; border-radius: var(--radius-md); text-align: left; font-size: 0.9rem; line-height: 1.6;">
+          <h4 style="color: var(--saffron-700); margin-bottom: 0.5rem;">Hướng Dẫn Tọa Thiền Sơ Khởi:</h4>
+          <p>1. <strong>Tư thế:</strong> Ngồi kiết già hoặc bán già, lưng thẳng tự nhiên, thả lỏng toàn bộ cơ mặt và bờ vai.</p>
+          <p>2. <strong>Đề mục:</strong> Đặt tâm tại cửa mũi hoặc sự phồng xẹp nơi bụng. Ghi nhận hơi thở tự nhiên đi vào - đi ra.</p>
+          <p>3. <strong>Xử lý tạp niệm:</strong> Khi tâm phóng đi, nhận biết rõ "phóng tâm" rồi nhẹ nhàng đưa tâm trở về với hơi thở.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         TAB 8: SỔ TAY TU HỌC & ĐÁNH DẤU CÁ NHÂN
+         ==================================================================== -->
+    <section id="tab-notes" class="tab-panel" role="tabpanel" aria-labelledby="tab-notes" style="display: none;">
+      <div style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center;">
+        <div>
+          <h3 style="font-family: var(--font-serif); font-size: 1.45rem;">Sổ Tay Quán Chiếu & Đánh Dấu</h3>
+          <p style="color: var(--text-secondary); font-size: 0.95rem;">Lưu giữ những điều tâm đắc trong quá trình học và thực hành Pháp</p>
+        </div>
+        <button class="btn-read-han" onclick="window.LibraryStore.backup()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Xuất Bản Sao Lưu (JSON)
+        </button>
+      </div>
+
+      <div class="notes-container">
+        <!-- Form nhập ghi chép mới -->
+        <div class="note-editor-card">
+          <h4 style="font-family: var(--font-serif); color: var(--text-primary);">Ghi Nhận Quán Chiếu Mới</h4>
+          <input type="text" id="note-title-input" class="form-input" placeholder="Tiêu đề (ví dụ: Quán thọ khi tức giận, Dụ chiếc xe...)">
+          <textarea id="note-content-input" class="form-input form-textarea" placeholder="Nhập những suy ngẫm, trải nghiệm pháp hành hoặc đoạn kinh văn tâm đắc..."></textarea>
+          <button class="bell-btn" onclick="saveNewNote()">
+            Lưu Vào Sổ Tay
+          </button>
+        </div>
+
+        <!-- Danh sách ghi chép đã lưu -->
+        <div>
+          <h4 style="font-family: var(--font-serif); font-size: 1.15rem; margin-bottom: 1rem;">Nhật Ký Tu Tập Của Bạn</h4>
+          <div class="notes-history-list" id="notes-history-container">
+            <!-- Rendered by app.js -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 4. Giao Diện Đọc Sách Tam Bản Chuyên Sâu (Tri-View Reader) -->
+  <div class="reader-view-container" id="reader-view-container" role="dialog" aria-modal="true" aria-label="Trình đọc kinh văn">
+  </div>
+
+  <div class="noble-modal-backdrop" id="noble-modal" onclick="if(event.target === this) closeModal()" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="noble-modal-content">
+      <div class="modal-header">
+        <h3 id="modal-title">Tiêu Đề Vấn Đáp</h3>
+        <button class="btn-close-modal" onclick="closeModal()" aria-label="Đóng">×</button>
+      </div>
+      <div class="modal-body" id="modal-body">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. Chân Trang Trang Nghiêm (Footer) -->
+  <footer class="noble-footer">
+    <div class="footer-quote">
+      "Sabbapāpassa akaraṇaṃ, kusalassa upasampadā,<br>
+      Sacittapariyodapanaṃ, etaṃ buddhāna sāsanaṃ."
+    </div>
+    <p style="margin-bottom: 0.5rem;">
+      <strong>Không làm các điều ác • Thành tựu các việc thiện • Giữ tâm luôn trong sạch • Là lời chư Phật dạy.</strong> (Pháp Cú 183)
+    </p>
+    <p style="font-size: 0.8rem; color: var(--text-muted);">
+      Đại Thư Viện Chánh Pháp Tam Tạng Số • 62 Bộ Kinh Đại Thừa • 25 Bộ Hán Tạng 2.471 Tác Phẩm • Nikāya &amp; A-Hàm Đối Chiếu • Phật Lịch 2570
+    </p>
+  </footer>
+
+  <!-- Scripts: Data Modules First, Then Core Controllers -->
+  <script src="js/phuc-minh-data.js?v=ed2c762b9873"></script>
+  <script src="js/dai-tang-kinh-summary.js?v=1088beb9201a"></script>
+  <script src="js/phuc-minh-ocr.js?v=fb3e4778e38b"></script>
+  <script src="js/dai-thua-data.js?v=fcfb3da23a88"></script>
+  <script src="js/dai-tang-han-data.js?v=1cb760836caf"></script>
+  <script src="js/dhamma-appendices.js?v=010cf9ad1c4d"></script>
+  <script src="js/meditation-bell.js?v=cd16d7703b29"></script>
+  <script src="js/notes-manager.js?v=537b480fe504"></script>
+  <script src="js/sutra-formatter.js?v=4cdd49e8514c"></script>
+  <script src="js/reader-model.js?v=f4a01499cea1"></script>
+  <script src="js/library-store.js?v=9021bfe66715"></script>
+  <script src="js/library-router.js?v=4d1b5e47d9df"></script>
+  <script src="js/mobile-bridge.js?v=655ff070e1cb"></script>
+  <script src="js/sutra-context.js?v=b8d19f98e227"></script>
+  <script src="js/connection.js?v=39bce40c351a"></script>
+  <script src="js/narration-model.js?v=73ec692e578a"></script>
+  <script src="js/audio-service.js?v=32f88a9d3170"></script>
+  <script src="js/audiobook.js?v=350c58de42f3"></script>
+  <script src="js/ornaments.js?v=8e4636fcd4bc"></script>
+  <script src="js/edition-credits.js?v=3ac660511233"></script>
+  <script src="js/library-catalog.js?v=28cb89968e5c"></script>
+  <script src="js/library-assets.js?v=ed89ab1a4825"></script>
+  <script src="js/library-design.js?v=191c2318f50f"></script>
+  <script src="js/reader.js?v=3abefb7d7fba"></script>
+  <script src="js/library-ui.js?v=b80fc4e7622d"></script>
+  <script src="js/collection-player.js?v=24c8814ea444"></script>
+  <script src="js/dharma-player-store.js?v=b2b4d6a38d06"></script>
+  <script src="js/persistent-player.js?v=6cb06f26f44b"></script>
+  <script src="js/listening-history.js?v=012b87f16971"></script>
+  <script src="js/dharma-shell.js?v=368ddbe6db84"></script>
+  <script src="js/phuc-minh.js?v=6a3fa13a63f5"></script>
+  <script src="js/dai-tang-kinh.js?v=cf00ec9a4dc4"></script>
+  <script src="js/library-editions.js?v=7bc7e7df4807"></script>
+  <script src="js/library-offline.js?v=97f31329a5c9"></script>
+  <script src="js/library-sync.js?v=3c6ee0522226"></script>
+  <script src="js/library-study.js?v=72194535fb9d"></script>
+  <script src="js/library-upgrades.js?v=37c479123a81"></script>
+  <script src="js/content-taxonomy.js?v=d5e35cd49b00"></script>
+  <script src="js/content-modules.js?v=596c420cf54e"></script>
+  <script src="js/library-experience.js?v=c7452ed913d3"></script>
+  <script src="js/library-download.js?v=efe15770c608"></script>
+  <script src="js/library-devices.js?v=69a6e1fa0bec"></script>
+  <script src="js/library-community.js?v=98fe02c8d153"></script>
+  <script src="js/library-diagnostics.js?v=3b4ef8f0a6bf"></script>
+  <script src="js/module-presentation.js?v=3644b1767003"></script>
+  <script src="js/learning-path-data.js?v=abfde70e3961"></script>
+  <script src="js/learning-path-depth.js?v=0e59e852ee6d"></script>
+  <script src="js/learning-path-curriculum.js?v=284c6161a624"></script>
+  <script src="js/learning-path.js?v=cdbae0cea08b"></script>
+  <script src="js/touch-ux.js?v=b1532a01c587"></script>
+  <script src="js/touch-ux.js?v=b1532a01c587"></script>
+  <script src="js/app.js?v=f5b5fe9cfc09"></script>
+</body>
+</html>

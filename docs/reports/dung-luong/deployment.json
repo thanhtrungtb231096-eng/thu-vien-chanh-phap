@@ -1,0 +1,19 @@
+{
+  "release": "thuvien-20261005080448",
+  "site": "https://thuvienchanhphap.duckdns.org/web-thuvien/index.html",
+  "backup": "/opt/thuvien-backups/thuvien-20261005080448",
+  "status": "passed",
+  "catalogs": {
+    "daithua": 62,
+    "daitang": 2471,
+    "phucminh": 26,
+    "ebooks": 1624
+  },
+  "documents": 5348,
+  "passages": 3395798,
+  "publicHttpStatus": 200,
+  "completedAt": "2026-10-05T09:05:23.404601+07:00",
+  "archiveSha256": "08745ed0d27e3977fad16c0e21eb1bc6e1ed0a079a42ef219431ab93eefbe11e",
+  "configPreserved": true,
+  "personalDataOverwritten": false
+}

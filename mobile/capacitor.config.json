@@ -1,0 +1,29 @@
+{
+  "appId": "org.chanhphap.thuvien",
+  "appName": "Chánh Pháp",
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "backgroundColor": "#F7F4EC",
+  "server": {
+    "androidScheme": "https",
+    "iosScheme": "capacitor",
+    "hostname": "localhost"
+  },
+  "ios": {
+    "contentInset": "never",
+    "allowsLinkPreview": false,
+    "backgroundColor": "#F7F4EC",
+    "preferredContentMode": "mobile"
+  },
+  "android": {
+    "backgroundColor": "#F7F4EC",
+    "allowMixedContent": false
+  },
+  "plugins": {
+    "LocalNotifications": {
+      "smallIcon": "ic_stat_dharma_wheel",
+      "iconColor": "#285A46"
+    }
+  }
+}
+

@@ -1,0 +1,23 @@
+﻿{
+  "result": "passed",
+  "release": "audio-20261112-06",
+  "version": "ux-20261010-129c6fc8d4c6",
+  "changedFiles": 7,
+  "databasesUnchanged": true,
+  "rollbackOutsideApplication": "/opt/thuvien-backups/audio-20261112-06",
+  "preflight": {
+    "version": "ux-20261010-129c6fc8d4c6",
+    "edge_tts": "7.3.1",
+    "assetHashes": "passed",
+    "exportedImports": "passed",
+    "transportLimit": 160,
+    "providerFirstAudioTimeout": 25.0,
+    "voices": [
+      "vi-VN-HoaiMyNeural",
+      "vi-VN-NamMinhNeural",
+      "vi-VN-HoaiMyNeural:slow",
+      "vi-VN-NamMinhNeural:slow"
+    ]
+  },
+  "audioDefaultsUpdated": []
+}

@@ -1,0 +1,8 @@
+# Offline Vietnamese AI TTS runtime (torch-free ONNX for VieNeu-TTS v3 Nano / Turbo)
+sea-g2p>=0.10.0
+onnxruntime>=1.20.0
+numpy>=1.24
+lameenc>=1.7,<2
+PyYAML>=6.0
+huggingface-hub>=0.20
+# Install vieneu==3.8.4 with --no-deps so server stays light (no gradio/torch/librosa).

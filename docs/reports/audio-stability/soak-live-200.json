@@ -1,0 +1,5258 @@
+{
+  "provider": "Microsoft edge-tts",
+  "syntheticTextOnly": true,
+  "injectedFaults": false,
+  "count": 200,
+  "concurrency": 2,
+  "successRate": 1.0,
+  "ttfbSeconds": {
+    "p50": 1.796,
+    "p95": 3.766
+  },
+  "midStreamRate": 0.0,
+  "invalidHttpTerminations": 0,
+  "automaticRecoveryCases": 0,
+  "temporaryRecoveryRate": null,
+  "maxCachedReplaySeconds": 0.047,
+  "targets": {
+    "successRate": true,
+    "ttfbP50": true,
+    "ttfbP95": true,
+    "midStreamRate": true,
+    "httpFraming": true,
+    "cachedReplay": true,
+    "temporaryRecovery": true
+  },
+  "allTargetsPassed": true,
+  "stats": {
+    "jobs": 57,
+    "active": 0,
+    "queued": 0,
+    "workers": 3,
+    "counters": {
+      "job-created": 201,
+      "job-started": 201,
+      "first-audio": 201,
+      "job-complete": 201,
+      "warmup": 1
+    },
+    "errors": {},
+    "errorRate": 0.0,
+    "ttfbMs": {
+      "samples": 201,
+      "p50": 1781.0,
+      "p95": 3750.0
+    },
+    "streamTruncated": 0,
+    "recoveries": 0,
+    "config": {
+      "prefetchDepth": 3,
+      "stallTimeoutMs": 15000,
+      "progressive": true
+    }
+  },
+  "rows": [
+    {
+      "index": 0,
+      "characters": 109,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 2.125,
+      "totalSeconds": 6.859,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 81360,
+          "framing": true,
+          "first": 2.125,
+          "gaps": [
+            1.25,
+            0.9690000000409782,
+            1.406999999890104
+          ]
+        }
+      ]
+    },
+    {
+      "index": 1,
+      "characters": 193,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.703,
+      "totalSeconds": 8.359,
+      "cachedReplaySeconds": 0.031,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 130896,
+          "framing": true,
+          "first": 1.702999999979511,
+          "gaps": [
+            1.0309999999590218,
+            0.546000000089407,
+            0.6880000000819564,
+            0.9379999998491257,
+            0.7189999998081475,
+            1.0940000000409782
+          ]
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "characters": 277,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.828,
+      "totalSeconds": 11.75,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 178992,
+          "framing": true,
+          "first": 1.8119999999180436,
+          "gaps": [
+            1.0620000001508743,
+            1.125,
+            0.7970000000204891,
+            0.9059999999590218,
+            1.0630000000819564,
+            0.6099999998696148,
+            0.7340000001713634,
+            1.281999999890104
+          ]
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "characters": 109,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.313,
+      "totalSeconds": 5.922,
+      "cachedReplaySeconds": 0.047,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 82656,
+          "framing": true,
+          "first": 1.3130000000819564,
+          "gaps": [
+            1.421000000089407,
+            0.8440000000409782,
+            1.2660000000614673
+          ]
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "characters": 193,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.703,
+      "totalSeconds": 11.422,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 130176,
+          "framing": true,
+          "first": 1.702999999979511,
+          "gaps": [
+            1.2660000000614673,
+            1.2190000000409782,
+            1.327999999979511,
+            1.5159999998286366,
+            0.9849999998696148,
+            1.4690000000409782
+          ]
+        }
+      ]
+    },
+    {
+      "index": 5,
+      "characters": 277,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.109,
+      "totalSeconds": 10.359,
+      "cachedReplaySeconds": 0.015,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 179280,
+          "framing": true,
+          "first": 1.093000000109896,
+          "gaps": [
+            0.9220000000204891,
+            0.75,
+            0.7029999999795109,
+            0.9059999999590218,
+            0.9220000000204891,
+            0.5779999999795109,
+            0.75,
+            1.5310000001918525
+          ]
+        }
+      ]
+    },
+    {
+      "index": 6,
+      "characters": 109,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.578,
+      "totalSeconds": 5.937,
+      "cachedReplaySeconds": 0.031,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 81648,
+          "framing": true,
+          "first": 1.577999999979511,
+          "gaps": [
+            0.9839999999385327,
+            0.8430000001098961,
+            1.25
+          ]
+        }
+      ]
+    },
+    {
+      "index": 7,
+      "characters": 193,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 0.938,
+      "totalSeconds": 5.516,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 132912,
+          "framing": true,
+          "first": 0.9220000000204891,
+          "gaps": [
+            0.4839999999385327,
+            0.4529999999795109,
+            0.5309999999590218,
+            0.4380000000819564,
+            1.202999999979511
+          ]
+        }
+      ]
+    },
+    {
+      "index": 8,
+      "characters": 277,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.266,
+      "totalSeconds": 11.625,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 178848,
+          "framing": true,
+          "first": 1.25,
+          "gaps": [
+            1.1559999999590218,
+            0.7970000000204891,
+            0.625,
+            0.9220000000204891,
+            1.1399999998975545,
+            1.1399999998975545,
+            0.8900000001303852,
+            0.9369999999180436,
+            0.875
+          ]
+        }
+      ]
+    },
+    {
+      "index": 9,
+      "characters": 109,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 2.578,
+      "totalSeconds": 11.141,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 83232,
+          "framing": true,
+          "first": 2.577999999979511,
+          "gaps": [
+            1.5629999998491257,
+            2.0630000000819564,
+            2.9370000001508743
+          ]
+        }
+      ]
+    },
+    {
+      "index": 10,
+      "characters": 195,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.438,
+      "totalSeconds": 11.391,
+      "cachedReplaySeconds": 0.016,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 130320,
+          "framing": true,
+          "first": 1.422000000020489,
+          "gaps": [
+            1.3119999999180436,
+            1.3599999998696148,
+            0.7970000000204891,
+            0.9840000001713634,
+            1.4690000000409782,
+            1.953999999910593
+          ]
+        }
+      ]
+    },
+    {
+      "index": 11,
+      "characters": 280,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.218,
+      "totalSeconds": 13.156,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 183600,
+          "framing": true,
+          "first": 1.202999999979511,
+          "gaps": [
+            1.1410000000614673,
+            1.0150000001303852,
+            0.7350000001024455,
+            1.6870000001508743,
+            1.0630000000819564,
+            0.9069999998901039,
+            1.593000000109896,
+            1.1879999998491257
+          ]
+        }
+      ]
+    },
+    {
+      "index": 12,
+      "characters": 110,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 2.266,
+      "totalSeconds": 6.422,
+      "cachedReplaySeconds": 0.016,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 83232,
+          "framing": true,
+          "first": 2.2660000000614673,
+          "gaps": [
+            1.125,
+            0.5,
+            1.547000000020489
+          ]
+        }
+      ]
+    },
+    {
+      "index": 13,
+      "characters": 195,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.922,
+      "totalSeconds": 12.266,
+      "cachedReplaySeconds": 0.016,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 134928,
+          "framing": true,
+          "first": 1.922000000020489,
+          "gaps": [
+            0.9220000000204891,
+            1.7339999999385327,
+            1.077999999979511,
+            1.547000000020489,
+            1.156999999890104,
+            2.297000000020489
+          ]
+        }
+      ]
+    },
+    {
+      "index": 14,
+      "characters": 280,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.578,
+      "totalSeconds": 11.078,
+      "cachedReplaySeconds": 0.047,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 183024,
+          "framing": true,
+          "first": 1.5629999998491257,
+          "gaps": [
+            1.202999999979511,
+            0.8590000001713634,
+            0.75,
+            1.0160000000614673,
+            1.125,
+            0.5309999999590218,
+            0.9220000000204891,
+            0.7349999998696148,
+            0.5940000000409782
+          ]
+        }
+      ]
+    },
+    {
+      "index": 15,
+      "characters": 110,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 2.546,
+      "totalSeconds": 6.875,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 84672,
+          "framing": true,
+          "first": 2.5310000001918525,
+          "gaps": [
+            1.5309999999590218,
+            0.625,
+            1.202999999979511
+          ]
+        }
+      ]
+    },
+    {
+      "index": 16,
+      "characters": 195,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.516,
+      "totalSeconds": 6.078,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 133200,
+          "framing": true,
+          "first": 1.5,
+          "gaps": [
+            0.43799999984912574,
+            0.5,
+            0.7029999999795109,
+            0.6879999998491257,
+            0.43700000015087426,
+            0.7660000000614673
+          ]
+        }
+      ]
+    },
+    {
+      "index": 17,
+      "characters": 280,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 0.906,
+      "totalSeconds": 10.125,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 185904,
+          "framing": true,
+          "first": 0.8910000000614673,
+          "gaps": [
+            0.48499999986961484,
+            0.6720000000204891,
+            0.8129999998491257,
+            1.1559999999590218,
+            0.875,
+            0.8900000001303852,
+            1.0,
+            0.4369999999180436,
+            1.1409999998286366
+          ]
+        }
+      ]
+    },
+    {
+      "index": 18,
+      "characters": 110,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.266,
+      "totalSeconds": 5.063,
+      "cachedReplaySeconds": 0.032,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 83088,
+          "framing": true,
+          "first": 1.25,
+          "gaps": [
+            1.1880000000819564,
+            0.875,
+            0.9680000001098961
+          ]
+        }
+      ]
+    },
+    {
+      "index": 19,
+      "characters": 195,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 2.125,
+      "totalSeconds": 10.546,
+      "cachedReplaySeconds": 0.015,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 135360,
+          "framing": true,
+          "first": 2.125,
+          "gaps": [
+            1.078999999910593,
+            1.1089999999385327,
+            0.9380000000819564,
+            1.4219999997876585,
+            0.7190000000409782,
+            1.547000000020489
+          ]
+        }
+      ]
+    },
+    {
+      "index": 20,
+      "characters": 280,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.375,
+      "totalSeconds": 11.234,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 183024,
+          "framing": true,
+          "first": 1.375,
+          "gaps": [
+            0.6559999999590218,
+            0.9529999999795109,
+            0.8600000001024455,
+            1.6869999999180436,
+            0.6399999998975545,
+            0.625,
+            0.9839999999385327,
+            1.297000000020489
+          ]
+        }
+      ]
+    },
+    {
+      "index": 21,
+      "characters": 110,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.25,
+      "totalSeconds": 6.782,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 85392,
+          "framing": true,
+          "first": 1.25,
+          "gaps": [
+            0.5310000001918525,
+            1.5159999998286366,
+            2.4219999997876585
+          ]
+        }
+      ]
+    },
+    {
+      "index": 22,
+      "characters": 195,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 2.547,
+      "totalSeconds": 18.547,
+      "cachedReplaySeconds": 0.016,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 136080,
+          "framing": true,
+          "first": 2.547000000020489,
+          "gaps": [
+            2.3119999999180436,
+            1.922000000020489,
+            1.7190000000409782,
+            2.671000000089407,
+            1.7969999997876585,
+            3.3130000000819564
+          ]
+        }
+      ]
+    },
+    {
+      "index": 23,
+      "characters": 280,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.203,
+      "totalSeconds": 14.422,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 186768,
+          "framing": true,
+          "first": 1.202999999979511,
+          "gaps": [
+            1.125,
+            1.0620000001508743,
+            0.7810000001918525,
+            1.4530000002123415,
+            1.3600000001024455,
+            1.25,
+            1.422000000020489,
+            1.078999999910593,
+            1.218000000109896
+          ]
+        }
+      ]
+    },
+    {
+      "index": 24,
+      "characters": 110,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 2.046,
+      "totalSeconds": 7.5,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 84240,
+          "framing": true,
+          "first": 2.046000000089407,
+          "gaps": [
+            1.7659999998286366,
+            1.1559999999590218,
+            1.5
+          ]
+        }
+      ]
+    },
+    {
+      "index": 25,
+      "characters": 195,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.125,
+      "totalSeconds": 8.344,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 135936,
+          "framing": true,
+          "first": 1.125,
+          "gaps": [
+            0.5150000001303852,
+            0.6879999998491257,
+            0.48400000017136335,
+            1.0310000001918525,
+            1.25,
+            2.0159999998286366
+          ]
+        }
+      ]
+    },
+    {
+      "index": 26,
+      "characters": 280,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.437,
+      "totalSeconds": 10.625,
+      "cachedReplaySeconds": 0.032,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 187056,
+          "framing": true,
+          "first": 1.422000000020489,
+          "gaps": [
+            0.875,
+            0.6090000001713634,
+            0.5779999999795109,
+            1.2190000000409782,
+            1.077999999979511,
+            0.7180000001098961,
+            1.202999999979511,
+            0.6869999999180436
+          ]
+        }
+      ]
+    },
+    {
+      "index": 27,
+      "characters": 110,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.796,
+      "totalSeconds": 6.218,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 85824,
+          "framing": true,
+          "first": 1.796000000089407,
+          "gaps": [
+            1.5309999999590218,
+            0.8279999999795109,
+            1.375
+          ]
+        }
+      ]
+    },
+    {
+      "index": 28,
+      "characters": 195,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 2.532,
+      "totalSeconds": 10.516,
+      "cachedReplaySeconds": 0.016,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 135216,
+          "framing": true,
+          "first": 2.531999999890104,
+          "gaps": [
+            0.9059999999590218,
+            0.7809999999590218,
+            1.3590000001713634,
+            1.3439999998081475,
+            0.625,
+            1.5159999998286366
+          ]
+        }
+      ]
+    },
+    {
+      "index": 29,
+      "characters": 280,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.609,
+      "totalSeconds": 10.156,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 187488,
+          "framing": true,
+          "first": 1.6089999999385327,
+          "gaps": [
+            0.4059999999590218,
+            0.6090000001713634,
+            1.125,
+            1.172000000020489,
+            0.5310000001918525,
+            0.4369999999180436,
+            0.9529999999795109,
+            0.7030000002123415,
+            0.8910000000614673
+          ]
+        }
+      ]
+    },
+    {
+      "index": 30,
+      "characters": 110,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.141,
+      "totalSeconds": 6.156,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 82800,
+          "framing": true,
+          "first": 1.1410000000614673,
+          "gaps": [
+            0.9689999998081475,
+            1.0619999999180436,
+            1.8440000000409782,
+            0.43700000015087426
+          ]
+        }
+      ]
+    },
+    {
+      "index": 31,
+      "characters": 195,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.5,
+      "totalSeconds": 12.078,
+      "cachedReplaySeconds": 0.016,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 136512,
+          "framing": true,
+          "first": 1.5,
+          "gaps": [
+            0.8440000000409782,
+            1.0150000001303852,
+            1.531999999890104,
+            1.577999999979511,
+            0.9379999998491257,
+            2.702999999979511
+          ]
+        }
+      ]
+    },
+    {
+      "index": 32,
+      "characters": 280,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.453,
+      "totalSeconds": 12.016,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 187200,
+          "framing": true,
+          "first": 1.4530000002123415,
+          "gaps": [
+            1.0940000000409782,
+            1.0149999998975545,
+            1.0310000001918525,
+            1.0309999999590218,
+            1.0939999998081475,
+            1.1089999999385327,
+            1.452999999979511,
+            0.6089999999385327
+          ]
+        }
+      ]
+    },
+    {
+      "index": 33,
+      "characters": 110,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.031,
+      "totalSeconds": 4.844,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 85680,
+          "framing": true,
+          "first": 1.0149999998975545,
+          "gaps": [
+            0.8440000000409782,
+            1.0620000001508743,
+            0.9529999999795109
+          ]
+        }
+      ]
+    },
+    {
+      "index": 34,
+      "characters": 195,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 2.562,
+      "totalSeconds": 11.015,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 135792,
+          "framing": true,
+          "first": 2.5619999999180436,
+          "gaps": [
+            0.9530000002123415,
+            1.2660000000614673,
+            0.7660000000614673,
+            1.452999999979511,
+            0.8600000001024455,
+            1.6089999999385327
+          ]
+        }
+      ]
+    },
+    {
+      "index": 35,
+      "characters": 280,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.406,
+      "totalSeconds": 14.359,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 187488,
+          "framing": true,
+          "first": 1.4059999999590218,
+          "gaps": [
+            1.3440000000409782,
+            1.547000000020489,
+            1.1409999998286366,
+            1.7650000001303852,
+            0.8430000001098961,
+            0.5779999999795109,
+            0.8589999999385327,
+            0.5779999999795109,
+            2.25
+          ]
+        }
+      ]
+    },
+    {
+      "index": 36,
+      "characters": 110,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.157,
+      "totalSeconds": 5.016,
+      "cachedReplaySeconds": 0.016,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 84240,
+          "framing": true,
+          "first": 1.1410000000614673,
+          "gaps": [
+            0.6870000001508743,
+            0.8599999998696148,
+            1.4690000000409782
+          ]
+        }
+      ]
+    },
+    {
+      "index": 37,
+      "characters": 195,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 3.219,
+      "totalSeconds": 15.969,
+      "cachedReplaySeconds": 0.047,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 137520,
+          "framing": true,
+          "first": 3.219000000040978,
+          "gaps": [
+            2.25,
+            1.1410000000614673,
+            1.797000000020489,
+            3.297000000020489,
+            0.9379999998491257,
+            1.6400000001303852
+          ]
+        }
+      ]
+    },
+    {
+      "index": 38,
+      "characters": 280,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.187,
+      "totalSeconds": 10.5,
+      "cachedReplaySeconds": 0.016,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 186336,
+          "framing": true,
+          "first": 1.1870000001508743,
+          "gaps": [
+            0.875,
+            0.625,
+            1.0940000000409782,
+            1.3440000000409782,
+            0.671000000089407,
+            0.5630000000819564,
+            0.875,
+            0.5,
+            1.0150000001303852
+          ]
+        }
+      ]
+    },
+    {
+      "index": 39,
+      "characters": 110,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.094,
+      "totalSeconds": 3.422,
+      "cachedReplaySeconds": 0.016,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 85824,
+          "framing": true,
+          "first": 1.0940000000409782,
+          "gaps": [
+            0.5,
+            0.5160000000614673,
+            0.7339999999385327
+          ]
+        }
+      ]
+    },
+    {
+      "index": 40,
+      "characters": 195,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 2.531,
+      "totalSeconds": 14.859,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 133200,
+          "framing": true,
+          "first": 2.530999999959022,
+          "gaps": [
+            1.875,
+            1.5630000000819564,
+            0.8120000001508743,
+            0.953999999910593,
+            2.1879999998491257,
+            2.75
+          ]
+        }
+      ]
+    },
+    {
+      "index": 41,
+      "characters": 280,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 2.594,
+      "totalSeconds": 17.109,
+      "cachedReplaySeconds": 0.015,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 186912,
+          "framing": true,
+          "first": 2.577999999979511,
+          "gaps": [
+            1.672000000020489,
+            1.421000000089407,
+            0.8279999999795109,
+            1.2030000002123415,
+            1.3440000000409782,
+            1.2030000002123415,
+            1.4370000001508743,
+            0.8439999998081475,
+            1.797000000020489
+          ]
+        }
+      ]
+    },
+    {
+      "index": 42,
+      "characters": 110,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 0.969,
+      "totalSeconds": 3.906,
+      "cachedReplaySeconds": 0.015,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 84528,
+          "framing": true,
+          "first": 0.9529999999795109,
+          "gaps": [
+            0.5159999998286366,
+            1.202999999979511
+          ]
+        }
+      ]
+    },
+    {
+      "index": 43,
+      "characters": 195,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 2.266,
+      "totalSeconds": 15.594,
+      "cachedReplaySeconds": 0.031,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 136224,
+          "framing": true,
+          "first": 2.2659999998286366,
+          "gaps": [
+            1.2340000001713634,
+            2.5,
+            1.9690000000409782,
+            2.281999999890104,
+            1.4839999999385327,
+            1.625
+          ]
+        }
+      ]
+    },
+    {
+      "index": 44,
+      "characters": 280,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.375,
+      "totalSeconds": 16.079,
+      "cachedReplaySeconds": 0.047,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 187776,
+          "framing": true,
+          "first": 1.375,
+          "gaps": [
+            0.6569999998901039,
+            0.7970000000204891,
+            0.9220000000204891,
+            2.0780000002123415,
+            1.875,
+            1.4840000001713634,
+            2.047000000020489,
+            0.8899999998975545,
+            1.4369999999180436
+          ]
+        }
+      ]
+    },
+    {
+      "index": 45,
+      "characters": 110,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.797,
+      "totalSeconds": 9.063,
+      "cachedReplaySeconds": 0.016,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 85680,
+          "framing": true,
+          "first": 1.7809999999590218,
+          "gaps": [
+            1.7189999998081475,
+            1.5310000001918525,
+            2.594000000040978
+          ]
+        }
+      ]
+    },
+    {
+      "index": 46,
+      "characters": 195,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.281,
+      "totalSeconds": 17.75,
+      "cachedReplaySeconds": 0.032,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 135936,
+          "framing": true,
+          "first": 1.2660000000614673,
+          "gaps": [
+            2.4530000002123415,
+            1.8909999998286366,
+            1.4839999999385327,
+            1.9689999998081475,
+            2.453999999910593,
+            3.922000000020489
+          ]
+        }
+      ]
+    },
+    {
+      "index": 47,
+      "characters": 280,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.671,
+      "totalSeconds": 11.14,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 187920,
+          "framing": true,
+          "first": 1.671000000089407,
+          "gaps": [
+            0.5940000000409782,
+            0.796000000089407,
+            0.8119999999180436,
+            0.6569999998901039,
+            0.5940000000409782,
+            0.9529999999795109,
+            1.4840000001713634,
+            0.5939999998081475,
+            0.9379999998491257
+          ]
+        }
+      ]
+    },
+    {
+      "index": 48,
+      "characters": 110,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.687,
+      "totalSeconds": 4.703,
+      "cachedReplaySeconds": 0.032,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 84384,
+          "framing": true,
+          "first": 1.6869999999180436,
+          "gaps": [
+            0.5629999998491257,
+            0.4690000000409782,
+            1.2340000001713634
+          ]
+        }
+      ]
+    },
+    {
+      "index": 49,
+      "characters": 195,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 2.797,
+      "totalSeconds": 20.235,
+      "cachedReplaySeconds": 0.016,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 136512,
+          "framing": true,
+          "first": 2.797000000020489,
+          "gaps": [
+            1.797000000020489,
+            2.265000000130385,
+            1.843000000109896,
+            2.3589999999385327,
+            1.8589999999385327,
+            4.1560000001918525,
+            0.5
+          ]
+        }
+      ]
+    },
+    {
+      "index": 50,
+      "characters": 280,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.812,
+      "totalSeconds": 15.968,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 183168,
+          "framing": true,
+          "first": 1.8119999999180436,
+          "gaps": [
+            1.547000000020489,
+            0.9840000001713634,
+            1.172000000020489,
+            1.297000000020489,
+            0.8440000000409782,
+            0.9839999999385327,
+            1.75,
+            0.7030000002123415,
+            2.172000000020489
+          ]
+        }
+      ]
+    },
+    {
+      "index": 51,
+      "characters": 110,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 4.75,
+      "totalSeconds": 19.016,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 85392,
+          "framing": true,
+          "first": 4.75,
+          "gaps": [
+            4.358999999938533,
+            3.8129999998491257,
+            0.5150000001303852,
+            3.8910000000614673
+          ]
+        }
+      ]
+    },
+    {
+      "index": 52,
+      "characters": 195,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 4.562,
+      "totalSeconds": 20.046,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 136224,
+          "framing": true,
+          "first": 4.547000000020489,
+          "gaps": [
+            2.827999999979511,
+            1.7030000002123415,
+            2.0,
+            2.1399999998975545,
+            1.5,
+            2.4369999999180436
+          ]
+        }
+      ]
+    },
+    {
+      "index": 53,
+      "characters": 280,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 3.563,
+      "totalSeconds": 29.813,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 187056,
+          "framing": true,
+          "first": 3.5630000000819564,
+          "gaps": [
+            1.968000000109896,
+            0.9369999999180436,
+            2.5939999998081475,
+            1.625,
+            2.406999999890104,
+            0.42100000008940697,
+            2.5,
+            2.952999999979511,
+            1.5150000001303852,
+            6.061999999918044,
+            0.625
+          ]
+        }
+      ]
+    },
+    {
+      "index": 54,
+      "characters": 110,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.11,
+      "totalSeconds": 5.563,
+      "cachedReplaySeconds": 0.031,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 84528,
+          "framing": true,
+          "first": 1.1099999998696148,
+          "gaps": [
+            0.7340000001713634,
+            1.078999999910593,
+            1.6560000001918525
+          ]
+        }
+      ]
+    },
+    {
+      "index": 55,
+      "characters": 195,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 3.437,
+      "totalSeconds": 19.047,
+      "cachedReplaySeconds": 0.016,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 136224,
+          "framing": true,
+          "first": 3.4370000001508743,
+          "gaps": [
+            1.968000000109896,
+            2.171000000089407,
+            0.4220000000204891,
+            1.9219999997876585,
+            2.469000000040978,
+            1.1870000001508743,
+            3.0
+          ]
+        }
+      ]
+    },
+    {
+      "index": 56,
+      "characters": 280,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.781,
+      "totalSeconds": 11.234,
+      "cachedReplaySeconds": 0.015,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 187776,
+          "framing": true,
+          "first": 1.7809999999590218,
+          "gaps": [
+            0.9220000000204891,
+            1.125,
+            0.7660000000614673,
+            1.1559999999590218,
+            0.9529999999795109,
+            0.8900000001303852,
+            0.9069999998901039
+          ]
+        }
+      ]
+    },
+    {
+      "index": 57,
+      "characters": 110,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.859,
+      "totalSeconds": 5.093,
+      "cachedReplaySeconds": 0.015,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 85824,
+          "framing": true,
+          "first": 1.8589999999385327,
+          "gaps": [
+            0.5469999997876585,
+            0.4839999999385327,
+            1.25
+          ]
+        }
+      ]
+    },
+    {
+      "index": 58,
+      "characters": 195,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 2.235,
+      "totalSeconds": 10.625,
+      "cachedReplaySeconds": 0.031,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 135648,
+          "framing": true,
+          "first": 2.234999999869615,
+          "gaps": [
+            1.125,
+            1.156999999890104,
+            1.2650000001303852,
+            1.0780000002123415,
+            0.9220000000204891,
+            1.2659999998286366
+          ]
+        }
+      ]
+    },
+    {
+      "index": 59,
+      "characters": 280,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.719,
+      "totalSeconds": 14.0,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 188208,
+          "framing": true,
+          "first": 1.7190000000409782,
+          "gaps": [
+            0.9060000001918525,
+            1.078999999910593,
+            0.8440000000409782,
+            1.6869999999180436,
+            1.2339999999385327,
+            0.7340000001713634,
+            1.172000000020489,
+            0.8440000000409782,
+            1.4059999999590218
+          ]
+        }
+      ]
+    },
+    {
+      "index": 60,
+      "characters": 110,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 5.11,
+      "totalSeconds": 20.188,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 83088,
+          "framing": true,
+          "first": 5.094000000040978,
+          "gaps": [
+            3.9379999998491257,
+            0.48499999986961484,
+            2.734999999869615,
+            6.094000000040978
+          ]
+        }
+      ]
+    },
+    {
+      "index": 61,
+      "characters": 195,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.875,
+      "totalSeconds": 14.438,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 136368,
+          "framing": true,
+          "first": 1.875,
+          "gaps": [
+            1.7969999997876585,
+            1.718000000109896,
+            0.9840000001713634,
+            1.3900000001303852,
+            1.3909999998286366,
+            2.7030000002123415
+          ]
+        }
+      ]
+    },
+    {
+      "index": 62,
+      "characters": 280,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.781,
+      "totalSeconds": 14.937,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 188208,
+          "framing": true,
+          "first": 1.7659999998286366,
+          "gaps": [
+            0.7029999999795109,
+            0.8439999998081475,
+            0.75,
+            1.875,
+            1.672000000020489,
+            0.5940000000409782,
+            0.9369999999180436,
+            1.0310000001918525,
+            2.1410000000614673
+          ]
+        }
+      ]
+    },
+    {
+      "index": 63,
+      "characters": 110,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 4.047,
+      "totalSeconds": 15.984,
+      "cachedReplaySeconds": 0.016,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 85536,
+          "framing": true,
+          "first": 4.031999999890104,
+          "gaps": [
+            3.905999999959022,
+            2.4839999999385327,
+            3.1410000000614673
+          ]
+        }
+      ]
+    },
+    {
+      "index": 64,
+      "characters": 195,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.266,
+      "totalSeconds": 16.328,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 136080,
+          "framing": true,
+          "first": 1.2659999998286366,
+          "gaps": [
+            0.7970000000204891,
+            1.8129999998491257,
+            1.6100000001024455,
+            2.077999999979511,
+            2.1089999999385327,
+            4.125
+          ]
+        }
+      ]
+    },
+    {
+      "index": 65,
+      "characters": 280,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.141,
+      "totalSeconds": 10.547,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 187200,
+          "framing": true,
+          "first": 1.1410000000614673,
+          "gaps": [
+            0.9220000000204891,
+            0.625,
+            0.4529999999795109,
+            0.7029999999795109,
+            1.171000000089407,
+            0.9370000001508743,
+            1.2349999998696148,
+            0.6560000001918525,
+            0.8440000000409782
+          ]
+        }
+      ]
+    },
+    {
+      "index": 66,
+      "characters": 110,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.781,
+      "totalSeconds": 6.047,
+      "cachedReplaySeconds": 0.016,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 84384,
+          "framing": true,
+          "first": 1.7809999999590218,
+          "gaps": [
+            0.8590000001713634,
+            0.8280000002123415,
+            1.4059999999590218
+          ]
+        }
+      ]
+    },
+    {
+      "index": 67,
+      "characters": 195,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.454,
+      "totalSeconds": 11.86,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 137088,
+          "framing": true,
+          "first": 1.453999999910593,
+          "gaps": [
+            1.3909999998286366,
+            1.593000000109896,
+            1.4690000000409782,
+            2.0629999998491257,
+            0.9059999999590218,
+            1.077999999979511
+          ]
+        }
+      ]
+    },
+    {
+      "index": 68,
+      "characters": 280,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 2.109,
+      "totalSeconds": 20.312,
+      "cachedReplaySeconds": 0.031,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 187344,
+          "framing": true,
+          "first": 2.1089999999385327,
+          "gaps": [
+            2.75,
+            1.9059999999590218,
+            1.5309999999590218,
+            1.171000000089407,
+            1.625,
+            1.2190000000409782,
+            2.0160000000614673,
+            1.0309999999590218,
+            1.7969999997876585
+          ]
+        }
+      ]
+    },
+    {
+      "index": 69,
+      "characters": 110,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 2.328,
+      "totalSeconds": 6.094,
+      "cachedReplaySeconds": 0.016,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 85968,
+          "framing": true,
+          "first": 2.327999999979511,
+          "gaps": [
+            0.9060000001918525,
+            0.7659999998286366,
+            0.8900000001303852,
+            0.5
+          ]
+        }
+      ]
+    },
+    {
+      "index": 70,
+      "characters": 195,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 3.531,
+      "totalSeconds": 20.562,
+      "cachedReplaySeconds": 0.016,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 133200,
+          "framing": true,
+          "first": 3.530999999959022,
+          "gaps": [
+            2.094000000040978,
+            2.0159999998286366,
+            1.922000000020489,
+            2.5,
+            1.875,
+            3.2660000000614673,
+            0.4369999999180436
+          ]
+        }
+      ]
+    },
+    {
+      "index": 71,
+      "characters": 280,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 3.157,
+      "totalSeconds": 26.063,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 186768,
+          "framing": true,
+          "first": 3.125,
+          "gaps": [
+            2.297000000020489,
+            1.9839999999385327,
+            2.1870000001508743,
+            2.3130000000819564,
+            1.452999999979511,
+            2.671000000089407,
+            1.9690000000409782,
+            1.8589999999385327,
+            2.5619999999180436
+          ]
+        }
+      ]
+    },
+    {
+      "index": 72,
+      "characters": 110,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 2.984,
+      "totalSeconds": 8.563,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 84528,
+          "framing": true,
+          "first": 2.968000000109896,
+          "gaps": [
+            1.1719999997876585,
+            1.0160000000614673,
+            2.031999999890104
+          ]
+        }
+      ]
+    },
+    {
+      "index": 73,
+      "characters": 195,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.515,
+      "totalSeconds": 7.125,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 136368,
+          "framing": true,
+          "first": 1.5149999998975545,
+          "gaps": [
+            0.75,
+            0.9849999998696148,
+            0.625,
+            0.5940000000409782,
+            0.8589999999385327
+          ]
+        }
+      ]
+    },
+    {
+      "index": 74,
+      "characters": 280,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 3.562,
+      "totalSeconds": 22.422,
+      "cachedReplaySeconds": 0.016,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 187920,
+          "framing": true,
+          "first": 3.5620000001508743,
+          "gaps": [
+            1.5309999999590218,
+            1.3600000001024455,
+            1.875,
+            1.5310000001918525,
+            2.172000000020489,
+            1.5,
+            2.406999999890104,
+            0.5630000000819564,
+            1.6410000000614673,
+            1.6559999999590218
+          ]
+        }
+      ]
+    },
+    {
+      "index": 75,
+      "characters": 110,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 2.109,
+      "totalSeconds": 8.671,
+      "cachedReplaySeconds": 0.015,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 85680,
+          "framing": true,
+          "first": 2.1089999999385327,
+          "gaps": [
+            1.625,
+            1.047000000020489,
+            2.5629999998491257
+          ]
+        }
+      ]
+    },
+    {
+      "index": 76,
+      "characters": 195,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 2.875,
+      "totalSeconds": 15.782,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 135792,
+          "framing": true,
+          "first": 2.875,
+          "gaps": [
+            1.5940000000409782,
+            1.781999999890104,
+            1.672000000020489,
+            1.7810000001918525,
+            1.5940000000409782,
+            2.3280000002123415
+          ]
+        }
+      ]
+    },
+    {
+      "index": 77,
+      "characters": 280,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 3.25,
+      "totalSeconds": 23.531,
+      "cachedReplaySeconds": 0.031,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 189072,
+          "framing": true,
+          "first": 3.234999999869615,
+          "gaps": [
+            1.1559999999590218,
+            1.452999999979511,
+            1.6719999997876585,
+            2.297000000020489,
+            2.1880000000819564,
+            1.656999999890104,
+            2.125,
+            1.375,
+            2.969000000040978
+          ]
+        }
+      ]
+    },
+    {
+      "index": 78,
+      "characters": 110,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 2.484,
+      "totalSeconds": 7.547,
+      "cachedReplaySeconds": 0.016,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 84240,
+          "framing": true,
+          "first": 2.4839999999385327,
+          "gaps": [
+            1.327999999979511,
+            1.2650000001303852,
+            1.172000000020489
+          ]
+        }
+      ]
+    },
+    {
+      "index": 79,
+      "characters": 195,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 2.75,
+      "totalSeconds": 17.75,
+      "cachedReplaySeconds": 0.016,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 137232,
+          "framing": true,
+          "first": 2.7350000001024455,
+          "gaps": [
+            2.077999999979511,
+            1.922000000020489,
+            1.4370000001508743,
+            1.7349999998696148,
+            1.7650000001303852,
+            3.469000000040978
+          ]
+        }
+      ]
+    },
+    {
+      "index": 80,
+      "characters": 280,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.297,
+      "totalSeconds": 9.891,
+      "cachedReplaySeconds": 0.016,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 183024,
+          "framing": true,
+          "first": 1.2809999999590218,
+          "gaps": [
+            1.3909999998286366,
+            0.5469999997876585,
+            0.4220000000204891,
+            0.6400000001303852,
+            0.5779999999795109,
+            0.7650000001303852,
+            0.8589999999385327,
+            0.7189999998081475,
+            0.8900000001303852
+          ]
+        }
+      ]
+    },
+    {
+      "index": 81,
+      "characters": 110,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.421,
+      "totalSeconds": 6.718,
+      "cachedReplaySeconds": 0.015,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 85104,
+          "framing": true,
+          "first": 1.421000000089407,
+          "gaps": [
+            1.2340000001713634,
+            1.1559999999590218,
+            1.531999999890104
+          ]
+        }
+      ]
+    },
+    {
+      "index": 82,
+      "characters": 195,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.89,
+      "totalSeconds": 8.75,
+      "cachedReplaySeconds": 0.032,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 136080,
+          "framing": true,
+          "first": 1.8589999999385327,
+          "gaps": [
+            1.375,
+            1.1089999999385327,
+            0.9220000000204891,
+            1.0940000000409782,
+            0.4220000000204891,
+            0.7339999999385327
+          ]
+        }
+      ]
+    },
+    {
+      "index": 83,
+      "characters": 280,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.297,
+      "totalSeconds": 14.938,
+      "cachedReplaySeconds": 0.016,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 186048,
+          "framing": true,
+          "first": 1.2809999999590218,
+          "gaps": [
+            1.1560000001918525,
+            1.3280000002123415,
+            1.3440000000409782,
+            1.5,
+            2.1880000000819564,
+            0.6399999998975545,
+            0.9849999998696148,
+            0.7650000001303852,
+            1.5
+          ]
+        }
+      ]
+    },
+    {
+      "index": 84,
+      "characters": 110,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 3.109,
+      "totalSeconds": 14.093,
+      "cachedReplaySeconds": 0.015,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 84384,
+          "framing": true,
+          "first": 3.1089999999385327,
+          "gaps": [
+            2.3129999998491257,
+            1.8119999999180436,
+            4.718000000109896
+          ]
+        }
+      ]
+    },
+    {
+      "index": 85,
+      "characters": 195,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.547,
+      "totalSeconds": 11.719,
+      "cachedReplaySeconds": 0.032,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 136080,
+          "framing": true,
+          "first": 1.547000000020489,
+          "gaps": [
+            0.9849999998696148,
+            2.077999999979511,
+            1.375,
+            1.3440000000409782,
+            1.25,
+            1.1870000001508743
+          ]
+        }
+      ]
+    },
+    {
+      "index": 86,
+      "characters": 280,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.828,
+      "totalSeconds": 21.016,
+      "cachedReplaySeconds": 0.031,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 187488,
+          "framing": true,
+          "first": 1.8120000001508743,
+          "gaps": [
+            2.1410000000614673,
+            1.4839999999385327,
+            1.2339999999385327,
+            2.046000000089407,
+            1.1089999999385327,
+            1.577999999979511,
+            2.577999999979511,
+            2.015000000130385,
+            1.7339999999385327
+          ]
+        }
+      ]
+    },
+    {
+      "index": 87,
+      "characters": 110,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.921,
+      "totalSeconds": 6.656,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 85536,
+          "framing": true,
+          "first": 1.921000000089407,
+          "gaps": [
+            1.6089999999385327,
+            0.875,
+            1.218000000109896
+          ]
+        }
+      ]
+    },
+    {
+      "index": 88,
+      "characters": 195,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.656,
+      "totalSeconds": 11.719,
+      "cachedReplaySeconds": 0.016,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 135648,
+          "framing": true,
+          "first": 1.6409999998286366,
+          "gaps": [
+            0.8120000001508743,
+            1.125,
+            1.5619999999180436,
+            1.7660000000614673,
+            1.375,
+            1.531999999890104
+          ]
+        }
+      ]
+    },
+    {
+      "index": 89,
+      "characters": 280,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.984,
+      "totalSeconds": 18.453,
+      "cachedReplaySeconds": 0.016,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 187200,
+          "framing": true,
+          "first": 1.9840000001713634,
+          "gaps": [
+            1.625,
+            0.9379999998491257,
+            0.7339999999385327,
+            1.5620000001508743,
+            1.922000000020489,
+            1.1099999998696148,
+            2.25,
+            1.3130000000819564,
+            2.094000000040978
+          ]
+        }
+      ]
+    },
+    {
+      "index": 90,
+      "characters": 110,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 2.953,
+      "totalSeconds": 9.39,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 82656,
+          "framing": true,
+          "first": 2.952999999979511,
+          "gaps": [
+            2.1410000000614673,
+            1.3439999998081475,
+            1.843000000109896
+          ]
+        }
+      ]
+    },
+    {
+      "index": 91,
+      "characters": 195,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 2.391,
+      "totalSeconds": 12.0,
+      "cachedReplaySeconds": 0.015,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 136080,
+          "framing": true,
+          "first": 2.3910000000614673,
+          "gaps": [
+            1.1100000001024455,
+            1.3119999999180436,
+            1.1880000000819564,
+            1.4379999998491257,
+            0.8279999999795109,
+            1.9369999999180436
+          ]
+        }
+      ]
+    },
+    {
+      "index": 92,
+      "characters": 280,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.563,
+      "totalSeconds": 14.313,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 187488,
+          "framing": true,
+          "first": 1.5630000000819564,
+          "gaps": [
+            0.7349999998696148,
+            0.75,
+            0.9690000000409782,
+            1.156999999890104,
+            1.5939999998081475,
+            1.2809999999590218,
+            1.5619999999180436,
+            0.9839999999385327,
+            1.672000000020489
+          ]
+        }
+      ]
+    },
+    {
+      "index": 93,
+      "characters": 110,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 2.172,
+      "totalSeconds": 5.563,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 85392,
+          "framing": true,
+          "first": 2.172000000020489,
+          "gaps": [
+            0.8900000001303852,
+            0.625,
+            1.1560000001918525
+          ]
+        }
+      ]
+    },
+    {
+      "index": 94,
+      "characters": 195,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 2.156,
+      "totalSeconds": 10.234,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 135936,
+          "framing": true,
+          "first": 2.155999999959022,
+          "gaps": [
+            1.5309999999590218,
+            1.7650000001303852,
+            0.5470000000204891,
+            1.421000000089407,
+            0.625,
+            0.9690000000409782
+          ]
+        }
+      ]
+    },
+    {
+      "index": 95,
+      "characters": 280,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 2.844,
+      "totalSeconds": 28.391,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 187344,
+          "framing": true,
+          "first": 2.8439999998081475,
+          "gaps": [
+            2.4839999999385327,
+            2.952999999979511,
+            1.7349999998696148,
+            2.030999999959022,
+            2.5629999998491257,
+            2.125,
+            2.234999999869615,
+            1.5940000000409782,
+            3.765000000130385,
+            0.5779999999795109
+          ]
+        }
+      ]
+    },
+    {
+      "index": 96,
+      "characters": 110,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 2.156,
+      "totalSeconds": 6.984,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 84240,
+          "framing": true,
+          "first": 2.1399999998975545,
+          "gaps": [
+            0.7339999999385327,
+            0.6559999999590218,
+            2.530999999959022
+          ]
+        }
+      ]
+    },
+    {
+      "index": 97,
+      "characters": 195,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 4.86,
+      "totalSeconds": 26.672,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 136800,
+          "framing": true,
+          "first": 4.859999999869615,
+          "gaps": [
+            3.327999999979511,
+            3.030999999959022,
+            1.702999999979511,
+            3.655999999959022,
+            2.859999999869615,
+            3.6879999998491257,
+            0.7660000000614673
+          ]
+        }
+      ]
+    },
+    {
+      "index": 98,
+      "characters": 280,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.172,
+      "totalSeconds": 9.562,
+      "cachedReplaySeconds": 0.031,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 187200,
+          "framing": true,
+          "first": 1.172000000020489,
+          "gaps": [
+            0.6400000001303852,
+            1.125,
+            0.7349999998696148,
+            0.5149999998975545,
+            0.4220000000204891,
+            1.2349999998696148,
+            0.8600000001024455,
+            0.8599999998696148
+          ]
+        }
+      ]
+    },
+    {
+      "index": 99,
+      "characters": 110,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.157,
+      "totalSeconds": 5.079,
+      "cachedReplaySeconds": 0.016,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 85536,
+          "framing": true,
+          "first": 1.1410000000614673,
+          "gaps": [
+            1.0,
+            0.7970000000204891,
+            0.9690000000409782
+          ]
+        }
+      ]
+    },
+    {
+      "index": 100,
+      "characters": 197,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.828,
+      "totalSeconds": 14.688,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 132768,
+          "framing": true,
+          "first": 1.8280000002123415,
+          "gaps": [
+            1.625,
+            1.4689999998081475,
+            1.3440000000409782,
+            1.7190000000409782,
+            1.6099999998696148,
+            2.4530000002123415
+          ]
+        }
+      ]
+    },
+    {
+      "index": 101,
+      "characters": 283,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 2.125,
+      "totalSeconds": 12.484,
+      "cachedReplaySeconds": 0.016,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 190368,
+          "framing": true,
+          "first": 2.125,
+          "gaps": [
+            1.2190000000409782,
+            1.4219999997876585,
+            0.5159999998286366,
+            0.5630000000819564,
+            0.7650000001303852,
+            0.9379999998491257,
+            0.75,
+            0.4059999999590218,
+            1.6880000000819564
+          ]
+        }
+      ]
+    },
+    {
+      "index": 102,
+      "characters": 111,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 2.578,
+      "totalSeconds": 9.344,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 85824,
+          "framing": true,
+          "first": 2.5619999999180436,
+          "gaps": [
+            1.797000000020489,
+            1.5620000001508743,
+            2.125
+          ]
+        }
+      ]
+    },
+    {
+      "index": 103,
+      "characters": 197,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.937,
+      "totalSeconds": 10.828,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 139536,
+          "framing": true,
+          "first": 1.9369999999180436,
+          "gaps": [
+            1.3439999998081475,
+            1.3440000000409782,
+            1.3129999998491257,
+            1.0,
+            0.7340000001713634,
+            1.3589999999385327
+          ]
+        }
+      ]
+    },
+    {
+      "index": 104,
+      "characters": 283,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.593,
+      "totalSeconds": 12.593,
+      "cachedReplaySeconds": 0.015,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 191088,
+          "framing": true,
+          "first": 1.593000000109896,
+          "gaps": [
+            0.8279999999795109,
+            1.3129999998491257,
+            0.5940000000409782,
+            1.077999999979511,
+            1.1089999999385327,
+            0.7970000000204891,
+            1.2190000000409782,
+            1.0940000000409782,
+            1.0939999998081475
+          ]
+        }
+      ]
+    },
+    {
+      "index": 105,
+      "characters": 111,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.765,
+      "totalSeconds": 7.062,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 86832,
+          "framing": true,
+          "first": 1.75,
+          "gaps": [
+            1.125,
+            0.9059999999590218,
+            2.0620000001508743
+          ]
+        }
+      ]
+    },
+    {
+      "index": 106,
+      "characters": 197,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.547,
+      "totalSeconds": 8.375,
+      "cachedReplaySeconds": 0.031,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 138960,
+          "framing": true,
+          "first": 1.5469999997876585,
+          "gaps": [
+            1.3120000001508743,
+            1.2030000002123415,
+            0.5470000000204891,
+            0.4529999999795109,
+            0.625,
+            1.297000000020489
+          ]
+        }
+      ]
+    },
+    {
+      "index": 107,
+      "characters": 283,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 2.61,
+      "totalSeconds": 23.969,
+      "cachedReplaySeconds": 0.015,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 193104,
+          "framing": true,
+          "first": 2.577999999979511,
+          "gaps": [
+            1.5149999998975545,
+            1.4059999999590218,
+            1.6400000001303852,
+            2.75,
+            2.4369999999180436,
+            2.593000000109896,
+            1.6560000001918525,
+            2.0,
+            2.4370000001508743,
+            0.4529999999795109
+          ]
+        }
+      ]
+    },
+    {
+      "index": 108,
+      "characters": 111,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.032,
+      "totalSeconds": 3.907,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 85536,
+          "framing": true,
+          "first": 1.031999999890104,
+          "gaps": [
+            0.8279999999795109,
+            0.6089999999385327,
+            0.75
+          ]
+        }
+      ]
+    },
+    {
+      "index": 109,
+      "characters": 197,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.468,
+      "totalSeconds": 9.296,
+      "cachedReplaySeconds": 0.015,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 140112,
+          "framing": true,
+          "first": 1.468000000109896,
+          "gaps": [
+            0.8590000001713634,
+            1.5150000001303852,
+            1.3440000000409782,
+            0.75,
+            0.5619999999180436,
+            1.3119999999180436
+          ]
+        }
+      ]
+    },
+    {
+      "index": 110,
+      "characters": 283,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 2.188,
+      "totalSeconds": 16.688,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 187344,
+          "framing": true,
+          "first": 2.1879999998491257,
+          "gaps": [
+            1.3899999998975545,
+            1.7969999997876585,
+            1.2190000000409782,
+            1.5,
+            1.5160000000614673,
+            1.1880000000819564,
+            1.1880000000819564,
+            0.7030000002123415,
+            1.7189999998081475
+          ]
+        }
+      ]
+    },
+    {
+      "index": 111,
+      "characters": 111,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 4.266,
+      "totalSeconds": 14.735,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 86688,
+          "framing": true,
+          "first": 4.266000000061467,
+          "gaps": [
+            2.422000000020489,
+            1.1100000001024455,
+            4.969000000040978,
+            0.7339999999385327
+          ]
+        }
+      ]
+    },
+    {
+      "index": 112,
+      "characters": 197,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 3.953,
+      "totalSeconds": 16.703,
+      "cachedReplaySeconds": 0.016,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 138960,
+          "framing": true,
+          "first": 3.952999999979511,
+          "gaps": [
+            2.3590000001713634,
+            2.3910000000614673,
+            1.718000000109896,
+            1.593000000109896,
+            1.077999999979511,
+            1.5620000001508743
+          ]
+        }
+      ]
+    },
+    {
+      "index": 113,
+      "characters": 283,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 3.234,
+      "totalSeconds": 27.234,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 191664,
+          "framing": true,
+          "first": 3.2339999999385327,
+          "gaps": [
+            2.5619999999180436,
+            2.2350000001024455,
+            2.281999999890104,
+            3.75,
+            0.42199999978765845,
+            2.1870000001508743,
+            1.7809999999590218,
+            1.75,
+            1.0160000000614673,
+            3.094000000040978
+          ]
+        }
+      ]
+    },
+    {
+      "index": 114,
+      "characters": 111,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 2.015,
+      "totalSeconds": 5.484,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 85536,
+          "framing": true,
+          "first": 2.015000000130385,
+          "gaps": [
+            0.7189999998081475,
+            0.8909999998286366,
+            1.1869999999180436
+          ]
+        }
+      ]
+    },
+    {
+      "index": 115,
+      "characters": 197,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.328,
+      "totalSeconds": 6.828,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 139536,
+          "framing": true,
+          "first": 1.327999999979511,
+          "gaps": [
+            0.8440000000409782,
+            1.031999999890104,
+            0.42100000008940697,
+            0.5,
+            0.4220000000204891,
+            0.9689999998081475
+          ]
+        }
+      ]
+    },
+    {
+      "index": 116,
+      "characters": 283,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.719,
+      "totalSeconds": 10.922,
+      "cachedReplaySeconds": 0.016,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 191664,
+          "framing": true,
+          "first": 1.7190000000409782,
+          "gaps": [
+            0.5160000000614673,
+            0.8279999999795109,
+            0.8440000000409782,
+            0.8129999998491257,
+            0.625,
+            0.8279999999795109,
+            1.2650000001303852,
+            0.8130000000819564,
+            0.8119999999180436
+          ]
+        }
+      ]
+    },
+    {
+      "index": 117,
+      "characters": 111,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 4.109,
+      "totalSeconds": 10.984,
+      "cachedReplaySeconds": 0.015,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 87264,
+          "framing": true,
+          "first": 4.109000000171363,
+          "gaps": [
+            1.2190000000409782,
+            1.125,
+            3.125
+          ]
+        }
+      ]
+    },
+    {
+      "index": 118,
+      "characters": 197,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 2.016,
+      "totalSeconds": 12.328,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 138528,
+          "framing": true,
+          "first": 2.0160000000614673,
+          "gaps": [
+            1.5,
+            1.1410000000614673,
+            0.6559999999590218,
+            1.8130000000819564,
+            1.452999999979511,
+            1.921000000089407
+          ]
+        }
+      ]
+    },
+    {
+      "index": 119,
+      "characters": 283,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 2.407,
+      "totalSeconds": 17.782,
+      "cachedReplaySeconds": 0.016,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 192960,
+          "framing": true,
+          "first": 2.406999999890104,
+          "gaps": [
+            2.547000000020489,
+            2.530999999959022,
+            0.9060000001918525,
+            0.9680000001098961,
+            0.9529999999795109,
+            0.8120000001508743,
+            1.327999999979511,
+            1.25,
+            1.452999999979511
+          ]
+        }
+      ]
+    },
+    {
+      "index": 120,
+      "characters": 111,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.781,
+      "totalSeconds": 6.781,
+      "cachedReplaySeconds": 0.031,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 85536,
+          "framing": true,
+          "first": 1.7810000001918525,
+          "gaps": [
+            0.8279999999795109,
+            1.3130000000819564,
+            1.953999999910593
+          ]
+        }
+      ]
+    },
+    {
+      "index": 121,
+      "characters": 197,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.235,
+      "totalSeconds": 11.735,
+      "cachedReplaySeconds": 0.016,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 140256,
+          "framing": true,
+          "first": 1.2349999998696148,
+          "gaps": [
+            1.077999999979511,
+            1.1099999998696148,
+            0.4529999999795109,
+            2.156999999890104,
+            1.7190000000409782,
+            1.8439999998081475
+          ]
+        }
+      ]
+    },
+    {
+      "index": 122,
+      "characters": 283,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.953,
+      "totalSeconds": 11.312,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 194400,
+          "framing": true,
+          "first": 1.9380000000819564,
+          "gaps": [
+            1.218000000109896,
+            1.1099999998696148,
+            0.5930000001098961,
+            0.546000000089407,
+            0.6560000001918525,
+            0.6099999998696148,
+            0.6869999999180436,
+            0.5,
+            1.5159999998286366
+          ]
+        }
+      ]
+    },
+    {
+      "index": 123,
+      "characters": 111,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.875,
+      "totalSeconds": 6.344,
+      "cachedReplaySeconds": 0.016,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 87696,
+          "framing": true,
+          "first": 1.875,
+          "gaps": [
+            1.0160000000614673,
+            0.6100000001024455,
+            1.5940000000409782
+          ]
+        }
+      ]
+    },
+    {
+      "index": 124,
+      "characters": 197,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 2.719,
+      "totalSeconds": 10.797,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 140400,
+          "framing": true,
+          "first": 2.719000000040978,
+          "gaps": [
+            0.9220000000204891,
+            1.0469999997876585,
+            1.125,
+            0.9220000000204891,
+            1.077999999979511,
+            1.2350000001024455
+          ]
+        }
+      ]
+    },
+    {
+      "index": 125,
+      "characters": 283,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.625,
+      "totalSeconds": 13.625,
+      "cachedReplaySeconds": 0.016,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 193248,
+          "framing": true,
+          "first": 1.6099999998696148,
+          "gaps": [
+            0.671000000089407,
+            1.0630000000819564,
+            1.7340000001713634,
+            1.5160000000614673,
+            0.8589999999385327,
+            0.5939999998081475,
+            1.4060000001918525,
+            0.6870000001508743,
+            1.452999999979511
+          ]
+        }
+      ]
+    },
+    {
+      "index": 126,
+      "characters": 111,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 2.812,
+      "totalSeconds": 8.812,
+      "cachedReplaySeconds": 0.015,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 86688,
+          "framing": true,
+          "first": 2.8119999999180436,
+          "gaps": [
+            1.4060000001918525,
+            1.1400000001303852,
+            2.172000000020489
+          ]
+        }
+      ]
+    },
+    {
+      "index": 127,
+      "characters": 197,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.875,
+      "totalSeconds": 9.063,
+      "cachedReplaySeconds": 0.032,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 141696,
+          "framing": true,
+          "first": 1.875,
+          "gaps": [
+            0.6869999999180436,
+            1.125,
+            0.8440000000409782,
+            0.8439999998081475,
+            0.7970000000204891,
+            1.5619999999180436
+          ]
+        }
+      ]
+    },
+    {
+      "index": 128,
+      "characters": 283,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.094,
+      "totalSeconds": 8.281,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 193392,
+          "framing": true,
+          "first": 1.0940000000409782,
+          "gaps": [
+            0.5310000001918525,
+            0.5,
+            0.6100000001024455,
+            0.4850000001024455,
+            0.6720000000204891,
+            0.40600000019185245,
+            0.5940000000409782,
+            0.9059999999590218,
+            1.0159999998286366
+          ]
+        }
+      ]
+    },
+    {
+      "index": 129,
+      "characters": 111,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.156,
+      "totalSeconds": 4.234,
+      "cachedReplaySeconds": 0.031,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 88128,
+          "framing": true,
+          "first": 1.1560000001918525,
+          "gaps": [
+            0.4850000001024455,
+            0.4059999999590218,
+            1.202999999979511
+          ]
+        }
+      ]
+    },
+    {
+      "index": 130,
+      "characters": 197,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.39,
+      "totalSeconds": 6.015,
+      "cachedReplaySeconds": 0.031,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 138096,
+          "framing": true,
+          "first": 1.375,
+          "gaps": [
+            0.5309999999590218,
+            0.8910000000614673,
+            0.5939999998081475,
+            0.8910000000614673
+          ]
+        }
+      ]
+    },
+    {
+      "index": 131,
+      "characters": 283,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 2.657,
+      "totalSeconds": 14.5,
+      "cachedReplaySeconds": 0.046,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 193392,
+          "framing": true,
+          "first": 2.656999999890104,
+          "gaps": [
+            1.2660000000614673,
+            1.5940000000409782,
+            0.7809999999590218,
+            1.077999999979511,
+            1.172000000020489,
+            0.8129999998491257,
+            0.875,
+            0.8279999999795109,
+            1.297000000020489
+          ]
+        }
+      ]
+    },
+    {
+      "index": 132,
+      "characters": 111,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.094,
+      "totalSeconds": 4.344,
+      "cachedReplaySeconds": 0.031,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 86544,
+          "framing": true,
+          "first": 1.0939999998081475,
+          "gaps": [
+            0.43700000015087426,
+            0.8440000000409782,
+            1.0159999998286366
+          ]
+        }
+      ]
+    },
+    {
+      "index": 133,
+      "characters": 197,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.688,
+      "totalSeconds": 9.0,
+      "cachedReplaySeconds": 0.016,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 140688,
+          "framing": true,
+          "first": 1.672000000020489,
+          "gaps": [
+            0.7809999999590218,
+            0.9220000000204891,
+            1.0309999999590218,
+            1.0619999999180436,
+            0.9059999999590218,
+            1.5
+          ]
+        }
+      ]
+    },
+    {
+      "index": 134,
+      "characters": 283,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.641,
+      "totalSeconds": 14.25,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 193968,
+          "framing": true,
+          "first": 1.6409999998286366,
+          "gaps": [
+            0.8599999998696148,
+            1.031999999890104,
+            1.2660000000614673,
+            1.6089999999385327,
+            1.8600000001024455,
+            1.0,
+            0.8119999999180436,
+            0.7660000000614673,
+            1.1090000001713634
+          ]
+        }
+      ]
+    },
+    {
+      "index": 135,
+      "characters": 111,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 2.047,
+      "totalSeconds": 6.031,
+      "cachedReplaySeconds": 0.015,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 87696,
+          "framing": true,
+          "first": 2.047000000020489,
+          "gaps": [
+            1.1879999998491257,
+            0.75,
+            1.125
+          ]
+        }
+      ]
+    },
+    {
+      "index": 136,
+      "characters": 197,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 2.469,
+      "totalSeconds": 13.516,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 140544,
+          "framing": true,
+          "first": 2.452999999979511,
+          "gaps": [
+            1.8129999998491257,
+            1.0,
+            1.8130000000819564,
+            1.672000000020489,
+            1.468000000109896,
+            1.6869999999180436
+          ]
+        }
+      ]
+    },
+    {
+      "index": 137,
+      "characters": 283,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 3.297,
+      "totalSeconds": 38.532,
+      "cachedReplaySeconds": 0.032,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 195552,
+          "framing": true,
+          "first": 3.297000000020489,
+          "gaps": [
+            1.9690000000409782,
+            2.1719999997876585,
+            1.9690000000409782,
+            3.1870000001508743,
+            2.875,
+            2.577999999979511,
+            3.4060000001918525,
+            2.859999999869615,
+            3.094000000040978,
+            5.515000000130385,
+            0.7660000000614673
+          ]
+        }
+      ]
+    },
+    {
+      "index": 138,
+      "characters": 111,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 2.625,
+      "totalSeconds": 7.594,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 86400,
+          "framing": true,
+          "first": 2.625,
+          "gaps": [
+            1.6089999999385327,
+            0.7660000000614673,
+            1.75
+          ]
+        }
+      ]
+    },
+    {
+      "index": 139,
+      "characters": 197,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.531,
+      "totalSeconds": 10.297,
+      "cachedReplaySeconds": 0.016,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 141552,
+          "framing": true,
+          "first": 1.5309999999590218,
+          "gaps": [
+            1.327999999979511,
+            1.3910000000614673,
+            1.297000000020489,
+            1.547000000020489,
+            0.6409999998286366,
+            0.9060000001918525
+          ]
+        }
+      ]
+    },
+    {
+      "index": 140,
+      "characters": 283,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.203,
+      "totalSeconds": 10.64,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 191664,
+          "framing": true,
+          "first": 1.1880000000819564,
+          "gaps": [
+            1.1879999998491257,
+            0.7970000000204891,
+            0.4690000000409782,
+            0.6400000001303852,
+            1.1560000001918525,
+            0.9370000001508743,
+            1.327999999979511,
+            0.4839999999385327,
+            0.7029999999795109
+          ]
+        }
+      ]
+    },
+    {
+      "index": 141,
+      "characters": 111,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.235,
+      "totalSeconds": 8.141,
+      "cachedReplaySeconds": 0.016,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 87840,
+          "framing": true,
+          "first": 1.2350000001024455,
+          "gaps": [
+            1.2809999999590218,
+            1.5,
+            2.625
+          ]
+        }
+      ]
+    },
+    {
+      "index": 142,
+      "characters": 197,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.062,
+      "totalSeconds": 6.797,
+      "cachedReplaySeconds": 0.016,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 140976,
+          "framing": true,
+          "first": 1.0469999997876585,
+          "gaps": [
+            0.42100000008940697,
+            0.6089999999385327,
+            0.5310000001918525,
+            0.5779999999795109,
+            0.7029999999795109,
+            1.6559999999590218
+          ]
+        }
+      ]
+    },
+    {
+      "index": 143,
+      "characters": 283,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 3.906,
+      "totalSeconds": 27.609,
+      "cachedReplaySeconds": 0.047,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 194112,
+          "framing": true,
+          "first": 3.8909999998286366,
+          "gaps": [
+            3.609999999869615,
+            2.030999999959022,
+            2.3119999999180436,
+            2.75,
+            1.8440000000409782,
+            1.672000000020489,
+            1.9690000000409782,
+            1.3900000001303852,
+            2.6560000001918525
+          ]
+        }
+      ]
+    },
+    {
+      "index": 144,
+      "characters": 111,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 2.359,
+      "totalSeconds": 8.468,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 86832,
+          "framing": true,
+          "first": 2.344000000040978,
+          "gaps": [
+            1.6719999997876585,
+            0.9849999998696148,
+            2.25
+          ]
+        }
+      ]
+    },
+    {
+      "index": 145,
+      "characters": 197,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 2.36,
+      "totalSeconds": 13.328,
+      "cachedReplaySeconds": 0.015,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 141408,
+          "framing": true,
+          "first": 2.359999999869615,
+          "gaps": [
+            1.625,
+            1.172000000020489,
+            1.4059999999590218,
+            1.452999999979511,
+            1.3439999998081475,
+            2.0630000000819564
+          ]
+        }
+      ]
+    },
+    {
+      "index": 146,
+      "characters": 283,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.079,
+      "totalSeconds": 7.391,
+      "cachedReplaySeconds": 0.031,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 195264,
+          "framing": true,
+          "first": 1.078999999910593,
+          "gaps": [
+            0.5469999997876585,
+            0.5940000000409782,
+            0.4839999999385327,
+            0.5,
+            0.5469999997876585,
+            0.5160000000614673,
+            0.5620000001508743,
+            0.4529999999795109,
+            0.7029999999795109
+          ]
+        }
+      ]
+    },
+    {
+      "index": 147,
+      "characters": 111,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.391,
+      "totalSeconds": 4.61,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 88272,
+          "framing": true,
+          "first": 1.375,
+          "gaps": [
+            0.7180000001098961,
+            0.6720000000204891,
+            1.077999999979511
+          ]
+        }
+      ]
+    },
+    {
+      "index": 148,
+      "characters": 197,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.063,
+      "totalSeconds": 5.391,
+      "cachedReplaySeconds": 0.032,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 140976,
+          "framing": true,
+          "first": 1.047000000020489,
+          "gaps": [
+            0.5,
+            0.578999999910593,
+            0.46899999980814755,
+            0.5149999998975545,
+            0.42100000008940697,
+            0.7660000000614673
+          ]
+        }
+      ]
+    },
+    {
+      "index": 149,
+      "characters": 283,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.14,
+      "totalSeconds": 8.14,
+      "cachedReplaySeconds": 0.015,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 195696,
+          "framing": true,
+          "first": 1.1399999998975545,
+          "gaps": [
+            0.4839999999385327,
+            0.5309999999590218,
+            0.5939999998081475,
+            0.5,
+            0.7659999998286366,
+            0.48499999986961484,
+            0.5470000000204891,
+            0.4839999999385327,
+            0.7970000000204891
+          ]
+        }
+      ]
+    },
+    {
+      "index": 150,
+      "characters": 111,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 2.109,
+      "totalSeconds": 7.75,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 85680,
+          "framing": true,
+          "first": 2.1089999999385327,
+          "gaps": [
+            1.5160000000614673,
+            0.9059999999590218,
+            2.125
+          ]
+        }
+      ]
+    },
+    {
+      "index": 151,
+      "characters": 197,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.047,
+      "totalSeconds": 5.563,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 140112,
+          "framing": true,
+          "first": 1.0309999999590218,
+          "gaps": [
+            0.4850000001024455,
+            0.5930000001098961,
+            0.4839999999385327,
+            0.5619999999180436,
+            0.4690000000409782,
+            0.7819999998901039
+          ]
+        }
+      ]
+    },
+    {
+      "index": 152,
+      "characters": 283,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 2.328,
+      "totalSeconds": 19.234,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 194976,
+          "framing": true,
+          "first": 2.327999999979511,
+          "gaps": [
+            1.9849999998696148,
+            1.1410000000614673,
+            1.5150000001303852,
+            1.3589999999385327,
+            1.7339999999385327,
+            1.8130000000819564,
+            1.3439999998081475,
+            1.3119999999180436,
+            2.0
+          ]
+        }
+      ]
+    },
+    {
+      "index": 153,
+      "characters": 111,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.203,
+      "totalSeconds": 3.734,
+      "cachedReplaySeconds": 0.016,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 87552,
+          "framing": true,
+          "first": 1.202999999979511,
+          "gaps": [
+            0.5160000000614673,
+            0.5,
+            0.875
+          ]
+        }
+      ]
+    },
+    {
+      "index": 154,
+      "characters": 197,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.078,
+      "totalSeconds": 5.438,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 140544,
+          "framing": true,
+          "first": 1.0619999999180436,
+          "gaps": [
+            0.5,
+            0.5940000000409782,
+            0.5309999999590218,
+            0.5159999998286366,
+            0.5779999999795109,
+            0.625
+          ]
+        }
+      ]
+    },
+    {
+      "index": 155,
+      "characters": 283,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.812,
+      "totalSeconds": 13.218,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 193104,
+          "framing": true,
+          "first": 1.797000000020489,
+          "gaps": [
+            0.9690000000409782,
+            0.7970000000204891,
+            1.172000000020489,
+            1.3439999998081475,
+            0.7029999999795109,
+            0.875,
+            1.0619999999180436,
+            0.7029999999795109,
+            1.797000000020489
+          ]
+        }
+      ]
+    },
+    {
+      "index": 156,
+      "characters": 111,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.734,
+      "totalSeconds": 7.031,
+      "cachedReplaySeconds": 0.031,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 86832,
+          "framing": true,
+          "first": 1.7340000001713634,
+          "gaps": [
+            1.375,
+            1.2190000000409782,
+            1.593000000109896
+          ]
+        }
+      ]
+    },
+    {
+      "index": 157,
+      "characters": 197,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.86,
+      "totalSeconds": 12.828,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 141120,
+          "framing": true,
+          "first": 1.8599999998696148,
+          "gaps": [
+            1.5310000001918525,
+            1.0,
+            1.4689999998081475,
+            1.827999999979511,
+            1.577999999979511,
+            1.4849999998696148
+          ]
+        }
+      ]
+    },
+    {
+      "index": 158,
+      "characters": 283,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.032,
+      "totalSeconds": 8.5,
+      "cachedReplaySeconds": 0.015,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 193968,
+          "framing": true,
+          "first": 1.031999999890104,
+          "gaps": [
+            1.0940000000409782,
+            0.9690000000409782,
+            0.5159999998286366,
+            0.5319999998901039,
+            0.4529999999795109,
+            0.48499999986961484,
+            0.5,
+            1.046000000089407
+          ]
+        }
+      ]
+    },
+    {
+      "index": 159,
+      "characters": 111,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 3.766,
+      "totalSeconds": 11.125,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 88128,
+          "framing": true,
+          "first": 3.75,
+          "gaps": [
+            2.484999999869615,
+            0.8909999998286366,
+            2.577999999979511
+          ]
+        }
+      ]
+    },
+    {
+      "index": 160,
+      "characters": 197,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.625,
+      "totalSeconds": 6.438,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 138672,
+          "framing": true,
+          "first": 1.625,
+          "gaps": [
+            0.5779999999795109,
+            0.6879999998491257,
+            0.5779999999795109,
+            0.6090000001713634,
+            0.5309999999590218,
+            0.6409999998286366
+          ]
+        }
+      ]
+    },
+    {
+      "index": 161,
+      "characters": 283,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 3.953,
+      "totalSeconds": 31.406,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 193824,
+          "framing": true,
+          "first": 3.952999999979511,
+          "gaps": [
+            2.1090000001713634,
+            1.968000000109896,
+            2.077999999979511,
+            2.843000000109896,
+            2.1879999998491257,
+            1.6409999998286366,
+            3.093000000109896,
+            2.2340000001713634,
+            5.0
+          ]
+        }
+      ]
+    },
+    {
+      "index": 162,
+      "characters": 111,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 2.375,
+      "totalSeconds": 8.25,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 86832,
+          "framing": true,
+          "first": 2.375,
+          "gaps": [
+            1.3590000001713634,
+            1.172000000020489,
+            2.219000000040978
+          ]
+        }
+      ]
+    },
+    {
+      "index": 163,
+      "characters": 197,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 3.235,
+      "totalSeconds": 7.844,
+      "cachedReplaySeconds": 0.016,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 141120,
+          "framing": true,
+          "first": 3.234999999869615,
+          "gaps": [
+            0.43700000015087426,
+            0.5940000000409782,
+            0.5,
+            0.6089999999385327,
+            0.6559999999590218,
+            0.75
+          ]
+        }
+      ]
+    },
+    {
+      "index": 164,
+      "characters": 283,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.578,
+      "totalSeconds": 13.0,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 195120,
+          "framing": true,
+          "first": 1.577999999979511,
+          "gaps": [
+            0.9529999999795109,
+            0.796000000089407,
+            0.8119999999180436,
+            1.1089999999385327,
+            1.125,
+            1.375,
+            1.406999999890104,
+            0.7819999998901039,
+            1.1879999998491257
+          ]
+        }
+      ]
+    },
+    {
+      "index": 165,
+      "characters": 111,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.563,
+      "totalSeconds": 6.969,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 87984,
+          "framing": true,
+          "first": 1.5630000000819564,
+          "gaps": [
+            0.8910000000614673,
+            1.1869999999180436,
+            2.390000000130385
+          ]
+        }
+      ]
+    },
+    {
+      "index": 166,
+      "characters": 197,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 2.063,
+      "totalSeconds": 15.75,
+      "cachedReplaySeconds": 0.031,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 140976,
+          "framing": true,
+          "first": 2.0630000000819564,
+          "gaps": [
+            1.6090000001713634,
+            2.0159999998286366,
+            2.077999999979511,
+            1.218000000109896,
+            1.9690000000409782,
+            2.5629999998491257
+          ]
+        }
+      ]
+    },
+    {
+      "index": 167,
+      "characters": 283,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.297,
+      "totalSeconds": 9.641,
+      "cachedReplaySeconds": 0.032,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 195696,
+          "framing": true,
+          "first": 1.297000000020489,
+          "gaps": [
+            0.8590000001713634,
+            0.8120000001508743,
+            0.7190000000409782,
+            0.6559999999590218,
+            0.5630000000819564,
+            0.5,
+            0.5,
+            0.6409999998286366,
+            1.4850000001024455
+          ]
+        }
+      ]
+    },
+    {
+      "index": 168,
+      "characters": 111,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 2.859,
+      "totalSeconds": 10.406,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 86832,
+          "framing": true,
+          "first": 2.8590000001713634,
+          "gaps": [
+            2.093000000109896,
+            1.547000000020489,
+            2.327999999979511
+          ]
+        }
+      ]
+    },
+    {
+      "index": 169,
+      "characters": 197,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.687,
+      "totalSeconds": 16.968,
+      "cachedReplaySeconds": 0.015,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 142272,
+          "framing": true,
+          "first": 1.672000000020489,
+          "gaps": [
+            2.0630000000819564,
+            1.796000000089407,
+            1.8590000001713634,
+            1.4849999998696148,
+            2.0,
+            3.6880000000819564
+          ]
+        }
+      ]
+    },
+    {
+      "index": 170,
+      "characters": 283,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.36,
+      "totalSeconds": 8.094,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 191376,
+          "framing": true,
+          "first": 1.3599999998696148,
+          "gaps": [
+            0.5,
+            0.6560000001918525,
+            0.5779999999795109,
+            0.46899999980814755,
+            0.6559999999590218,
+            0.4690000000409782,
+            0.6099999998696148,
+            0.4220000000204891,
+            0.75
+          ]
+        }
+      ]
+    },
+    {
+      "index": 171,
+      "characters": 111,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.516,
+      "totalSeconds": 5.688,
+      "cachedReplaySeconds": 0.016,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 87840,
+          "framing": true,
+          "first": 1.5,
+          "gaps": [
+            0.5779999999795109,
+            1.0160000000614673,
+            1.6560000001918525
+          ]
+        }
+      ]
+    },
+    {
+      "index": 172,
+      "characters": 197,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 2.859,
+      "totalSeconds": 17.844,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 141264,
+          "framing": true,
+          "first": 2.8590000001713634,
+          "gaps": [
+            2.030999999959022,
+            2.702999999979511,
+            1.8590000001713634,
+            2.156999999890104,
+            1.452999999979511,
+            2.797000000020489
+          ]
+        }
+      ]
+    },
+    {
+      "index": 173,
+      "characters": 283,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.734,
+      "totalSeconds": 9.344,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 194112,
+          "framing": true,
+          "first": 1.7339999999385327,
+          "gaps": [
+            1.5,
+            0.6559999999590218,
+            0.5470000000204891,
+            0.5,
+            0.7190000000409782,
+            0.5940000000409782,
+            0.5,
+            0.4059999999590218,
+            0.7029999999795109
+          ]
+        }
+      ]
+    },
+    {
+      "index": 174,
+      "characters": 111,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.062,
+      "totalSeconds": 4.062,
+      "cachedReplaySeconds": 0.016,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 86832,
+          "framing": true,
+          "first": 1.0619999999180436,
+          "gaps": [
+            0.7970000000204891,
+            0.7029999999795109,
+            0.8129999998491257
+          ]
+        }
+      ]
+    },
+    {
+      "index": 175,
+      "characters": 197,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.0,
+      "totalSeconds": 6.922,
+      "cachedReplaySeconds": 0.016,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 140976,
+          "framing": true,
+          "first": 1.0,
+          "gaps": [
+            0.4059999999590218,
+            1.0160000000614673,
+            0.5940000000409782,
+            0.6410000000614673,
+            0.5,
+            1.4839999999385327
+          ]
+        }
+      ]
+    },
+    {
+      "index": 176,
+      "characters": 283,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 3.75,
+      "totalSeconds": 25.672,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 194976,
+          "framing": true,
+          "first": 3.75,
+          "gaps": [
+            2.281999999890104,
+            1.077999999979511,
+            1.0630000000819564,
+            2.796000000089407,
+            1.8910000000614673,
+            2.9379999998491257,
+            2.4060000001918525,
+            2.0,
+            2.797000000020489
+          ]
+        }
+      ]
+    },
+    {
+      "index": 177,
+      "characters": 111,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.109,
+      "totalSeconds": 3.64,
+      "cachedReplaySeconds": 0.031,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 88272,
+          "framing": true,
+          "first": 1.0939999998081475,
+          "gaps": [
+            0.4529999999795109,
+            0.46800000010989606,
+            1.0149999998975545
+          ]
+        }
+      ]
+    },
+    {
+      "index": 178,
+      "characters": 197,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.5,
+      "totalSeconds": 7.063,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 140832,
+          "framing": true,
+          "first": 1.5,
+          "gaps": [
+            0.6559999999590218,
+            0.7809999999590218,
+            0.6560000001918525,
+            0.5309999999590218,
+            0.5149999998975545,
+            1.297000000020489
+          ]
+        }
+      ]
+    },
+    {
+      "index": 179,
+      "characters": 283,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 2.219,
+      "totalSeconds": 20.922,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 195552,
+          "framing": true,
+          "first": 2.219000000040978,
+          "gaps": [
+            1.5,
+            1.9059999999590218,
+            1.2650000001303852,
+            1.7339999999385327,
+            1.8589999999385327,
+            1.1090000001713634,
+            1.6870000001508743,
+            2.046000000089407,
+            2.155999999959022
+          ]
+        }
+      ]
+    },
+    {
+      "index": 180,
+      "characters": 111,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.25,
+      "totalSeconds": 5.937,
+      "cachedReplaySeconds": 0.015,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 85824,
+          "framing": true,
+          "first": 1.2339999999385327,
+          "gaps": [
+            0.6409999998286366,
+            0.9850000001024455,
+            2.172000000020489
+          ]
+        }
+      ]
+    },
+    {
+      "index": 181,
+      "characters": 197,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 2.204,
+      "totalSeconds": 10.719,
+      "cachedReplaySeconds": 0.015,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 140832,
+          "framing": true,
+          "first": 2.203999999910593,
+          "gaps": [
+            1.593000000109896,
+            1.0310000001918525,
+            1.172000000020489,
+            1.0,
+            0.5940000000409782,
+            1.5
+          ]
+        }
+      ]
+    },
+    {
+      "index": 182,
+      "characters": 283,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 2.265,
+      "totalSeconds": 17.125,
+      "cachedReplaySeconds": 0.032,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 194976,
+          "framing": true,
+          "first": 2.265000000130385,
+          "gaps": [
+            1.202999999979511,
+            1.156999999890104,
+            1.4059999999590218,
+            1.6400000001303852,
+            1.6559999999590218,
+            0.7659999998286366,
+            1.125,
+            1.4060000001918525,
+            1.4839999999385327
+          ]
+        }
+      ]
+    },
+    {
+      "index": 183,
+      "characters": 111,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.891,
+      "totalSeconds": 4.406,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 87696,
+          "framing": true,
+          "first": 1.875,
+          "gaps": [
+            0.625,
+            0.5,
+            0.75
+          ]
+        }
+      ]
+    },
+    {
+      "index": 184,
+      "characters": 197,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.469,
+      "totalSeconds": 10.047,
+      "cachedReplaySeconds": 0.015,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 140688,
+          "framing": true,
+          "first": 1.4689999998081475,
+          "gaps": [
+            1.593000000109896,
+            1.953999999910593,
+            0.75,
+            0.9680000001098961,
+            0.7180000001098961,
+            1.202999999979511
+          ]
+        }
+      ]
+    },
+    {
+      "index": 185,
+      "characters": 283,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.406,
+      "totalSeconds": 9.625,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 194544,
+          "framing": true,
+          "first": 1.4059999999590218,
+          "gaps": [
+            0.7340000001713634,
+            1.156999999890104,
+            0.7650000001303852,
+            0.7189999998081475,
+            0.625,
+            0.6399999998975545,
+            0.46800000010989606,
+            0.8599999998696148
+          ]
+        }
+      ]
+    },
+    {
+      "index": 186,
+      "characters": 111,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 2.016,
+      "totalSeconds": 7.688,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 86832,
+          "framing": true,
+          "first": 2.0159999998286366,
+          "gaps": [
+            1.202999999979511,
+            1.0619999999180436,
+            2.2339999999385327
+          ]
+        }
+      ]
+    },
+    {
+      "index": 187,
+      "characters": 197,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.875,
+      "totalSeconds": 12.906,
+      "cachedReplaySeconds": 0.031,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 141696,
+          "framing": true,
+          "first": 1.875,
+          "gaps": [
+            0.9370000001508743,
+            1.327999999979511,
+            1.0630000000819564,
+            1.6099999998696148,
+            1.2969999997876585,
+            3.047000000020489
+          ]
+        }
+      ]
+    },
+    {
+      "index": 188,
+      "characters": 283,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.578,
+      "totalSeconds": 11.843,
+      "cachedReplaySeconds": 0.031,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 194544,
+          "framing": true,
+          "first": 1.577999999979511,
+          "gaps": [
+            0.6400000001303852,
+            0.6099999998696148,
+            0.5940000000409782,
+            1.0,
+            0.8279999999795109,
+            1.077999999979511,
+            1.0939999998081475,
+            1.3129999998491257,
+            1.3600000001024455
+          ]
+        }
+      ]
+    },
+    {
+      "index": 189,
+      "characters": 111,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 3.25,
+      "totalSeconds": 11.282,
+      "cachedReplaySeconds": 0.016,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 88272,
+          "framing": true,
+          "first": 3.25,
+          "gaps": [
+            2.905999999959022,
+            1.4839999999385327,
+            2.375
+          ]
+        }
+      ]
+    },
+    {
+      "index": 190,
+      "characters": 197,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.547,
+      "totalSeconds": 7.797,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 138528,
+          "framing": true,
+          "first": 1.547000000020489,
+          "gaps": [
+            1.1869999999180436,
+            0.7029999999795109,
+            0.5779999999795109,
+            0.875,
+            0.7339999999385327,
+            0.9680000001098961
+          ]
+        }
+      ]
+    },
+    {
+      "index": 191,
+      "characters": 283,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 2.516,
+      "totalSeconds": 17.859,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 193824,
+          "framing": true,
+          "first": 2.5160000000614673,
+          "gaps": [
+            1.702999999979511,
+            1.375,
+            1.422000000020489,
+            1.343000000109896,
+            1.6100000001024455,
+            1.125,
+            1.4060000001918525,
+            1.4840000001713634,
+            1.422000000020489
+          ]
+        }
+      ]
+    },
+    {
+      "index": 192,
+      "characters": 111,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.14,
+      "totalSeconds": 3.687,
+      "cachedReplaySeconds": 0.031,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 86688,
+          "framing": true,
+          "first": 1.1400000001303852,
+          "gaps": [
+            0.5470000000204891,
+            0.5779999999795109,
+            0.7819999998901039
+          ]
+        }
+      ]
+    },
+    {
+      "index": 193,
+      "characters": 197,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.844,
+      "totalSeconds": 11.485,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 140544,
+          "framing": true,
+          "first": 1.827999999979511,
+          "gaps": [
+            1.5619999999180436,
+            1.4839999999385327,
+            1.078999999910593,
+            1.297000000020489,
+            1.0,
+            1.9369999999180436
+          ]
+        }
+      ]
+    },
+    {
+      "index": 194,
+      "characters": 283,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.985,
+      "totalSeconds": 20.391,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 194400,
+          "framing": true,
+          "first": 1.9849999998696148,
+          "gaps": [
+            1.406999999890104,
+            1.7350000001024455,
+            1.875,
+            2.171000000089407,
+            1.8119999999180436,
+            1.6719999997876585,
+            1.6399999998975545,
+            1.5309999999590218,
+            2.0
+          ]
+        }
+      ]
+    },
+    {
+      "index": 195,
+      "characters": 111,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 3.218,
+      "totalSeconds": 14.093,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 88128,
+          "framing": true,
+          "first": 3.218000000109896,
+          "gaps": [
+            3.327999999979511,
+            1.8590000001713634,
+            3.234999999869615,
+            0.4529999999795109
+          ]
+        }
+      ]
+    },
+    {
+      "index": 196,
+      "characters": 197,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.703,
+      "totalSeconds": 9.172,
+      "cachedReplaySeconds": 0.031,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 140688,
+          "framing": true,
+          "first": 1.702999999979511,
+          "gaps": [
+            0.8599999998696148,
+            1.578999999910593,
+            1.0160000000614673,
+            0.9690000000409782,
+            0.625,
+            0.8279999999795109
+          ]
+        }
+      ]
+    },
+    {
+      "index": 197,
+      "characters": 283,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.141,
+      "totalSeconds": 7.094,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 195552,
+          "framing": true,
+          "first": 1.1410000000614673,
+          "gaps": [
+            0.5319999998901039,
+            0.48400000017136335,
+            0.43799999984912574,
+            0.5319999998901039,
+            0.5,
+            0.46800000010989606,
+            0.43700000015087426,
+            0.7970000000204891
+          ]
+        }
+      ]
+    },
+    {
+      "index": 198,
+      "characters": 111,
+      "voice": "vi-VN-HoaiMyNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 3.641,
+      "totalSeconds": 13.188,
+      "cachedReplaySeconds": 0.016,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 86544,
+          "framing": true,
+          "first": 3.625,
+          "gaps": [
+            2.531999999890104,
+            1.968000000109896,
+            3.25
+          ]
+        }
+      ]
+    },
+    {
+      "index": 199,
+      "characters": 197,
+      "voice": "vi-VN-NamMinhNeural",
+      "success": true,
+      "automaticRecoveries": 0,
+      "firstByteSeconds": 1.765,
+      "totalSeconds": 12.937,
+      "cachedReplaySeconds": 0.0,
+      "attempts": [
+        {
+          "ok": true,
+          "bytes": 141984,
+          "framing": true,
+          "first": 1.7650000001303852,
+          "gaps": [
+            1.375,
+            1.172000000020489,
+            1.6099999998696148,
+            2.077999999979511,
+            1.172000000020489,
+            2.327999999979511
+          ]
+        }
+      ]
+    }
+  ],
+  "limits": [
+    "TTFB is transport latency, not time to audible sound.",
+    "iOS/Safari and deployment proxy require separate device/network checks."
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "date": "2026-11-11",
+  "result": "passed",
+  "beforeBytes": 9313516475,
+  "beforeFiles": 14271,
+  "removedBytes": 4347248495,
+  "removedFiles": 215,
+  "sha256VerifiedFiles": 7378,
+  "sourceFiles": 5598,
+  "moves": {
+    "tools/windows/": "local/",
+    "tools/deploy/": "vps/",
+    "runtime/": "local/runtime/",
+    "storage/state/": "local/storage/state/",
+    "storage/cache/": "local/storage/cache/"
+  },
+  "defaultExport": "E:\\Kinh điển phật giáo - VPS",
+  "oldBackupDirectoriesRemaining": [],
+  "afterBytes": 4967337002,
+  "afterFiles": 14065,
+  "directories": {
+    ".gitignore": {
+      "files": 1,
+      "bytes": 111
+    },
+    "MO_THU_VIEN.cmd": {
+      "files": 1,
+      "bytes": 213
+    },
+    "README.md": {
+      "files": 1,
+      "bytes": 5993
+    },
+    "app": {
+      "files": 125,
+      "bytes": 18299342
+    },
+    "config": {
+      "files": 6,
+      "bytes": 3315
+    },
+    "data": {
+      "files": 7263,
+      "bytes": 2291392587
+    },
+    "docs": {
+      "files": 65,
+      "bytes": 8460087
+    },
+    "local": {
+      "files": 5872,
+      "bytes": 2556759661
+    },
+    "tests": {
+      "files": 688,
+      "bytes": 92144280
+    },
+    "tools": {
+      "files": 32,
+      "bytes": 189189
+    },
+    "vps": {
+      "files": 11,
+      "bytes": 82224
+    }
+  },
+  "netSavedBytes": 4346179473
+}

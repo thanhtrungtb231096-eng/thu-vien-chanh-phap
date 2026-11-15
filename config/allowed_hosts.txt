@@ -1,0 +1,9 @@
+# Danh sách tên miền được phép truy cập Đại Thư Viện Chánh Pháp từ xa (ngoài localhost và 127.0.0.1).
+# Thêm mỗi tên miền trên một dòng. Dòng bắt đầu bằng dấu # là ghi chú.
+# Tệp này được máy chủ kiểm tra tự động, thay đổi có hiệu lực ngay mà không cần khởi động lại máy chủ.
+
+# Cho phép tất cả đường link tạm thời từ Cloudflare Quick Tunnel:
+*.trycloudflare.com
+
+# Nếu muốn ghim cố định một đường dẫn cụ thể, bạn có thể bỏ dòng trên và ghi rõ:
+# ten-ngau-nhien.trycloudflare.com

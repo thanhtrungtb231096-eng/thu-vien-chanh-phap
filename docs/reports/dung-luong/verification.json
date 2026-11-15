@@ -1,0 +1,33 @@
+{
+  "archiveSha256": "521c9fada7bec726e3e72adfc1c05ffcca202bcb564b50882b229b87af22e759",
+  "manifestFiles": 7403,
+  "extractedFiles": 151,
+  "collections": {
+    "daithua": {
+      "searchTotal": 162,
+      "source": "Dai_thua/01_Khe_Kinh/01_Quan_Vo_Luong_Tho/Nguyen_van/Quan_Vo_Luong_Tho_viet.md"
+    },
+    "daitang": {
+      "searchTotal": 1080,
+      "source": "Dai_Tang_Kinh_Han/01_A_Ham/T01n0001_viet.md"
+    },
+    "phucminh": {
+      "searchTotal": 24,
+      "source": "web-thuvien/data/phuc-minh/text/hoi-dap-can-ban.md"
+    },
+    "ebooks": {
+      "searchTotal": 189,
+      "source": "web-thuvien/data/dai-tang-kinh/text/ep-2b3de2ffb41b.md"
+    }
+  },
+  "checks": [
+    "SHA-256 matches for all extracted files, including the search index",
+    "Server starts without workspace runtime/source folders",
+    "Audio version 5, config and narration stats work in the exported layout",
+    "Home page, edition and search APIs work for all four collections",
+    "Sample texts, original Word and PDF downloads match their hashes",
+    "Private index/Python/config files return 404",
+    "Personal database is absent from the update package"
+  ],
+  "result": "passed"
+}

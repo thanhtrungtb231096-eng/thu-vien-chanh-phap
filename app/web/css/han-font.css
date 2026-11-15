@@ -1,0 +1,9 @@
+/* Full CJK font is requested only when opening a Han/parallel reading edition. */
+@font-face {
+  font-family: 'Noto Serif TC';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(../fonts/noto-serif-tc.ttf) format('truetype');
+  unicode-range: U+2E80-9FFF,U+F900-FAFF,U+20000-3134F;
+}

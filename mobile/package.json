@@ -1,0 +1,28 @@
+{
+  "name": "chanh-phap-mobile",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Ứng dụng Di động iOS & Android — Đại Thư Viện Chánh Pháp (Capacitor + ONNX VieNeu-Nano + Native Lock-Screen Audio)",
+  "scripts": {
+    "prepare:www": "python -X utf8 ../tools/mobile/build_mobile_shell.py --out ./www --allow-in-repo",
+    "cap:sync": "npx cap sync",
+    "cap:add:ios": "npx cap add ios",
+    "cap:add:android": "npx cap add android",
+    "android:assemble": "cd android && ./gradlew assembleRelease"
+  },
+  "dependencies": {
+    "@capacitor/app": "^6.0.2",
+    "@capacitor/core": "^6.2.0",
+    "@capacitor/local-notifications": "^6.1.2",
+    "@capacitor/status-bar": "^6.0.2",
+    "chanh-phap-engine": "file:./plugins/chanh-phap-engine"
+  },
+  "devDependencies": {
+    "@capacitor/android": "^6.2.0",
+    "@capacitor/assets": "^3.0.5",
+    "@capacitor/cli": "^6.2.0",
+    "@capacitor/ios": "^6.2.0",
+    "typescript": "^5.6.3"
+  }
+}
+

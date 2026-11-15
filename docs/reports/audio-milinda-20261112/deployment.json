@@ -1,0 +1,26 @@
+{
+  "deployment": {
+    "result": "passed",
+    "release": "audio-20261112-04",
+    "version": "ux-20261010-0967464ad970",
+    "changedFiles": 6,
+    "databasesUnchanged": true,
+    "rollbackOutsideApplication": "/opt/thuvien-backups/audio-20261112-04",
+    "preflight": {
+      "version": "ux-20261010-0967464ad970",
+      "edge_tts": "7.3.1",
+      "assetHashes": "passed",
+      "exportedImports": "passed",
+      "transportLimit": 160,
+      "providerFirstAudioTimeout": 8
+    },
+    "audioDefaultsUpdated": []
+  },
+  "package": {
+    "archive": "C:\\Users\\Home\\AppData\\Local\\Temp\\chanh-phap-audio-complete-20261112.tar.gz",
+    "bytes": 1096337,
+    "files": 113,
+    "version": "ux-20261010-0967464ad970",
+    "sha256": "399cd9f7dec19bb6ba5192101a244a59fc00527112813b791b2ddb504e8f939c"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "audioVersion": 4,
+  "bytes": 82224,
+  "firstByteSeconds": 2.0,
+  "complete": true,
+  "workers": 3,
+  "warmup": 1,
+  "errors": {},
+  "payload": "authored synthetic sentence only"
+}

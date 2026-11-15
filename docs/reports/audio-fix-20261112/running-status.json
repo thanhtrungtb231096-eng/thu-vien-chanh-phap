@@ -1,0 +1,14 @@
+{
+  "local": {
+    "version": "ux-20261010-89aefaa23777",
+    "indexReady": true,
+    "documents": 5348,
+    "passages": 3395798
+  },
+  "vps": {
+    "version": "ux-20261010-89aefaa23777",
+    "indexReady": true,
+    "documents": 5348,
+    "passages": 3395798
+  }
+}

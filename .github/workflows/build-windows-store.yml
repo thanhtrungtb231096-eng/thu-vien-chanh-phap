@@ -1,0 +1,196 @@
+name: Build Chánh Pháp Windows PC App (Microsoft Store .msix & Setup .exe)
+
+on:
+  workflow_dispatch:
+    inputs:
+      remote_server_url:
+        description: "Địa chỉ máy chủ Thư viện / CDN chứa gói Kinh & AI TTS"
+        required: false
+        default: "https://thuvienchanhphap.duckdns.org"
+      ms_store_identity_name:
+        description: "Package/Identity/Name từ Microsoft Partner Center (khi nộp Store)"
+        required: false
+        default: "ChanhPhap.DaiThuVienKinhDien"
+      ms_store_publisher:
+        description: "Package/Identity/Publisher từ Microsoft Partner Center (VD: CN=XXXXXXXX-XXXX-...)"
+        required: false
+        default: "CN=ChanhPhap"
+      app_version:
+        description: "Phiên bản 4 số chuẩn MSIX (VD: 1.0.0.0)"
+        required: false
+        default: "1.0.0.0"
+  push:
+    tags:
+      - "windows-v*"
+
+permissions:
+  contents: read
+
+jobs:
+  build-windows:
+    name: Build Windows Store (.msix) & Standalone Installer (.exe)
+    runs-on: windows-2022
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout mã nguồn
+        uses: actions/checkout@v4
+
+      - name: Cài đặt Python 3.11 & Pillow (Tạo bộ Icon .ico & Tiles Microsoft Store)
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Cài đặt thư viện xử lý ảnh Pillow
+        shell: pwsh
+        run: python -m pip install --upgrade pip pillow
+
+      - name: Cài đặt Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Cài đặt trình biên dịch Rust Stable (x86_64-pc-windows-msvc)
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-pc-windows-msvc
+
+      - name: Bộ nhớ đệm Rust Cargo (Tăng tốc biên dịch lần sau)
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: "desktop-windows/src-tauri -> target"
+
+      - name: Đóng gói Gói Kinh Cốt Lõi & Windows Staging (Web Shell + Icons + AppxManifest)
+        shell: pwsh
+        env:
+          REMOTE_BASE: ${{ inputs.remote_server_url || 'https://thuvienchanhphap.duckdns.org' }}
+          MS_IDENTITY: ${{ inputs.ms_store_identity_name || secrets.MS_STORE_IDENTITY_NAME || 'ChanhPhap.DaiThuVienKinhDien' }}
+          MS_PUBLISHER: ${{ inputs.ms_store_publisher || secrets.MS_STORE_PUBLISHER || 'CN=ChanhPhap' }}
+          MS_VERSION: ${{ inputs.app_version || '1.0.0.0' }}
+        run: |
+          $packsTmp = Join-Path $env:RUNNER_TEMP "windows-packs"
+          $stagingDir = Join-Path $env:RUNNER_TEMP "windows-staging"
+          New-Item -ItemType Directory -Force -Path $packsTmp | Out-Null
+
+          $coreDb = Join-Path $packsTmp "core-bundled.pack.db"
+          if (Test-Path "local/storage/state/search.sqlite3") {
+            python -X utf8 tools/mobile/build_text_packs.py --only core-bundled --out "$packsTmp" --allow-in-repo
+          }
+          if ((-not (Test-Path $coreDb)) -or ((Get-Item $coreDb).Length -lt 1000000)) {
+            Write-Host "Đang tải core-bundled.pack.db từ máy chủ $($env:REMOTE_BASE)..."
+            Invoke-WebRequest -Uri "$($env:REMOTE_BASE)/mobile-packs/text-packs/core-bundled.pack.db" -OutFile $coreDb
+          }
+          if ((Get-Item $coreDb).Length -lt 1000000) {
+            throw "Tệp core-bundled.pack.db không hợp lệ hoặc chưa được tải lên máy chủ CDN!"
+          }
+
+          python -X utf8 tools/windows/build_windows_shell.py `
+            --out "$stagingDir" `
+            --core-pack "$coreDb" `
+            --identity-name "$env:MS_IDENTITY" `
+            --publisher "$env:MS_PUBLISHER" `
+            --version "$env:MS_VERSION"
+
+      - name: Biên dịch Tauri v2 Native Rust & Bộ cài đặt độc lập (NSIS .exe)
+        working-directory: desktop-windows
+        shell: pwsh
+        run: |
+          npm install --no-audit --no-fund
+
+          $stagingDir = (Join-Path $env:RUNNER_TEMP "windows-staging") -replace '\\', '/'
+          $ciConfPath = Join-Path $env:RUNNER_TEMP "tauri.ci.conf.json"
+          $ciConf = @{
+            build = @{
+              frontendDist = "$stagingDir/www"
+            }
+            bundle = @{
+              icon = @(
+                "$stagingDir/icons/32x32.png",
+                "$stagingDir/icons/128x128.png",
+                "$stagingDir/icons/128x128@2x.png",
+                "$stagingDir/icons/icon.ico"
+              )
+            }
+          } | ConvertTo-Json -Depth 6
+          Set-Content -Path $ciConfPath -Value $ciConf -Encoding UTF8
+
+          npx tauri build --bundles nsis --config "$ciConfPath"
+
+          $nsisExe = Get-ChildItem -Path "src-tauri/target/release/bundle/nsis/*-setup.exe" | Select-Object -First 1
+          if (-not $nsisExe) {
+            throw "Không tìm thấy bộ cài NSIS *-setup.exe sau khi biên dịch!"
+          }
+          Copy-Item $nsisExe.FullName (Join-Path $env:RUNNER_TEMP "ChanhPhap-Windows-Setup_x64.exe") -Force
+
+      - name: Đóng gói Gói chuẩn Microsoft Store (ChanhPhap-Windows-Store_x64.msix) bằng Windows SDK
+        shell: pwsh
+        run: |
+          $stagingDir = Join-Path $env:RUNNER_TEMP "windows-staging"
+          $msixLayout = Join-Path $env:RUNNER_TEMP "msix-layout"
+          $releaseDir = "desktop-windows/src-tauri/target/release"
+
+          New-Item -ItemType Directory -Force -Path $msixLayout | Out-Null
+          Copy-Item -Path "$stagingDir/msix-template/*" -Destination $msixLayout -Recurse -Force
+          Copy-Item -Path "$releaseDir/chanh-phap.exe" -Destination "$msixLayout/chanh-phap.exe" -Force
+
+          # Sao chép mọi thư viện động đi kèm (nếu có, ví dụ onnxruntime.dll / WebView2Loader.dll)
+          Get-ChildItem -Path $releaseDir -Filter "*.dll" -File -ErrorAction SilentlyContinue | ForEach-Object {
+            Copy-Item $_.FullName -Destination (Join-Path $msixLayout $_.Name) -Force
+          }
+
+          # Nhúng trực tiếp gói Kinh Cốt Lõi để trích xuất siêu tốc ngay lần mở đầu tiên
+          $packsDest = Join-Path $msixLayout "packs"
+          New-Item -ItemType Directory -Force -Path $packsDest | Out-Null
+          $coreDb = Join-Path $stagingDir "www/packs/core-bundled.pack.db"
+          if (Test-Path $coreDb) {
+            Copy-Item $coreDb -Destination (Join-Path $packsDest "core-bundled.pack.db") -Force
+          }
+
+          $makeappx = Get-ChildItem -Path "C:\Program Files (x86)\Windows Kits\10\bin\*\x64\makeappx.exe" |
+            Sort-Object FullName -Descending |
+            Select-Object -First 1 -ExpandProperty FullName
+          if (-not $makeappx) {
+            throw "Không tìm thấy makeappx.exe trong Windows Kits 10!"
+          }
+
+          $msixOut = Join-Path $env:RUNNER_TEMP "ChanhPhap-Windows-Store_x64.msix"
+          & "$makeappx" pack /d "$msixLayout" /p "$msixOut" /o
+          if ($LASTEXITCODE -ne 0) {
+            throw "Đóng gói MSIX bằng makeappx.exe thất bại (mã lỗi $LASTEXITCODE)."
+          }
+
+      - name: Ký số Code Signing bằng chứng chỉ PFX (Tùy chọn khi cài MSIX nội bộ ngoài Store)
+        if: ${{ env.WINDOWS_PFX_BASE64 != '' }}
+        shell: pwsh
+        env:
+          WINDOWS_PFX_BASE64: ${{ secrets.WINDOWS_PFX_BASE64 }}
+          WINDOWS_PFX_PASSWORD: ${{ secrets.WINDOWS_PFX_PASSWORD }}
+        run: |
+          $pfxPath = Join-Path $env:RUNNER_TEMP "codesign.pfx"
+          [IO.File]::WriteAllBytes($pfxPath, [Convert]::FromBase64String($env:WINDOWS_PFX_BASE64))
+
+          $signtool = Get-ChildItem -Path "C:\Program Files (x86)\Windows Kits\10\bin\*\x64\signtool.exe" |
+            Sort-Object FullName -Descending |
+            Select-Object -First 1 -ExpandProperty FullName
+
+          foreach ($target in @(
+            (Join-Path $env:RUNNER_TEMP "ChanhPhap-Windows-Setup_x64.exe"),
+            (Join-Path $env:RUNNER_TEMP "ChanhPhap-Windows-Store_x64.msix")
+          )) {
+            & "$signtool" sign /fd SHA256 /f "$pfxPath" /p "$env:WINDOWS_PFX_PASSWORD" /tr "http://timestamp.digicert.com" /td SHA256 "$target"
+          }
+
+      - name: Tải lên Bộ cài đặt Windows Độc lập (ChanhPhap-Windows-Setup_x64.exe)
+        uses: actions/upload-artifact@v4
+        with:
+          name: ChanhPhap-Windows-Setup-EXE
+          path: ${{ runner.temp }}/ChanhPhap-Windows-Setup_x64.exe
+          retention-days: 30
+
+      - name: Tải lên Gói chuẩn Microsoft Store (ChanhPhap-Windows-Store_x64.msix)
+        uses: actions/upload-artifact@v4
+        with:
+          name: ChanhPhap-Windows-Store-MSIX
+          path: ${{ runner.temp }}/ChanhPhap-Windows-Store_x64.msix
+          retention-days: 30
+

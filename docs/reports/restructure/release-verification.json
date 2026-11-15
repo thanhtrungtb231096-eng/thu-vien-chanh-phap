@@ -1,0 +1,35 @@
+{
+  "result": "passed",
+  "mode": "preflight",
+  "catalogs": {
+    "daithua": 62,
+    "daitang": 2471,
+    "phucminh": 26,
+    "ebooks": 1624
+  },
+  "documents": 5348,
+  "passages": 3395798,
+  "searchTotals": {
+    "daithua": 162,
+    "daitang": 1080,
+    "phucminh": 24,
+    "ebooks": 189
+  },
+  "packages": {
+    "edge-tts": "7.2.8",
+    "pymupdf": "1.28.2"
+  },
+  "checks": [
+    "hashes",
+    "home",
+    "four-collection-search",
+    "edition",
+    "texts",
+    "original-word",
+    "pdf",
+    "pdf-preview",
+    "voice-availability",
+    "private-files-blocked"
+  ],
+  "releaseFiles": 7354
+}

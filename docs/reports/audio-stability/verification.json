@@ -1,0 +1,149 @@
+{
+  "verifiedAt": "2026-10-07T08:05:40.157518+07:00",
+  "result": "passed for measured local and Microsoft scenarios",
+  "pythonUnitTests": {
+    "passed": 20,
+    "suites": [
+      "stream_termination_check.py",
+      "narration_engine_check.py",
+      "narration_server_check.py",
+      "narration_stats_check.py"
+    ]
+  },
+  "audioServiceNodeTests": {
+    "passed": 14,
+    "suite": "audio-service.test.cjs"
+  },
+  "browserRegressionSuites": [
+    "playback_continuity_check.py",
+    "audio_recovery_check.py",
+    "test_spotify_player.py",
+    "library_upgrades_check.py"
+  ],
+  "liveTransport": {
+    "count": 200,
+    "successRate": 1.0,
+    "ttfbSeconds": {
+      "p50": 1.796,
+      "p95": 3.766
+    },
+    "midStreamRate": 0.0,
+    "invalidHttpTerminations": 0
+  },
+  "injectedRecovery": {
+    "count": 200,
+    "recoveredFaults": 10,
+    "temporaryRecoveryRate": 1,
+    "midStreamRate": 0.05,
+    "note": "Disconnects were deliberately injected; the production disconnect threshold does not apply to this fault fixture."
+  },
+  "browserRecovery": {
+    "checks": [
+      "A genuinely truncated local stream recovers as a complete blob at the same passage and second",
+      "Repeated media failure is bounded and retains the listening position with Vietnamese controls",
+      "Pause cancels full recovery and prevents late playback",
+      "A cancelled recovery cannot replace a newly selected document",
+      "Pausing before the first audio byte preserves the saved listening position"
+    ],
+    "positionDriftSeconds": 0.008,
+    "browserErrors": [],
+    "provider": "local WAV, fault injection"
+  },
+  "longPlayback": [
+    {
+      "voice": "online:vi-VN-HoaiMyNeural",
+      "firstPlaybackSeconds": 1.469,
+      "completeSeconds": 136.031,
+      "waitingSamples": 0,
+      "cachedReplaySeconds": 0.375,
+      "nativeCachedStartSeconds": 0.1981
+    },
+    {
+      "voice": "online:vi-VN-NamMinhNeural",
+      "firstPlaybackSeconds": 1.016,
+      "completeSeconds": 132.578,
+      "waitingSamples": 0,
+      "cachedReplaySeconds": 0.219,
+      "nativeCachedStartSeconds": 0.038
+    }
+  ],
+  "localServer": {
+    "audioVersion": 4,
+    "bytes": 82224,
+    "firstByteSeconds": 2.0,
+    "complete": true,
+    "workers": 3,
+    "warmup": 1,
+    "errors": {},
+    "payload": "authored synthetic sentence only"
+  },
+  "archive": {
+    "path": "dist/vps/thuvien.7z",
+    "sha256": "a3c3cb741ae717f26dd544cb42c89bffa7afa233fe35eea9888708b7cf7d7dd9",
+    "result": "passed",
+    "linuxChecksumFile": true,
+    "checks": [
+      "SHA-256 matches for all extracted files, including the search index",
+      "Server starts without workspace runtime/source folders",
+      "Audio version 4, config and narration stats work in the exported layout",
+      "Home page, edition and search APIs work for all four collections",
+      "Sample texts, original Word and PDF downloads match their hashes",
+      "Private index/Python/config files return 404",
+      "Personal database is absent from the update package"
+    ]
+  },
+  "sourceSha256": {
+    "app/audio_config.py": "f8b85798135467cdeccad21287dc5468000ab916573fe42f4fe7f7530cacab65",
+    "app/narration_engine.py": "324804c2338f04fab436ea4e36dd06023e652dc92a7847f877e796e731264703",
+    "app/server.py": "c3833af4477f665868cd367de2de630ffd1d6d7da1c028cc7d4a69b365e5e603",
+    "app/launch.py": "3e0d96766340942b0008f644ecb448dcecf2805f229a77fc23d9484911e2cc96",
+    "app/web/js/audio-service.js": "6a30ab90dd996fb5f15f41b5f52404afe32449df0a4521e075092f76275dc80e",
+    "app/web/js/audiobook.js": "2ae6e087c8708c051fc8604d04da5e04fbab387dcd57fd438a2b65d8dd46951e",
+    "app/web/js/persistent-player.js": "99ff57a6b6ba7534fc6c50cbb64840dbea6b1d25c55b6236e161f1f664eacc75",
+    "app/web/index.html": "994a5c296a60ebdf34fd53464fbccd13122de8505df7f667548c2c3de6bd254c",
+    "app/web/sw.js": "14dccc6f6df31e00e9387d18db97e34c6056c20a2e2c68f558c37eeedcc54cda",
+    "config/audio.txt": "061e33035cfa7ef3689a036a9faea53039467697caee7d86f457ef548180b3b0",
+    "data/generated/offline-assets.json": "61d5816a48a8fbaa8bb36fb747b3e62210b64bb9fac8643be04c9b042790b31e"
+  },
+  "evidence": {
+    "live": {
+      "path": "docs/reports/audio-stability/soak-live-200.json",
+      "sha256": "08689b8968142d15dc278ad47b0eb48468031d515fde0dea9af505b8b77acc0a"
+    },
+    "local": {
+      "path": "tests/artifacts/audio-recovery/soak-local.json",
+      "sha256": "1e0a3e9ca97ba1c9958d7291d50f98df899ce6570333d478efbb19dcdc72591a"
+    },
+    "injected": {
+      "path": "tests/artifacts/audio-recovery/soak-injected.json",
+      "sha256": "f9c109da1702ebebfd4c50c4f80f70873c9e889cb3197d23c6dd487b5f23f695"
+    },
+    "runtime": {
+      "path": "tests/artifacts/audio-recovery/runtime-stability.json",
+      "sha256": "fc9ab6538f3e14e6a22a4ca3d93e9120df2d96ad0dae22988ac69b7d4eb9956b"
+    },
+    "longPlayback": {
+      "path": "tests/artifacts/audio-recovery/latency-after.json",
+      "sha256": "026bd626fd8d562d08a80033fd8044b86bee52fa78496ac86708f8b292bec9bb"
+    },
+    "regressions": {
+      "path": "tests/artifacts/audio-recovery/browser-regressions.json",
+      "sha256": "7e34f78623da14c8eeb2b6b84c4a67d8461942dc08f2c975c7b0533397b369ab"
+    },
+    "localServer": {
+      "path": "docs/reports/audio-stability/local-server-check.json",
+      "sha256": "137a858280e632f2c049a3675ce7288f43f84f83fb963d4459542cf169f22947"
+    },
+    "package": {
+      "path": "docs/reports/dung-luong/verification.json",
+      "sha256": "7eb9630be8243a6d9a7a735c487ea19343a2c493f72d72387668ab65dbc0f647"
+    }
+  },
+  "remainingVerification": [
+    "Physical Safari/iOS devices",
+    "Tunnel/proxy and deployed VPS",
+    "Speaker output/start time across 200 decoded passages",
+    "Long-term service reliability"
+  ],
+  "deployment": "Local server on port 8090 restarted and verified with version 4; VPS package prepared, no external server deployed."
+}

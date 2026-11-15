@@ -1,0 +1,239 @@
+{
+  "generatedAt": "2026-11-14T18:03:37.954520+07:00",
+  "scope": "Workspace before packaging; output directory and this report directory excluded.",
+  "files": 20364,
+  "totalBytes": 6522919192,
+  "directories": {
+    "local": {
+      "bytes": 4105278389,
+      "files": 12057
+    },
+    "data": {
+      "bytes": 2291392587,
+      "files": 7263
+    },
+    "tests": {
+      "bytes": 98709716,
+      "files": 778
+    },
+    "app": {
+      "bytes": 18682889,
+      "files": 132
+    },
+    "docs": {
+      "bytes": 8487214,
+      "files": 73
+    },
+    "tools": {
+      "bytes": 246271,
+      "files": 36
+    },
+    "vps": {
+      "bytes": 111119,
+      "files": 15
+    },
+    "README.md": {
+      "bytes": 5993,
+      "files": 1
+    },
+    "config": {
+      "bytes": 4096,
+      "files": 6
+    },
+    "debug.log": {
+      "bytes": 594,
+      "files": 1
+    },
+    "MO_THU_VIEN.cmd": {
+      "bytes": 213,
+      "files": 1
+    },
+    ".gitignore": {
+      "bytes": 111,
+      "files": 1
+    }
+  },
+  "index": {
+    "page_size": 4096,
+    "page_count": 471445,
+    "freelist_count": 1347,
+    "bytes": 1931038720,
+    "documents": 5348,
+    "passages": 3395798,
+    "collections": {
+      "daitang": 3551,
+      "daithua": 155,
+      "ebooks": 1616,
+      "phucminh": 26
+    }
+  },
+  "verifiedReferences": 7226,
+  "deployFiles": 7403,
+  "deployBytes": 4240789344,
+  "largestFiles": [
+    {
+      "path": "local/storage/state/search.sqlite3",
+      "bytes": 1931038720
+    },
+    {
+      "path": "local/storage/tts-models/VieNeu-TTS-v3-Turbo/onnx_update/vieneu_backbone_shared.data",
+      "bytes": 415319040
+    },
+    {
+      "path": "local/storage/tts-models/VieNeu-TTS-v3-Nano/vector_estimator.onnx",
+      "bytes": 155132418
+    },
+    {
+      "path": "local/storage/tts-models/VieNeu-TTS-v3-Nano/codec_decoder.onnx",
+      "bytes": 99319941
+    },
+    {
+      "path": "local/runtime/python/playwright/driver/node.exe",
+      "bytes": 92540232
+    },
+    {
+      "path": "local/runtime/python/sea_g2p/sea_g2p.bin",
+      "bytes": 62829820
+    },
+    {
+      "path": "data/sources/chua phuc minh/bản in câu đối pháp 2 280721.pdf",
+      "bytes": 58703225
+    },
+    {
+      "path": "local/storage/tts-models/VieNeu-TTS-v3-Nano/codec_encoder.onnx",
+      "bytes": 56419417
+    },
+    {
+      "path": "local/runtime/bin/cloudflared.exe",
+      "bytes": 54841128
+    },
+    {
+      "path": "local/storage/tts-models/VieNeu-TTS-v3-Turbo/onnx_update/vieneu_v3_heads.npz",
+      "bytes": 52219622
+    },
+    {
+      "path": "local/storage/tts-models/VieNeu-TTS-v3-Turbo/codec/moss_audio_tokenizer_encode.data",
+      "bytes": 44507136
+    },
+    {
+      "path": "local/storage/tts-models/VieNeu-TTS-v3-Turbo/codec/moss_audio_tokenizer_decode_shared.data",
+      "bytes": 44198912
+    },
+    {
+      "path": "local/storage/tts-models/VieNeu-TTS-v3-Nano/denoiser.onnx",
+      "bytes": 42661414
+    },
+    {
+      "path": "local/storage/tts-models/VieNeu-TTS-v3-Turbo/denoiser.onnx",
+      "bytes": 42661414
+    },
+    {
+      "path": "data/sources/Dai_Tang_Kinh_Han/03_Bat_Nha/T05n0220a_viet.md",
+      "bytes": 29135067
+    },
+    {
+      "path": "local/storage/tts-models/VieNeu-TTS-v3-Nano/speaker_encoder.onnx",
+      "bytes": 28303423
+    },
+    {
+      "path": "local/storage/tts-models/VieNeu-TTS-v3-Turbo/speaker_encoder.onnx",
+      "bytes": 28303423
+    },
+    {
+      "path": "local/storage/tts-models/VieNeu-TTS-v3-Nano/text_encoder.onnx",
+      "bytes": 26519943
+    },
+    {
+      "path": "local/runtime/python/pymupdf/mupdfcpp64.dll",
+      "bytes": 26295808
+    },
+    {
+      "path": "data/sources/chua phuc minh/CÂU ĐỐI PHÁP 1.pdf",
+      "bytes": 25709755
+    },
+    {
+      "path": "local/runtime/python/onnxruntime/capi/onnxruntime_pybind11_state.pyd",
+      "bytes": 23481696
+    },
+    {
+      "path": "local/runtime/python/onnxruntime/capi/onnxruntime.dll",
+      "bytes": 22668640
+    },
+    {
+      "path": "local/runtime/python/numpy.libs/libscipy_openblas64_-63c857e738469261263c764a36be9436.dll",
+      "bytes": 20415488
+    },
+    {
+      "path": "data/sources/chua phuc minh/THI KỆ PHẬT ĐÀ - 3-3-22.pdf",
+      "bytes": 19319490
+    },
+    {
+      "path": "data/sources/Dai_thua/10_Phuong_Quang/14_Dai_Tap/Nguyen_van/Dai_Tap_viet.pdf",
+      "bytes": 18686183
+    },
+    {
+      "path": "data/sources/Dai_thua/10_Phuong_Quang/05_Dai_Bat_Niet_Ban/Nguyen_van/Dai_Bat_Niet_Ban_viet.pdf",
+      "bytes": 18140557
+    },
+    {
+      "path": "local/runtime/python/Scripts/onnxruntime.dll",
+      "bytes": 17799168
+    },
+    {
+      "path": "local/runtime/python/pymupdf/_mupdf.pyd",
+      "bytes": 13063168
+    },
+    {
+      "path": "local/storage/cache/work/ocr-models/vie-best.traineddata",
+      "bytes": 12435550
+    },
+    {
+      "path": "local/storage/tts-models/VieNeu-TTS-v3-Nano/reference_encoder.onnx",
+      "bytes": 10778145
+    }
+  ],
+  "duplicates": [
+    {
+      "bytes_each": 660510,
+      "paths": [
+        "data/generated/dai-tang-kinh/text/ep-5b864b36dd54.md",
+        "data/generated/dai-tang-kinh/text/ep-8b44ebaee12c.md"
+      ],
+      "redundant_bytes": 660510
+    },
+    {
+      "bytes_each": 48673,
+      "paths": [
+        "data/generated/dai-tang-kinh/text/ep-2117949653cd.md",
+        "data/generated/dai-tang-kinh/text/ep-8c4e9d64d4d2.md"
+      ],
+      "redundant_bytes": 48673
+    },
+    {
+      "bytes_each": 43359,
+      "paths": [
+        "data/generated/dai-tang-kinh/text/ep-5da64f5856a1.md",
+        "data/generated/dai-tang-kinh/text/ep-91564d183d32.md"
+      ],
+      "redundant_bytes": 43359
+    },
+    {
+      "bytes_each": 36756,
+      "paths": [
+        "app/web/fonts/font-11-latin.woff2",
+        "app/web/fonts/font-13-latin.woff2"
+      ],
+      "redundant_bytes": 36756
+    },
+    {
+      "bytes_each": 14704,
+      "paths": [
+        "app/web/fonts/font-10-vietnamese.woff2",
+        "app/web/fonts/font-12-vietnamese.woff2"
+      ],
+      "redundant_bytes": 14704
+    }
+  ],
+  "duplicateBytes": 804002,
+  "deletedFiles": 0
+}

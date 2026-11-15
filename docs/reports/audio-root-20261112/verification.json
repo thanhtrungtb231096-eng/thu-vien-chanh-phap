@@ -1,0 +1,60 @@
+{
+  "version": "ux-20261010-129c6fc8d4c6",
+  "deployment": {
+    "result": "passed",
+    "release": "audio-20261112-06",
+    "version": "ux-20261010-129c6fc8d4c6",
+    "changedFiles": 7,
+    "databasesUnchanged": true,
+    "rollbackOutsideApplication": "/opt/thuvien-backups/audio-20261112-06",
+    "preflight": {
+      "version": "ux-20261010-129c6fc8d4c6",
+      "edge_tts": "7.3.1",
+      "assetHashes": "passed",
+      "exportedImports": "passed",
+      "transportLimit": 160,
+      "providerFirstAudioTimeout": 25.0,
+      "voices": [
+        "vi-VN-HoaiMyNeural",
+        "vi-VN-NamMinhNeural",
+        "vi-VN-HoaiMyNeural:slow",
+        "vi-VN-NamMinhNeural:slow"
+      ]
+    },
+    "audioDefaultsUpdated": []
+  },
+  "unitAndHttpTests": 79,
+  "unitAndHttpPassed": true,
+  "corpus": {
+    "result": "passed",
+    "editions": 2784,
+    "passages": 2363656,
+    "maxLength": 1800,
+    "groups": {
+      "daithua": 62,
+      "daitang": 1080,
+      "phucminh": 26,
+      "ebooks": 1616
+    },
+    "errors": []
+  },
+  "fullBookFixturePassages": 8626,
+  "fullBookFixturesPassed": true,
+  "liveColdFirstJobs": {
+    "total": 32,
+    "passed": 29,
+    "failed": 3,
+    "worstSuccessfulSeconds": 85.093
+  },
+  "deployedClientReplays": {
+    "total": 3,
+    "passed": 3
+  },
+  "selectedLiveCasesEventuallyPassed": 32,
+  "actualDeployedVoiceSwitchChecks": 6,
+  "actualDeployedUiPassed": true,
+  "azureUsed": false,
+  "otherVoicesUsed": false,
+  "fullCorpusLiveSynthesisTested": false,
+  "instantColdPlaybackGuaranteed": false
+}

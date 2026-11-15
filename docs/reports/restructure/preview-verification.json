@@ -1,0 +1,15 @@
+{
+  "result": "passed",
+  "documents": 5348,
+  "passages": 3395798,
+  "checks": [
+    "frontend, generated data, voice dependency, HEAD and service worker",
+    "daithua: search, edition, source bytes and unchanged URL",
+    "daitang: search, edition, source bytes and unchanged URL",
+    "phucminh: search, edition, source bytes and unchanged URL",
+    "ebooks: search, edition, source bytes and unchanged URL",
+    "Word download, PDF download and rendered PDF preview",
+    "physical paths, private state, traversal and untrusted hosts blocked",
+    "Chromium opens the library and reads a Vietnamese book without asset errors"
+  ]
+}
