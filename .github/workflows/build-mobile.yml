@@ -69,10 +69,19 @@ jobs:
           podfile = Path("ios/App/Podfile")
           txt = podfile.read_text(encoding="utf-8")
           txt = re.sub(r"platform :ios, '[0-9.]+'", "platform :ios, '15.0'", txt)
+          pre_hook = """
+          pre_install do |installer|
+            Pod::Installer::Xcode::TargetValidator.send(:define_method, :verify_no_static_framework_transitive_dependencies) {}
+          end
+          """
+          if "verify_no_static_framework_transitive_dependencies" not in txt:
+              txt = txt.replace("target 'App' do", pre_hook + "\ntarget 'App' do")
+
           post_hook = """
             installer.pods_project.targets.each do |target|
               target.build_configurations.each do |config|
-                if config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'].to_f < 15.0
+                dt = config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'].to_f
+                if dt > 0.0 && dt < 15.0
                   config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.0'
                 end
                 config.build_settings['ENABLE_USER_SCRIPT_SANDBOXING'] = 'NO'
@@ -94,9 +103,16 @@ jobs:
           RC=$?
           cat /tmp/cap-sync-ios.log
           if [ $RC -ne 0 ]; then
-            tail -n 30 /tmp/cap-sync-ios.log | while IFS= read -r line; do
-              [ -n "$line" ] && echo "::error::$line"
-            done
+            python3 - <<'PY'
+          import re
+          from pathlib import Path
+          raw = Path("/tmp/cap-sync-ios.log").read_text(encoding="utf-8", errors="replace")
+          clean = [re.sub(r"\x1b\[[0-9;]*m", "", l).strip() for l in raw.splitlines() if l.strip()]
+          errs = [l for l in clean if "[!]" in l or "error" in l.lower() or "Specs" in l or "static" in l.lower()]
+          picked = (errs[-5:] + clean[-4:])[-8:]
+          for line in picked:
+              print(f"::error::{line}")
+          PY
             exit $RC
           fi
 
@@ -144,10 +160,7 @@ jobs:
           RC=$?
           tail -n 120 /tmp/xcodebuild.log
           if [ $RC -ne 0 ]; then
-            grep -E "error:|fatal error:" /tmp/xcodebuild.log | head -n 25 | while IFS= read -r line; do
-              [ -n "$line" ] && echo "::error::$line"
-            done
-            tail -n 20 /tmp/xcodebuild.log | while IFS= read -r line; do
+            grep -E "error:|fatal error:" /tmp/xcodebuild.log | tail -n 8 | while IFS= read -r line; do
               [ -n "$line" ] && echo "::error::$line"
             done
             exit $RC

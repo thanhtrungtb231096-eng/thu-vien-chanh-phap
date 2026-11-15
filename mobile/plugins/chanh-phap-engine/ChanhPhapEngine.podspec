@@ -13,6 +13,7 @@ Pod::Spec.new do |s|
   s.source_files = 'ios/Sources/**/*.{swift,h,m,c,cc,mm,cpp}'
   s.public_header_files = 'ios/Sources/**/*.h'
   s.ios.deployment_target = '15.0'
+  s.static_framework = true
   s.dependency 'Capacitor'
   s.dependency 'onnxruntime-c', '1.19.2'
   s.libraries = 'sqlite3', 'z', 'c++'
