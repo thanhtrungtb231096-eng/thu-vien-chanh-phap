@@ -248,12 +248,13 @@ def main() -> None:
 
         ipc_log: list[dict] = []
         cached_docs: dict[str, str] = {}
+        tts_enabled = True
 
         def handle_tauri_invoke(cmd: str, args: dict | None = None):
             args = args or {}
             ipc_log.append({'cmd': cmd, 'args': args})
             if cmd == 'vault_status':
-                return {'packs': ['core-bundled'], 'ttsInstalled': True, 'freeDiskMiB': 81920}
+                return {'packs': ['core-bundled'], 'ttsInstalled': tts_enabled, 'freeDiskMiB': 81920}
             if cmd == 'vault_get_manuscript':
                 url = args.get('url', '')
                 hit = query_core_manuscript(core_db, url)
@@ -272,6 +273,8 @@ def main() -> None:
                     int(args.get('offset', 0)),
                 )
             if cmd == 'tts_synthesize':
+                if not tts_enabled:
+                    raise RuntimeError('ONNX pack not installed')
                 return {'wavBase64': test_wav_b64, 'packActive': True}
             if cmd == 'vault_remove_pack':
                 return {'removed': True}
@@ -363,6 +366,35 @@ def main() -> None:
             page.evaluate('Audiobook.pause()')
             page.wait_for_function("Audiobook.state.status === 'paused'")
             checks.append('Rust ONNX TTS playback, 2-segment gapless prefetch & Windows SystemMediaTransportControls passed')
+
+            # 3b. Verify Single-Book & Single-Chapter Offline Download (#reader-download) + Tier 1.5 Offline Playback without ONNX pack!
+            tts_enabled = False
+            wav_bytes = base64.b64decode(test_wav_b64)
+            page.route(
+                '**/api/tts',
+                lambda route: route.fulfill(status=200, content_type='audio/wav', body=wav_bytes),
+            )
+            page.evaluate("document.getElementById('reader-download').click()")
+            page.wait_for_selector('#download-dialog[open]')
+            page.evaluate("""() => {
+                document.getElementById('download-audio').checked = true;
+                document.getElementById('download-start').click();
+            }""")
+            page.wait_for_function(
+                "document.getElementById('download-status').textContent.includes('Đã lưu đủ phần đã chọn')",
+                timeout=10000,
+            )
+            page.evaluate("document.getElementById('download-close').click()")
+            assert len(cached_docs) >= 1, 'Expected vault_cache_manuscript to persist single book'
+            # Now go 100% offline with ONNX disabled -> must play from Tier 1.5 LibraryOffline IndexedDB!
+            page.unroute('**/api/tts')
+            page.route('**/api/tts', lambda route: route.abort())
+            ctx.set_offline(True)
+            page.evaluate('Audiobook.stop().then(() => Audiobook.restart())')
+            page.wait_for_function("Audiobook.state.status === 'playing' && Audiobook.state.packActive === true", timeout=8000)
+            page.evaluate('Audiobook.pause()')
+            tts_enabled = True
+            checks.append('Single-book & chapter download (#reader-download) + Tier 1.5 offline audio playback verified')
 
             # 4. Verify Windows PC Vault UI inside #tab-offline
             ctx.set_offline(False)

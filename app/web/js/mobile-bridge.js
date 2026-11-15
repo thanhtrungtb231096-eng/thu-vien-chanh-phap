@@ -137,14 +137,22 @@
             if (res?.wavBase64) {
               return { url: base64ToBlobUrl(res.wavBase64, 'audio/wav'), packActive: true };
             }
-          } catch { /* fall through to Tier 2 */ }
+          } catch { /* fall through to Tier 1.5 */ }
+        }
+        // Tier 1.5: Pre-downloaded offline chapter audio in LibraryOffline IndexedDB
+        if (window.LibraryOffline?.getAudio) {
+          const savedBlob = await window.LibraryOffline.getAudio(seg.text, 'offline:' + q.voice).catch(() => null)
+            || await window.LibraryOffline.getAudio(seg.text, 'online:' + q.voice).catch(() => null);
+          if (savedBlob instanceof Blob && savedBlob.size > 256) {
+            return { url: URL.createObjectURL(savedBlob), packActive: true };
+          }
         }
         // Tier 2: Remote VPS /api/tts stream
         if (navigator.onLine !== false) {
           const resp = await nativeFetch(`${q.remoteBaseUrl}/api/tts`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ text: seg.text, voice: q.voice, rate: q.rate }),
+            body: JSON.stringify({ text: seg.text, voice: q.voice, stream: false }),
           });
           if (resp.ok) {
             const blob = await resp.blob();
@@ -836,6 +844,13 @@
     const grid = offlinePanel.querySelector('.upgrade-grid');
     if (grid) offlinePanel.insertBefore(container, grid);
     else offlinePanel.append(container);
+
+    const installBtn = document.getElementById('offline-install');
+    if (installBtn) installBtn.hidden = true;
+    const pwaHelp = document.getElementById('offline-status')?.nextElementSibling;
+    if (pwaHelp && pwaHelp.classList.contains('upgrade-help')) {
+      pwaHelp.textContent = 'Mẹo: Tải "Gói Giọng Đọc AI Nội Bộ" ở khung trên để tự đọc ngoại tuyến mọi bản kinh không cần tải từng chương âm thanh, hoặc lưu nhanh từng bài kinh lẻ ngay bên dưới.';
+    }
 
     const progressMap = new Map();
 

@@ -143,7 +143,7 @@
   async function downloadChapter(){
     const state=chapterContext,section=state?.sections[Number($('offline-chapter').value)];if(!state||!section){note('offline-audio-status','Hãy mở bản Việt rồi quay lại đây để chọn chương.');return;}
     chapterRequest=new AbortController();$('offline-audio').disabled=true;$('offline-cancel').disabled=false;
-    try{const item=DharmaPlayerStore.resolve(state.item);await LibraryOffline.saveChapter(item,state.doc,section.start,section.end,Audiobook.state.voice,chapterRequest.signal,t=>note('offline-audio-status',t));note('offline-audio-status','Đã lưu đủ chương nghe với giọng hiện tại.');renderOffline();}catch(e){note('offline-audio-status',e.name==='AbortError'?'Đã dừng tải. Các đoạn đã tải được giữ lại.':e.message);}finally{$('offline-audio').disabled=false;$('offline-cancel').disabled=true;chapterRequest=null;}
+    try{const item=DharmaPlayerStore.resolve(state.item);await LibraryOffline.saveChapter(item,state.doc,section.start,section.end,Audiobook.state.voice||'offline:vieneu-thien-tam-duc',chapterRequest.signal,t=>note('offline-audio-status',t));note('offline-audio-status','Đã lưu đủ chương nghe với giọng hiện tại.');renderOffline();}catch(e){note('offline-audio-status',e.name==='AbortError'?'Đã dừng tải. Các đoạn đã tải được giữ lại.':e.message);}finally{$('offline-audio').disabled=false;$('offline-cancel').disabled=true;chapterRequest=null;}
   }
   async function renderOffline(){
     if(!$('offline-books'))return;const list=$('offline-books');list.replaceChildren();

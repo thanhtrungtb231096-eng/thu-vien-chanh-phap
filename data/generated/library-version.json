@@ -1,6 +1,6 @@
 {
-  "version": "ux-20261010-e3f68d51279d",
-  "generatedAt": "2026-11-15T05:00:42.312101+00:00",
+  "version": "ux-20261010-75edef202ca3",
+  "generatedAt": "2026-11-15T17:06:18.060871+00:00",
   "documents": 5348,
   "passages": 3395798,
   "indexGeneratedAt": "2026-10-09T18:25:18.029589+00:00",
@@ -33,20 +33,20 @@
     "js/library-design.js": "191c2318f50fe501958358097a383560de888eeb7497dddef886d6c57cb60ce0",
     "js/library-devices.js": "69a6e1fa0bece52dd29000f3d9294b5d3f0a55b12f7d293df1d8047dc38dce4c",
     "js/library-diagnostics.js": "3b4ef8f0a6bf409428e7a21e937bccc02155048fb684f29f379e271185078dfd",
-    "js/library-download.js": "efe15770c6086b829a5d2c707b54af2e15ea969db114c670a7e3ec99ee5d601a",
+    "js/library-download.js": "c2e52804ffa456423f1d11f4aa60344c1cb845b213e1608a4091d348db3ae277",
     "js/library-editions.js": "7bc7e7df480788f6a78c104d2ced843919c0ae56d6a36116aee8b6dbec0c68ef",
     "js/library-experience.js": "c7452ed913d309930402f192bfcf393ff25cfbd60cf7a212b1405131edcd44ca",
-    "js/library-offline.js": "97f31329a5c96a71e101045581137f43e0986e510da34614513450fb9871292a",
+    "js/library-offline.js": "79eb8fdf8da840f0922a441f3a8ccc9b49dcb8a38fd9029c925f2596349d005e",
     "js/library-router.js": "4d1b5e47d9df5bf616ae9a80b3e86df26e684058540b45240db840bb071c33ab",
     "js/library-store.js": "9021bfe6671571bdd3b763f7ae14ce69b534d89e16781a47b41e9558c18ea6fb",
     "js/library-study.js": "72194535fb9d0378e12c6828bf7a085540a3c0507359630a2dd8cd0c027926d6",
     "js/library-sync.js": "3c6ee052222606bf7eb1820b09e026daeea3d41f1845116f3934d928e6832da2",
     "js/library-ui.js": "b80fc4e7622da0c796aa252b433e28612073a965b0905ca0bb18fafd86b7da95",
-    "js/library-upgrades.js": "37c479123a8118cd3378d9b8971fdaff56983a40c18e479eb18384b4e646338f",
+    "js/library-upgrades.js": "f18eebf1afb702dc7ad2db4ef9759d4e4672196bc8c61f2e57fca82ae14d986c",
     "js/listening-history.js": "012b87f16971e0527749977f3aed1a5425a745d9e014126636a0e21ae001bbb6",
     "js/meditation-bell.js": "cd16d7703b29ef05333a797006e8567179a4a5d83cbc9e7e2e12ba57df5e7b40",
     "js/milinda-panha.js": "69c7d02ffb111f6b48ca46b1d7377bdc8315563bd170135e9470f67fe085dc51",
-    "js/mobile-bridge.js": "655ff070e1cb660c45d9420530426fda45c2912f23df14490954adc47f6808bb",
+    "js/mobile-bridge.js": "0928c8af66eab3df7524e412755fc8b5d6e0ce2e70c31cc6298c34b611e00e03",
     "js/module-presentation.js": "3644b1767003ecc3179acaa192ea7a64b88fdbbd7ee4c818d62c7e48f25680b6",
     "js/narration-model.js": "73ec692e578a04c09bbda25615ecc338dd81242c993e8420e74d8b1073c8c45e",
     "js/notes-manager.js": "537b480fe5042e8986b2caedfe66b6e5191def38da6dd27c9b27a53a5157d6a5",
@@ -87,7 +87,7 @@
     "css/tokens.css": "f35c10f7fffc9d45fd8ccd2d6d885957dd325cfc51d3367e766afa801b27960a",
     "css/touch-ux.css": "75dd58b40c9e1a31d00fc09512f2a4cdcf8af5d1f1d32e4ed13503fa95ffc17d",
     "css/unified-player.css": "549b66ceb8b035b9c3e8e9c73c771c0ce7729240fff3dcdc8de53b66e14291df",
-    "index.html": "3b22dd2aaccbf98a041f10d73a6cd4347c3bb75d3b55ae2bbd9cb00e34e4338a",
-    "sw.js": "aa50949062edb36f7229c39f647fecb5b39ecd4d76ff629063f555dd295a77a1"
+    "index.html": "a7938f507db1d5505e43dcc0295f48f08128eca4ede865bbd1c9c4fe2c827745",
+    "sw.js": "9908995574be6497b6072b2bb147ef1603ff864d1b6363a68db4ded4ff46f114"
   }
 }

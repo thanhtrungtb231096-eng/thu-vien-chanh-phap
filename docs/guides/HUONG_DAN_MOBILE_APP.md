@@ -15,6 +15,7 @@ Tài liệu này hướng dẫn từng bước dành cho người dùng sử d�
    - **Tầng 1 (Nhúng sẵn trong App — 6,96 MB)**: Toàn bộ 26 tài liệu Chùa Phúc Minh và 18 Kinh Nhật Tụng cốt lõi (Tâm Kinh, Kim Cang, A Di Đà, Phổ Môn, Địa Tạng, Dược Sư, Vu Lan, Pháp Cú...) mở tức thì ngay lần đầu cài đặt không cần mạng.
    - **Tầng 2 (Tải theo nhu cầu trong mục *Đọc & nghe ngoại tuyến*)**: Gói Đại Thừa (`21,6 MB`), Nam Tông & Sách giảng (`203,9 MB`), Đại Tạng Kinh Hán (`224,0 MB`) có sẵn chỉ mục tìm kiếm không dấu FTS5 nội bộ (`< 16 ms`).
    - **Tầng 3 (Giọng Đọc AI Nội Bộ `VieNeu-TTS-v3-Nano` FP16 — `138,1 MB`)**: Hai giọng **Thiền Tâm Đức (Nam)** và **Thục Đoan (Nữ)** chạy trực tiếp bằng ONNX Runtime trên chip iPhone / Android khi bật Chế độ Máy bay.
+   - **Lưu nhanh từng bài kinh & chương nghe lẻ (`Tải để đọc/nghe ngoại tuyến`)**: Ngay trong thanh công cụ đọc kinh, người dùng có thể bấm **Tải để đọc/nghe ngoại tuyến** để lưu riêng một bản kinh (và từng chương âm thanh MP3 vào bộ nhớ đệm khóa màn hình nếu chưa tải Gói Giọng AI 138 MB).
 
 > **Quy tắc sạch kho nguồn**: Mọi tệp nhị phân lớn đã xuất sẵn nằm gọn ngoài thư mục dự án tại `E:\Kinh điển phật giáo - Mobile\`, không làm phình kho mã nguồn chính.
 

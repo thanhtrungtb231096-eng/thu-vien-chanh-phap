@@ -21,6 +21,8 @@ mobile/node_modules/
 mobile/www/
 mobile/ios/
 mobile/android/
+mobile/plugins/**/build/
+mobile/plugins/**/.gradle/
 desktop-windows/node_modules/
 desktop-windows/staging/
 desktop-windows/dist/

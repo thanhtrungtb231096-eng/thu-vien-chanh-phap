@@ -3,6 +3,25 @@
   const CACHE = 'cp-offline-books-v1';
   let database, installPrompt, registration;
   const absolute = path => new URL(path, location.href).href.split('#')[0];
+  const isNativeApp = () => Boolean(window.MobileBridge?.isNative || document.documentElement?.dataset?.nativeApp === 'true');
+  const canonicalVaultUrl = rawPath => {
+    try {
+      const p = decodeURIComponent(new URL(rawPath, location.href).pathname);
+      return p.startsWith('/data/') ? '/web-thuvien' + p : p;
+    } catch {
+      return String(rawPath || '');
+    }
+  };
+  const blobToBase64 = blob => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const s = String(reader.result || '');
+      const i = s.indexOf(',');
+      resolve(i >= 0 ? s.slice(i + 1) : s);
+    };
+    reader.onerror = () => reject(reader.error);
+    reader.readAsDataURL(blob);
+  });
   function db() {
     return database ||= new Promise((resolve,reject) => {
       const r = indexedDB.open('chanh-phap-media',1);
@@ -64,6 +83,43 @@
     return [...new Set([files.vietMd,files.hanMd,files.noteMd,b.vietFile,b.hanFile,...(options.sources?[files.vietPdf,files.hanPdf,files.notePdf,b.pdfFile,b.sourceFile]:[])].filter(Boolean))];
   }
   async function saveBook(item,report=()=>{},options={sources:false}) {
+    if (isNativeApp()) {
+      const urls = paths(item, options), prior = packs().find(x => x.key === item.key);
+      if (!urls.length) throw new Error('Bản này chưa có bản chữ. Chọn thêm PDF/Word nguồn để tải.');
+      const plugin = window.MobileBridge?.getPlugin?.();
+      let bytes = 0;
+      for (let i = 0; i < urls.length; i++) {
+        const rawPath = urls[i], url = absolute(rawPath);
+        report(`Đang tải tài liệu ${i + 1}/${urls.length}…`);
+        options.signal?.throwIfAborted();
+        const response = await fetch(url, { cache: 'no-store', signal: options.signal });
+        if (!response.ok) throw new Error('Không tải được một bản nguồn. Chưa hoàn tất lưu sách.');
+        const cloneForCache = typeof caches !== 'undefined' ? response.clone() : null;
+        if (/\.(?:md|txt)$/i.test(rawPath)) {
+          const text = await response.text();
+          bytes += new TextEncoder().encode(text).length;
+          await plugin?.cacheManuscript?.({ url: canonicalVaultUrl(rawPath), content: text });
+        } else {
+          const blob = await response.blob();
+          bytes += blob.size;
+        }
+        if (cloneForCache) {
+          try { const cache = await caches.open(CACHE); await cache.put(url, cloneForCache); } catch {}
+        }
+      }
+      const retained = (prior?.urls || []).filter(url => !urls.map(absolute).includes(url));
+      const value = {
+        key: item.key, type: item.type, id: item.id, title: item.title,
+        urls: [...new Set([...urls.map(absolute), ...retained])],
+        bytes, savedAt: Date.now(),
+        audio: prior?.audio || [], chapters: prior?.chapters || [],
+        sourcesIncluded: options.sources || prior?.sourcesIncluded || false,
+      };
+      if (!LibraryStore.write('offline-packs', [...packs().filter(x => x.key !== item.key), value])) {
+        throw new Error('Không lưu được danh sách sách trên thiết bị. Bản đã lưu trước đó được giữ lại.');
+      }
+      return value;
+    }
     if (!registration || !navigator.serviceWorker?.controller) throw new Error('Chế độ ngoại tuyến đang khởi tạo. Hãy đợi vài giây rồi thử lại.');
     const cache = await caches.open(CACHE), urls = paths(item,options), prior = packs().find(x=>x.key===item.key);
     if(!urls.length)throw new Error('Bản này chưa có bản chữ. Chọn thêm PDF/Word nguồn để tải.');
@@ -96,8 +152,12 @@
   }
   async function removeBook(key) {
     const old = packs().find(x=>x.key===key), rest = packs().filter(x=>x.key!==key);
-    const cache = await caches.open(CACHE), used = new Set(rest.flatMap(p=>p.urls));
-    for (const url of old?.urls||[]) if(!used.has(url)) await cache.delete(url);
+    if (typeof caches !== 'undefined') {
+      try {
+        const cache = await caches.open(CACHE), used = new Set(rest.flatMap(p=>p.urls));
+        for (const url of old?.urls||[]) if(!used.has(url)) await cache.delete(url);
+      } catch {}
+    }
     const retained = new Set(rest.flatMap(p=>p.audio||[]));
     for (const id of old?.audio||[]) if(!retained.has(id)) await media('delete',id);
     LibraryStore.write('offline-packs',rest);
@@ -136,10 +196,21 @@
     const updateChapter=()=>{const current=packs().find(x=>x.key===item.key);if(!current)throw new Error('Sách đã được gỡ.');const progress={id:chapterId,version:doc.version,start,end,voice,total:segments.length,completed,verifiedVersion:1,updatedAt:Date.now()};current.chapters=[...(current.chapters||[]).filter(x=>x.id!==chapterId),progress];if(!LibraryStore.write('offline-packs',packs().map(x=>x.key===item.key?current:x)))throw new Error('Không lưu được tiến độ chương.');};
     updateChapter();
 
-    // Fast path: download pre-rendered Chapter-Sprite pack(s) in 1 request if available & unmodified.
+    const nativePlugin = isNativeApp() ? window.MobileBridge?.getPlugin?.() : null;
+    if (nativePlugin?.getVaultStatus) {
+      const vaultSt = await nativePlugin.getVaultStatus().catch(() => null);
+      if (vaultSt?.ttsInstalled) {
+        completed = segments.length;
+        updateChapter();
+        report(`✓ Máy đã cài Gói Giọng Đọc AI Nội Bộ — trọn chương (${segments.length} đoạn) sẵn sàng nghe ngoại tuyến!`);
+        return completed;
+      }
+    }
+
+    // Fast path: download pre-rendered Chapter-Sprite pack(s) in 1 request if available & unmodified (Web PWA only).
     const customPron = !!LibraryStore.read('pronunciation', {})?.enabled;
     const hasEdits = doc.blocks.some(b => b.originalRaw !== undefined);
-    if ((voice.startsWith('offline:') || voice.startsWith('online:')) && !customPron && !hasEdits && window.AudioService?.packManifest) {
+    if (!isNativeApp() && (voice.startsWith('offline:') || voice.startsWith('online:')) && !customPron && !hasEdits && window.AudioService?.packManifest) {
       const manifest = await AudioService.packManifest(item.key, doc.version, voice, signal).catch(() => ({available:false}));
       if (manifest?.available && Array.isArray(manifest.packs) && manifest.packs.length) {
         const neededPacks = [];
@@ -194,11 +265,20 @@
     for(const chunk of segments) {
       signal?.throwIfAborted();
       const text = window.LibraryPronunciation.prepare(chunk.text), id = await audioKey(text,voice);
-      if(!await getAudioInfo(text,voice)) {
+      let segInfo = await getAudioInfo(text,voice);
+      if(!segInfo) {
         const options={signal,priority:'background',onRetry:detail=>report(detail.message)};
         const descriptor=await AudioService.prepare(text,voice,options);
         const blob=descriptor.blob||await AudioService.download(descriptor,options);
-        await media('put',id,{blob,verifiedVersion:1,actualVoices:descriptor.actualVoices||[],activeVoice:descriptor.activeVoice||''});
+        segInfo={blob,verifiedVersion:1,actualVoices:descriptor.actualVoices||[],activeVoice:descriptor.activeVoice||''};
+        await media('put',id,segInfo);
+      }
+      if (nativePlugin?.cacheAudioSegment && segInfo?.blob instanceof Blob) {
+        try {
+          const cleanVoice = voice.replace(/^(?:online|offline):/, '').split(':')[0];
+          const audioBase64 = await blobToBase64(segInfo.blob);
+          await nativePlugin.cacheAudioSegment({ voice: cleanVoice, text: text.trim(), audioBase64 });
+        } catch {}
       }
       const current = packs().find(x=>x.key===item.key);
       if (!current) { await media('delete',id); throw new Error('Sách đã được gỡ khỏi kho ngoại tuyến.'); }
@@ -210,6 +290,14 @@
     return completed;
   }
   async function search(query,collection,mode) {
+    if (isNativeApp()) {
+      const nativePlugin = window.MobileBridge?.getPlugin?.();
+      if (nativePlugin?.searchVault) {
+        const res = await nativePlugin.searchVault({ q: query, collection: collection || '', mode: mode || '', offset: 0 }).catch(() => null);
+        if (res && Array.isArray(res.results)) return { ...res, offline: true };
+      }
+    }
+    if (typeof caches === 'undefined') return { results: [], total: 0, offline: true };
     const q=ReaderModel.normalize(query), tokens=q.split(/\s+/).filter(Boolean), results=[];
     const cache=await caches.open(CACHE);
     for(const pack of packs()) {

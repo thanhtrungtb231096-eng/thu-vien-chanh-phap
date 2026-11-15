@@ -2,6 +2,7 @@ package org.chanhphap.engine
 
 import android.Manifest
 import android.os.Build
+import android.util.Base64
 import com.getcapacitor.JSObject
 import com.getcapacitor.PermissionState
 import com.getcapacitor.Plugin
@@ -10,6 +11,9 @@ import com.getcapacitor.PluginMethod
 import com.getcapacitor.annotation.CapacitorPlugin
 import com.getcapacitor.annotation.Permission
 import com.getcapacitor.annotation.PermissionCallback
+import java.io.File
+import java.io.FileOutputStream
+import java.security.MessageDigest
 import java.util.concurrent.Executors
 
 @CapacitorPlugin(
@@ -75,6 +79,39 @@ class ChanhPhapEnginePlugin : Plugin() {
         ioExecutor.execute {
             ChanhPhapVault.getInstance(context).cacheManuscript(url, content)
             call.resolve()
+        }
+    }
+
+    @PluginMethod
+    fun cacheAudioSegment(call: PluginCall) {
+        val rawVoice = call.getString("voice", "vieneu-thien-tam-duc") ?: "vieneu-thien-tam-duc"
+        val cleanText = (call.getString("text", "") ?: "").trim()
+        val b64 = call.getString("audioBase64", "") ?: ""
+        if (cleanText.isEmpty() || b64.isEmpty()) {
+            call.resolve(JSObject().put("cached", false))
+            return
+        }
+        val voice = if (rawVoice.contains("thuc-doan")) "vieneu-thuc-doan" else "vieneu-thien-tam-duc"
+        ioExecutor.execute {
+            try {
+                val bytes = Base64.decode(b64, Base64.DEFAULT)
+                if (bytes.size <= 256) {
+                    call.resolve(JSObject().put("cached", false))
+                    return@execute
+                }
+                val vault = ChanhPhapVault.getInstance(context)
+                val digest = MessageDigest.getInstance("SHA-256")
+                    .digest("mp3|$voice|$cleanText".toByteArray(Charsets.UTF_8))
+                    .joinToString("") { "%02x".format(it) }
+                val dest = File(vault.cacheDir, "$digest.mp3")
+                val tmp = File(vault.cacheDir, "$digest.mp3.tmp")
+                FileOutputStream(tmp).use { it.write(bytes) }
+                if (dest.exists()) dest.delete()
+                tmp.renameTo(dest)
+                call.resolve(JSObject().put("cached", true))
+            } catch (_: Exception) {
+                call.resolve(JSObject().put("cached", false))
+            }
         }
     }
 

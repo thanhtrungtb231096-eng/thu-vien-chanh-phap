@@ -1,6 +1,7 @@
 import Foundation
 import Capacitor
 import UserNotifications
+import CryptoKit
 
 @objc(ChanhPhapEnginePlugin)
 public class ChanhPhapEnginePlugin: CAPPlugin, CAPBridgedPlugin {
@@ -10,6 +11,7 @@ public class ChanhPhapEnginePlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "getVaultStatus", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "getManuscript", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "cacheManuscript", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "cacheAudioSegment", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "searchVault", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "downloadPack", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "removePack", returnType: CAPPluginReturnPromise),
@@ -64,6 +66,29 @@ public class ChanhPhapEnginePlugin: CAPPlugin, CAPBridgedPlugin {
         DispatchQueue.global(qos: .utility).async {
             ChanhPhapVault.shared.cacheManuscript(url: url, content: content)
             call.resolve()
+        }
+    }
+
+    @objc func cacheAudioSegment(_ call: CAPPluginCall) {
+        let rawVoice = call.getString("voice") ?? "vieneu-thien-tam-duc"
+        let rawText = (call.getString("text") ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+        let b64 = call.getString("audioBase64") ?? ""
+        guard !rawText.isEmpty, !b64.isEmpty, let audioData = Data(base64Encoded: b64), audioData.count > 256 else {
+            call.resolve(["cached": false])
+            return
+        }
+        let voice = rawVoice.contains("thuc-doan") ? "vieneu-thuc-doan" : "vieneu-thien-tam-duc"
+        DispatchQueue.global(qos: .utility).async {
+            let digest = SHA256.hash(data: Data("mp3|\(voice)|\(rawText)".utf8))
+                .map { String(format: "%02x", $0) }
+                .joined()
+            let dest = ChanhPhapVault.shared.cacheDir.appendingPathComponent("\(digest).mp3")
+            do {
+                try audioData.write(to: dest, options: .atomic)
+                call.resolve(["cached": true])
+            } catch {
+                call.resolve(["cached": false])
+            }
         }
     }
 

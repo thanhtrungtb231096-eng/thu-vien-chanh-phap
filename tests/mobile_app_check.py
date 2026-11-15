@@ -189,6 +189,8 @@ def main() -> None:
 
             queue_calls: list[dict] = []
             reminder_calls: list[dict] = []
+            cached_manuscripts: list[dict] = []
+            cached_audio_segs: list[dict] = []
 
             mobile_page.expose_function(
                 '__pyGetManuscript',
@@ -206,19 +208,42 @@ def main() -> None:
                 '__pyRecordReminder',
                 lambda payload: reminder_calls.append(payload),
             )
+            mobile_page.expose_function(
+                '__pyRecordManuscriptCache',
+                lambda payload: cached_manuscripts.append(payload),
+            )
+            mobile_page.expose_function(
+                '__pyRecordAudioCache',
+                lambda payload: cached_audio_segs.append(payload),
+            )
 
             mobile_page.add_init_script('''
                 (() => {
+                  // Simulate iOS WKWebView capacitor://localhost where ServiceWorker & CacheStorage do not exist
+                  try { delete window.caches; } catch {}
+                  try { Object.defineProperty(navigator, 'serviceWorker', { get: () => undefined, configurable: true }); } catch {}
                   const listeners = { playbackState: [], downloadProgress: [] };
                   let lastQueue = null;
+                  let simTtsInstalled = true;
                   window.__CHANH_PHAP_MOBILE_SIM__ = {
+                    __setTtsInstalled(val) { simTtsInstalled = Boolean(val); },
                     async getVaultStatus() {
-                      return { packs: ['core-bundled'], ttsInstalled: true, freeDiskMiB: 24576 };
+                      return { packs: ['core-bundled'], ttsInstalled: simTtsInstalled, freeDiskMiB: 24576 };
                     },
                     async getManuscript({ url }) {
                       return await window.__pyGetManuscript(url);
                     },
-                    async cacheManuscript() {},
+                    async cacheManuscript(opts) {
+                      await window.__pyRecordManuscriptCache({ url: opts?.url || '', len: (opts?.content || '').length });
+                    },
+                    async cacheAudioSegment(opts) {
+                      await window.__pyRecordAudioCache({
+                        voice: opts?.voice || '',
+                        textLen: (opts?.text || '').length,
+                        b64Len: (opts?.audioBase64 || '').length
+                      });
+                      return { cached: true };
+                    },
                     async searchVault({ q, collection, mode }) {
                       return await window.__pySearchVault(q || '', collection || '', mode || '');
                     },
@@ -349,8 +374,43 @@ def main() -> None:
             assert any(c['kind'] == 'pauseQueue' for c in queue_calls)
             checks.append('Native lock-screen queue start, segment advance, persistence and pause verified')
 
-            # Test D: Mobile Offline Vault UI & Daily Practice Reminder inside #tab-offline
+            # Test D: Single-Book & Single-Chapter Offline Download (#reader-download) WITHOUT ServiceWorker/CacheStorage!
+            # D1: When On-Device AI Voice Pack IS installed -> instant offline readiness without redundant MP3 downloads
+            mobile_page.evaluate("document.getElementById('reader-download').click()")
+            mobile_page.wait_for_selector('#download-dialog[open]')
+            mobile_page.evaluate("""() => {
+                document.getElementById('download-audio').checked = true;
+                document.getElementById('download-start').click();
+            }""")
+            mobile_page.wait_for_function("document.getElementById('download-status').textContent.includes('Giọng AI Nội Bộ')")
+            assert len(cached_manuscripts) >= 1 and cached_manuscripts[0]['len'] > 500, cached_manuscripts
+            mobile_page.evaluate("document.getElementById('download-close').click()")
+
+            # D2: When On-Device AI Voice Pack is NOT installed -> downloads MP3 segments & bridges into Native cacheAudioSegment!
+            fake_mp3 = b'ID3' + (b'\x00\xff\xfb\x90' * 120)
+            mobile_page.route(
+                '**/api/tts',
+                lambda route: route.fulfill(status=200, content_type='audio/mpeg', body=fake_mp3),
+            )
+            mobile_page.evaluate('window.__CHANH_PHAP_MOBILE_SIM__.__setTtsInstalled(false)')
+            mobile_page.evaluate("document.getElementById('reader-download').click()")
+            mobile_page.wait_for_selector('#download-dialog[open]')
+            mobile_page.evaluate("""() => {
+                document.getElementById('download-audio').checked = true;
+                document.getElementById('download-start').click();
+            }""")
+            mobile_page.wait_for_function(
+                "document.getElementById('download-status').textContent.includes('Đã lưu đủ phần đã chọn')",
+                timeout=10000,
+            )
+            assert len(cached_audio_segs) >= 1 and cached_audio_segs[0]['b64Len'] > 300, cached_audio_segs
+            mobile_page.evaluate("document.getElementById('download-close').click()")
+            mobile_page.evaluate('window.__CHANH_PHAP_MOBILE_SIM__.__setTtsInstalled(true)')
+            checks.append('Single-book & single-chapter offline save (#reader-download) verified without ServiceWorker/CacheStorage')
+
+            # Test E: Mobile Offline Vault UI & Daily Practice Reminder inside #tab-offline
             mobile_page.wait_for_selector('#mobile-vault-root', state='attached')
+            assert mobile_page.evaluate("document.getElementById('offline-install')?.hidden === true")
             pack_cards = mobile_page.locator('#mobile-pack-list .mobile-pack-item').count()
             assert pack_cards == 5, f'Expected 5 pack cards, got {pack_cards}'
             mobile_page.evaluate("document.getElementById('mobile-reminder-save').click()")

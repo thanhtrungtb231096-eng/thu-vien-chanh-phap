@@ -2,14 +2,15 @@
   "result": "passed",
   "icoFrames": 7,
   "msixTiles": 10,
-  "stagedWwwMiB": 27.49,
-  "ipcCallsVerified": 8,
+  "stagedWwwMiB": 27.5,
+  "ipcCallsVerified": 19,
   "checks": [
     "Clean workspace, Rust Tauri v2 contracts, 7-frame icon.ico, 10 MSIX PNG tiles & AppxManifest.xml verified",
     "VPS/Local server CORS allows Tauri v2 WebView2 origins (http://tauri.localhost)",
     "Windows Desktop mode flags active with zero mobile notch safe-area padding",
     "Offline sutra reading (<50ms) and accent-insensitive FTS5 search via Rust SQLite vault passed",
     "Rust ONNX TTS playback, 2-segment gapless prefetch & Windows SystemMediaTransportControls passed",
+    "Single-book & chapter download (#reader-download) + Tier 1.5 offline audio playback verified",
     "Windows PC Vault UI renders %LOCALAPPDATA%\\ChanhPhapVault & desktop download controls",
     "Windows snapped window / Surface tablet seamlessly activates Touch Bottom Navigation"
   ]
