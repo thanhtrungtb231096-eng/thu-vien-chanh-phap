@@ -1,5 +1,5 @@
 [
-  "/web-thuvien/css/library.bundle.css?v=d34d98e7f96c",
+  "/web-thuvien/css/library.bundle.css?v=740b3d4a403f",
   "/web-thuvien/data/library-version.json",
   "/web-thuvien/design/library-icon-192.png",
   "/web-thuvien/design/library-icon-512.png",
@@ -56,7 +56,7 @@
   "/web-thuvien/js/library-study.js?v=72194535fb9d",
   "/web-thuvien/js/library-sync.js?v=3c6ee0522226",
   "/web-thuvien/js/library-ui.js?v=b80fc4e7622d",
-  "/web-thuvien/js/library-upgrades.js?v=f18eebf1afb7",
+  "/web-thuvien/js/library-upgrades.js?v=a2ea35f0a48e",
   "/web-thuvien/js/listening-history.js?v=012b87f16971",
   "/web-thuvien/js/meditation-bell.js?v=cd16d7703b29",
   "/web-thuvien/js/mobile-bridge.js?v=0928c8af66ea",
@@ -72,6 +72,6 @@
   "/web-thuvien/js/reader.js?v=3abefb7d7fba",
   "/web-thuvien/js/sutra-context.js?v=b8d19f98e227",
   "/web-thuvien/js/sutra-formatter.js?v=4cdd49e8514c",
-  "/web-thuvien/js/touch-ux.js?v=b1532a01c587",
+  "/web-thuvien/js/touch-ux.js?v=b640972ffe65",
   "/web-thuvien/manifest.webmanifest"
 ]

@@ -55,6 +55,7 @@ git remote add origin https://github.com/<tai-khoan-cua-ban>/thu-vien-chanh-phap
 git push -u origin main
 ```
 
+
 ### Bước 2: Bấm nút Biên dịch trên Đám mây
 1. Mở trang GitHub của kho dự án trên trình duyệt Windows → chọn thẻ **Actions**.
 2. Chọn quy trình **Build Chánh Pháp Mobile Apps (iOS .ipa & Android .apk)** ở cột bên trái.
@@ -103,4 +104,15 @@ python -X utf8 tools/mobile/build_text_packs.py
 python -X utf8 tests/structure_check.py
 python -X utf8 tests/mobile_app_check.py
 ```
+
+---
+
+## 6. Phát Hành Miễn Phí \$0/Năm & Khóa Ký Chính Chủ (GitHub Releases)
+
+- **Khóa ký Android 27 năm (`Release Keystore`)**:
+  - Bản gốc được lưu an toàn ngoài kho Git tại `E:\Kinh điển phật giáo - Mobile\signing\chanhphap-android-release.p12` và sao lưu mật (`chmod 600`) tại `/opt/thuvien/.library-state/signing/` trên máy chủ VPS.
+  - Nhấp đúp `CAI_KHOA_KY_ANDROID_LEN_GITHUB.cmd` để tự động copy khóa `ANDROID_KEYSTORE_BASE64` vào Clipboard và dán vào GitHub Secrets trong 10 giây.
+- **Tự động xuất bản công khai (`v1.1.*`)**:
+  - Khi nhấp đúp `DAY_LEN_GITHUB_BUILD_APP.cmd` (hoặc đẩy tag `v1.1.x`), cả hai tiến trình Mobile & Windows cùng đính kèm 4 gói cài đặt (`ChanhPhap-Android.apk`, `ChanhPhap-iOS-Unsigned.ipa`, `ChanhPhap-Windows-Setup_x64.exe`, `ChanhPhap-Windows-Store_x64.msix`) lên một trang `GitHub Releases` duy nhất (`/releases/latest`), kết nối trực tiếp với nút **Tải Ứng Dụng** trên trang web `https://thuvienchanhphap.duckdns.org`.
+
 

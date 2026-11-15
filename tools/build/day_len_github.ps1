@@ -1,6 +1,7 @@
-# Dong bo ma nguon len GitHub de kich hoat Cloud Build (iOS .ipa, Android .apk, Windows .exe & Microsoft Store .msix)
+﻿# Dong bo ma nguon len GitHub de kich hoat Cloud Build (iOS .ipa, Android .apk, Windows .exe & Microsoft Store .msix)
 param(
-    [string]$RepoUrl = ''
+    [string]$RepoUrl = '',
+    [switch]$NoReleaseTag
 )
 $ErrorActionPreference = 'Stop'
 $Root = Split-Path (Split-Path $PSScriptRoot -Parent) -Parent
@@ -65,11 +66,29 @@ if ($LASTEXITCODE -ne 0) {
 
 $WebUrl = $CurrentOrigin -replace '\.git$', ''
 $ActionsUrl = "$WebUrl/actions"
-Write-Host "[4/4] HOAN TAT! Dang mo trang GitHub Actions: $ActionsUrl"
-Write-Host "=================================================================="
-Write-Host " HUONG DAN BAM NUT XUAT 4 GOI CAI DAT TREN TRANG VUA MO:"
-Write-Host "   - Chon 'Build Chánh Pháp Mobile Apps' -> Run workflow -> nhan .ipa (iPhone) & .apk (Android)"
-Write-Host "   - Chon 'Build Chánh Pháp Windows PC App' -> Run workflow -> nhan .exe & .msix (Microsoft Store)"
-Write-Host "=================================================================="
+$ReleasesUrl = "$WebUrl/releases"
+
+if (-not $NoReleaseTag) {
+    git fetch --tags origin 2>$null | Out-Null
+    $ExistingTags = @(git tag -l "v1.1.*" 2>$null)
+    $MaxPatch = -1
+    foreach ($t in $ExistingTags) {
+        if ($t -match '^v1\.1\.(\d+)$') {
+            $n = [int]$Matches[1]
+            if ($n -gt $MaxPatch) { $MaxPatch = $n }
+        }
+    }
+    $NextTag = "v1.1.$($MaxPatch + 1)"
+    Write-Host "[4/4] Tu dong kich hoat xuat ban cong khai 4 goi cai dat ($NextTag)..."
+    git tag $NextTag
+    git push origin $NextTag
+    Write-Host "=================================================================="
+    Write-Host " HOAN TAT! GitHub dang tu dong dong goi & xuat ban len trang Releases:"
+    Write-Host "   - Tien trinh build (~6-10 phut): $ActionsUrl"
+    Write-Host "   - Trang tai cong khai vinh vien : $ReleasesUrl"
+    Write-Host "=================================================================="
+} else {
+    Write-Host "[4/4] HOAN TAT! Dang mo trang GitHub Actions: $ActionsUrl"
+}
 Start-Process $ActionsUrl
 

@@ -21,10 +21,11 @@ on:
         default: "1.0.0.0"
   push:
     tags:
+      - "v[0-9]*"
       - "windows-v*"
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build-windows:
@@ -66,8 +67,14 @@ jobs:
           REMOTE_BASE: ${{ inputs.remote_server_url || 'https://thuvienchanhphap.duckdns.org' }}
           MS_IDENTITY: ${{ inputs.ms_store_identity_name || secrets.MS_STORE_IDENTITY_NAME || 'ChanhPhap.DaiThuVienKinhDien' }}
           MS_PUBLISHER: ${{ inputs.ms_store_publisher || secrets.MS_STORE_PUBLISHER || 'CN=ChanhPhap' }}
-          MS_VERSION: ${{ inputs.app_version || '1.0.0.0' }}
+          MS_VERSION: ${{ inputs.app_version || '' }}
         run: |
+          $semver = "1.1.0"
+          if ($env:GITHUB_REF_NAME -match '(\d+\.\d+\.\d+)') {
+            $semver = $Matches[1]
+          }
+          $msVer = if ($env:MS_VERSION) { $env:MS_VERSION } else { "$semver.0" }
+
           $packsTmp = Join-Path $env:RUNNER_TEMP "windows-packs"
           $stagingDir = "desktop-windows/staging"
           New-Item -ItemType Directory -Force -Path $packsTmp | Out-Null
@@ -89,11 +96,12 @@ jobs:
             --core-pack "$coreDb" `
             --identity-name "$env:MS_IDENTITY" `
             --publisher "$env:MS_PUBLISHER" `
-            --version "$env:MS_VERSION" `
+            --version "$msVer" `
             --allow-in-repo
 
           $confPath = (Resolve-Path "desktop-windows/src-tauri/tauri.conf.json").Path
           $cfg = [IO.File]::ReadAllText($confPath, [Text.Encoding]::UTF8) | ConvertFrom-Json
+          $cfg.version = $semver
           $cfg.build.frontendDist = "../staging/www"
           $cfg.bundle.icon = @(
             "../staging/icons/32x32.png",
@@ -203,3 +211,33 @@ jobs:
           name: ChanhPhap-Windows-Store-MSIX
           path: ${{ runner.temp }}/ChanhPhap-Windows-Store_x64.msix
           retention-days: 30
+
+      - name: Xuất bản công khai Bộ cài đặt Windows (.exe & .msix) lên GitHub Releases
+        if: startsWith(github.ref, 'refs/tags/')
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG_NAME: ${{ github.ref_name }}
+        run: |
+          $exeFile = Join-Path $env:RUNNER_TEMP "ChanhPhap-Windows-Setup_x64.exe"
+          $msixFile = Join-Path $env:RUNNER_TEMP "ChanhPhap-Windows-Store_x64.msix"
+          $notes = @"
+          ### Đại Thư Viện Chánh Pháp — Bộ cài đặt chính thức miễn phí
+
+          - **Điện thoại Android**: Tải trực tiếp **`ChanhPhap-Android.apk`** bên dưới để cài đặt (hỗ trợ nghe kinh tắt màn hình, kho 5.348 bản kinh & giọng đọc AI ngoại tuyến).
+          - **Máy tính Windows 10/11**: Tải trực tiếp **`ChanhPhap-Windows-Setup_x64.exe`** để cài đặt trong 10 giây.
+          - **iPhone / iPad**: Mở `https://thuvienchanhphap.duckdns.org` bằng Safari → **Chia sẻ** → **Thêm vào Màn hình chính** (10 giây, không bao giờ hết hạn), hoặc cài gói Native **`ChanhPhap-iOS-Unsigned.ipa`** qua Sideloadly / SideStore.
+          "@
+
+          gh release view "$env:TAG_NAME" *> $null
+          if ($LASTEXITCODE -ne 0) {
+            gh release create "$env:TAG_NAME" --title "Đại Thư Viện Chánh Pháp $($env:TAG_NAME)" --notes "$notes"
+          }
+          for ($i = 1; $i -le 4; $i++) {
+            gh release upload "$env:TAG_NAME" "$exeFile" "$msixFile" --clobber
+            if ($LASTEXITCODE -eq 0) { break }
+            Start-Sleep -Seconds 3
+          }
+          if ($LASTEXITCODE -ne 0) {
+            throw "Không thể tải tệp cài đặt Windows lên GitHub Release $($env:TAG_NAME)."
+          }

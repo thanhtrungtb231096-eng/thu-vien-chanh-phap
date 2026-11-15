@@ -1047,3 +1047,239 @@
     transition: none !important;
   }
 }
+
+/* ==========================================================================
+   7. Smart Cross-Platform App Download Buttons & Modal (Web Only)
+   ========================================================================== */
+[data-web-app-download][hidden] {
+  display: none !important;
+}
+
+.header-download-app-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 38px;
+  padding: 0 13px;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--accent) 42%, var(--border-subtle));
+  background: color-mix(in srgb, var(--accent) 11%, var(--bg-card));
+  color: var(--accent);
+  font: 600 12px/1 var(--font-body);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.header-download-app-btn svg {
+  width: 15px;
+  height: 15px;
+}
+
+.header-download-app-btn:hover {
+  background: color-mix(in srgb, var(--accent) 18%, var(--bg-card));
+}
+
+@media (max-width: 1023px) {
+  .header-download-app-btn span {
+    display: none;
+  }
+  .header-download-app-btn {
+    width: 40px;
+    min-width: 40px;
+    padding: 0;
+    justify-content: center;
+    border-radius: 10px;
+  }
+}
+
+@media (max-width: 767px) {
+  .header-download-app-btn {
+    display: none !important;
+  }
+}
+
+.home-download-app-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border-color: color-mix(in srgb, var(--accent) 48%, var(--border-subtle)) !important;
+  background: color-mix(in srgb, var(--accent) 12%, var(--bg-card)) !important;
+  color: var(--accent) !important;
+  font-weight: 600 !important;
+}
+
+.home-download-app-pill svg {
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+}
+
+.ds-download-app-btn {
+  margin-top: 4px;
+  border: 1px dashed color-mix(in srgb, var(--accent) 38%, var(--border-subtle)) !important;
+  background: color-mix(in srgb, var(--accent) 7%, transparent) !important;
+}
+
+.app-download-dialog {
+  width: min(780px, calc(100vw - 28px));
+  max-width: 780px;
+}
+
+.app-dl-lead {
+  margin: 0 0 14px;
+  font: 13.5px/1.55 var(--font-body);
+  color: var(--text-secondary);
+}
+
+.app-dl-banner {
+  margin: 0 0 14px;
+  padding: 10px 13px;
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--gold-pure, #c69a3b) 45%, var(--border-subtle));
+  background: color-mix(in srgb, var(--gold-pure, #c69a3b) 12%, var(--bg-card));
+  color: var(--text-primary);
+  font: 12.5px/1.5 var(--font-body);
+}
+
+.app-dl-banner-ok {
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--border-subtle));
+  background: color-mix(in srgb, var(--accent) 12%, var(--bg-card));
+}
+
+.app-dl-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.app-dl-card {
+  padding: 15px 16px;
+  border-radius: 15px;
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-card);
+  transition: border-color 0.16s ease, box-shadow 0.16s ease;
+}
+
+.app-dl-card.recommended {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 6%, var(--bg-card));
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+}
+
+.app-dl-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.app-dl-os-tag {
+  font: 600 10.5px/1.2 var(--font-body);
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+.app-dl-device-badge {
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  font: 600 10.5px/1.2 var(--font-body);
+}
+
+.app-dl-card h3 {
+  margin: 0 0 6px;
+  font: 600 15.5px/1.35 var(--font-serif);
+  color: var(--text-primary);
+}
+
+.app-dl-card p {
+  margin: 0 0 11px;
+  font: 12.8px/1.5 var(--font-body);
+  color: var(--text-secondary);
+}
+
+.app-dl-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.app-dl-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 42px;
+  padding: 9px 16px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.app-dl-hint {
+  display: block;
+  font: 11.5px/1.45 var(--font-body);
+  color: var(--text-muted);
+}
+
+.app-dl-steps {
+  margin: 6px 0 10px;
+  padding-left: 19px;
+  font: 12.8px/1.6 var(--font-body);
+  color: var(--text-primary);
+}
+
+.app-dl-steps li + li {
+  margin-top: 3px;
+}
+
+.app-dl-ipa-more {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--border-subtle);
+  font-size: 12.2px;
+  color: var(--text-secondary);
+}
+
+.app-dl-ipa-more summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--accent);
+  padding: 3px 0;
+}
+
+.app-dl-ipa-more p {
+  margin: 7px 0 9px;
+}
+
+.app-dl-ipa-more a:not(.app-dl-btn) {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.app-dl-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-subtle);
+  font: 12px/1.4 var(--font-body);
+  color: var(--text-muted);
+}
+
+.app-dl-footer a {
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.app-dl-footer a:hover {
+  text-decoration: underline;
+}

@@ -534,10 +534,275 @@
     }
 
     // 3. Swipe-down to dismiss on all Dharma Dialogs / Bottom Sheets
-    ['dp-options', 'dp-now', 'dharma-canons-sheet', 'dharma-tools-dialog', 'dharma-companion-dialog', 'ds-create-dialog', 'correction-dialog', 'issue-dialog'].forEach(id => {
+    ['dp-options', 'dp-now', 'dharma-canons-sheet', 'dharma-app-download-dialog', 'dharma-tools-dialog', 'dharma-companion-dialog', 'ds-create-dialog', 'correction-dialog', 'issue-dialog'].forEach(id => {
       const dlg = $(id);
       if (dlg) attachSheetSwipeDismiss(dlg, () => dlg.close());
     });
+  }
+
+  const GITHUB_RELEASE_BASE = 'https://github.com/thanhtrungtb231096-eng/thu-vien-chanh-phap/releases/latest/download';
+  const GITHUB_RELEASES_PAGE = 'https://github.com/thanhtrungtb231096-eng/thu-vien-chanh-phap/releases/latest';
+
+  function isNativeAppShell() {
+    const root = document.documentElement;
+    return Boolean(
+      window.MobileBridge?.isNative ||
+      window.Capacitor?.isNativePlatform?.() ||
+      window.__TAURI_INTERNALS__ ||
+      window.__CHANH_PHAP_WINDOWS_NATIVE__ ||
+      window.__CHANH_PHAP_MOBILE_SIM__ ||
+      root.classList.contains('cp-native-app') ||
+      root.classList.contains('cp-windows-app')
+    );
+  }
+
+  function detectVisitorOS() {
+    const ua = navigator.userAgent || '';
+    if (/Android/i.test(ua)) return 'android';
+    if (/iPhone|iPad|iPod/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) return 'ios';
+    if (/Win/i.test(ua)) return 'windows';
+    return 'other';
+  }
+
+  function isInAppWebView() {
+    return /Zalo|FBAN|FBAV|FB_IAB|Instagram|Line|MicroMessenger|TikTok/i.test(navigator.userAgent || '');
+  }
+
+  function syncAppDownloadVisibility() {
+    const hide = isNativeAppShell();
+    document.querySelectorAll('[data-web-app-download]').forEach(el => {
+      el.hidden = hide;
+    });
+    if (hide) {
+      const dlg = $('dharma-app-download-dialog');
+      if (dlg?.open) dlg.close();
+    }
+  }
+
+  function openAppDownloadDialog() {
+    if (isNativeAppShell()) return false;
+    closeDrawer({ restoreFocus: false });
+    document.querySelectorAll('dialog[open]').forEach(d => {
+      if (d.id !== 'dharma-app-download-dialog') d.close();
+    });
+    const dlg = $('dharma-app-download-dialog');
+    if (!dlg) return false;
+
+    const os = detectVisitorOS();
+    const grid = dlg.querySelector('.app-dl-grid');
+    if (grid) {
+      const cards = [...grid.querySelectorAll('[data-platform-card]')];
+      cards.forEach(card => {
+        const match = card.dataset.platformCard === os;
+        card.classList.toggle('recommended', match);
+        const badge = card.querySelector('.app-dl-device-badge');
+        if (badge) badge.hidden = !match;
+      });
+      const preferred = cards.find(c => c.dataset.platformCard === os);
+      if (preferred && grid.firstElementChild !== preferred) {
+        grid.prepend(preferred);
+      }
+    }
+
+    const inAppTip = $('app-dl-inapp-tip');
+    if (inAppTip) inAppTip.hidden = !isInAppWebView();
+
+    const pwaInstalled = Boolean(
+      window.matchMedia?.('(display-mode: standalone)')?.matches ||
+      window.navigator?.standalone === true
+    );
+    const pwaNote = $('app-dl-pwa-installed');
+    if (pwaNote) pwaNote.hidden = !pwaInstalled;
+
+    if (!dlg.open) dlg.showModal();
+    return true;
+  }
+
+  function installAppDownloadExperience() {
+    if (!$('dharma-app-download-dialog')) {
+      document.body.insertAdjacentHTML('beforeend', `
+        <dialog id="dharma-app-download-dialog" class="dharma-dialog app-download-dialog" aria-labelledby="app-dl-title">
+          <div class="sheet-drag-handle" aria-hidden="true"><span></span></div>
+          <header>
+            <div>
+              <span class="eyebrow">ỨNG DỤNG CHÁNH PHÁP · MIỄN PHÍ TRỌN ĐỜI</span>
+              <h2 id="app-dl-title">Tải Ứng Dụng Đọc &amp; Nghe Kinh Ngoại Tuyến</h2>
+            </div>
+            <button type="button" id="app-dl-close" class="dp-icon" aria-label="Đóng bảng tải ứng dụng">${icon('close')}</button>
+          </header>
+
+          <p class="app-dl-lead">
+            Mang trọn kho tàng <strong>5.348 bản kinh Việt – Hán – Pāḷi</strong> về thiết bị của bạn: nghe kinh khi tắt màn hình, lưu sách đọc trên máy bay và không quảng cáo.
+          </p>
+
+          <div id="app-dl-inapp-tip" class="app-dl-banner" hidden>
+            💡 <strong>Mẹo nhỏ:</strong> Bạn đang mở trang trong Zalo / Facebook. Hãy chạm biểu tượng <strong>⋯</strong> ở góc trên → chọn <strong>Mở bằng trình duyệt (Safari / Chrome)</strong> để tải và cài đặt mượt nhất.
+          </div>
+
+          <div id="app-dl-pwa-installed" class="app-dl-banner app-dl-banner-ok" hidden>
+            ✓ Thư viện đã được thêm vào Màn hình chính của thiết bị này. Bạn cũng có thể tải thêm gói cài đặt chuyên sâu bên dưới nếu cần.
+          </div>
+
+          <div class="app-dl-grid">
+            <article class="app-dl-card" data-platform-card="android">
+              <div class="app-dl-card-head">
+                <span class="app-dl-os-tag">ANDROID · ĐIỆN THOẠI &amp; MÁY TÍNH BẢNG</span>
+                <span class="app-dl-device-badge" hidden>Thiết bị của bạn</span>
+              </div>
+              <h3>Ứng dụng Android Chính Thức (<code>.apk</code>)</h3>
+              <p>Tích hợp sẵn 70 bộ kinh cốt lõi, phát âm thanh nền khóa màn hình và giọng đọc AI tiếng Việt ngoại tuyến.</p>
+              <div class="app-dl-actions">
+                <a id="app-dl-android-apk" class="r-primary app-dl-btn" href="${GITHUB_RELEASE_BASE}/ChanhPhap-Android.apk" target="_blank" rel="noopener">
+                  ⬇ Tải ChanhPhap-Android.apk
+                </a>
+                <button type="button" class="r-button app-dl-pwa-trigger">Cài nhanh từ trình duyệt</button>
+              </div>
+              <small class="app-dl-hint">Khi mở tệp vừa tải, nếu máy hỏi xác nhận nguồn hoặc Play Protect, chọn <strong>Chi tiết → Vẫn cài đặt</strong>.</small>
+            </article>
+
+            <article class="app-dl-card" data-platform-card="ios">
+              <div class="app-dl-card-head">
+                <span class="app-dl-os-tag">IPHONE &amp; IPAD · iOS / iPadOS</span>
+                <span class="app-dl-device-badge" hidden>Thiết bị của bạn</span>
+              </div>
+              <h3>Cài lên Màn hình chính iPhone (10 giây · Không hết hạn)</h3>
+              <ol class="app-dl-steps">
+                <li>Mở trang này bằng trình duyệt <strong>Safari</strong> trên iPhone hoặc iPad.</li>
+                <li>Chạm nút <strong>Chia sẻ</strong> (ô vuông có mũi tên lên <strong>↑</strong> ở thanh dưới).</li>
+                <li>Cuộn xuống chọn <strong>Thêm vào Màn hình chính</strong> → bấm <strong>Thêm</strong>.</li>
+              </ol>
+              <details class="app-dl-ipa-more">
+                <summary>Tùy chọn nâng cao: Tải gói Native <code>.ipa</code> (chạy chip AI nội bộ)</summary>
+                <p>Dành cho Phật tử dùng máy tính cài miễn phí qua <a href="https://sideloadly.io/" target="_blank" rel="noopener">Sideloadly</a> hoặc <a href="https://sidestore.io/" target="_blank" rel="noopener">SideStore</a> bằng Apple ID cá nhân:</p>
+                <a id="app-dl-ios-ipa" class="r-button app-dl-btn" href="${GITHUB_RELEASE_BASE}/ChanhPhap-iOS-Unsigned.ipa" target="_blank" rel="noopener">
+                  ⬇ Tải ChanhPhap-iOS-Unsigned.ipa
+                </a>
+              </details>
+            </article>
+
+            <article class="app-dl-card" data-platform-card="windows">
+              <div class="app-dl-card-head">
+                <span class="app-dl-os-tag">MÁY TÍNH WINDOWS 10 / 11 (64-BIT)</span>
+                <span class="app-dl-device-badge" hidden>Thiết bị của bạn</span>
+              </div>
+              <h3>Phần mềm Máy tính Windows (<code>.exe</code>)</h3>
+              <p>Ứng dụng Tauri v2 siêu nhẹ, tra cứu toàn văn 5.348 bản kinh tức thời và đọc kinh AI không cần mạng.</p>
+              <div class="app-dl-actions">
+                <a id="app-dl-win-exe" class="r-primary app-dl-btn" href="${GITHUB_RELEASE_BASE}/ChanhPhap-Windows-Setup_x64.exe" target="_blank" rel="noopener">
+                  ⬇ Tải Bộ Cài Windows (.exe)
+                </a>
+                <button type="button" class="r-button app-dl-pwa-trigger">Cài Web App trên trình duyệt</button>
+              </div>
+              <small class="app-dl-hint">Nếu Windows SmartScreen hiện thông báo bảo vệ, bấm <strong>More info (Thêm thông tin) → Run anyway</strong>.</small>
+            </article>
+          </div>
+
+          <footer class="app-dl-footer">
+            <span>Phát hành công khai, mã nguồn minh bạch &amp; hoàn toàn miễn phí</span>
+            <a href="${GITHUB_RELEASES_PAGE}" target="_blank" rel="noopener">Xem trang GitHub Releases ↗</a>
+          </footer>
+        </dialog>
+      `);
+
+      const dlg = $('dharma-app-download-dialog');
+      $('app-dl-close').onclick = () => dlg.close();
+      dlg.addEventListener('click', e => {
+        if (e.target === dlg) {
+          const r = dlg.getBoundingClientRect();
+          if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) dlg.close();
+        }
+      });
+      dlg.querySelectorAll('.app-dl-pwa-trigger').forEach(btn => {
+        btn.onclick = async () => {
+          const ok = await window.LibraryOffline?.install?.();
+          if (ok) {
+            dlg.close();
+          } else {
+            window.DharmaPlayerStore?.message?.('Hãy chọn "Thêm vào Màn hình chính" hoặc "Cài đặt ứng dụng" trong menu ⋮ của trình duyệt.');
+          }
+        };
+      });
+      attachSheetSwipeDismiss(dlg, () => dlg.close());
+    }
+
+    // 1. Header quick button (Desktop / Tablet >= 768px)
+    const headerContainer = document.querySelector('.header-container');
+    const toolsToggle = $('dharma-tools-toggle');
+    if (headerContainer && !$('dharma-download-toggle')) {
+      const hdrBtn = document.createElement('button');
+      hdrBtn.type = 'button';
+      hdrBtn.id = 'dharma-download-toggle';
+      hdrBtn.className = 'r-button header-download-app-btn';
+      hdrBtn.dataset.webAppDownload = 'true';
+      hdrBtn.setAttribute('aria-label', 'Tải ứng dụng Chánh Pháp miễn phí');
+      hdrBtn.title = 'Tải ứng dụng Chánh Pháp cho Điện thoại & Máy tính';
+      hdrBtn.innerHTML = `${icon('offline')}<span>Tải Ứng Dụng</span>`;
+      hdrBtn.onclick = openAppDownloadDialog;
+      if (toolsToggle) toolsToggle.before(hdrBtn);
+      else headerContainer.append(hdrBtn);
+    }
+
+    // 2. Sidebar & Mobile Off-Canvas Drawer entry
+    const sidebarNav = document.querySelector('#dharma-sidebar .ds-nav');
+    if (sidebarNav && !$('ds-download-app')) {
+      const sideBtn = document.createElement('button');
+      sideBtn.type = 'button';
+      sideBtn.id = 'ds-download-app';
+      sideBtn.className = 'ds-download-app-btn';
+      sideBtn.dataset.webAppDownload = 'true';
+      sideBtn.setAttribute('aria-label', 'Tải ứng dụng Chánh Pháp miễn phí');
+      sideBtn.innerHTML = `${icon('offline')}<span>Tải ứng dụng</span><span class="ds-nav-badge">Miễn phí</span><span class="ds-rail-caption">Tải App</span>`;
+      sideBtn.onclick = openAppDownloadDialog;
+      sidebarNav.append(sideBtn);
+    }
+
+    // 3. Sanctuary Hero CTA pill (always visible on Phone, Tablet & Desktop Web)
+    const heroActions = document.querySelector('#tab-home .hero-actions');
+    if (heroActions && !$('home-download-app-btn')) {
+      const homeBtn = document.createElement('button');
+      homeBtn.type = 'button';
+      homeBtn.id = 'home-download-app-btn';
+      homeBtn.className = 'hero-secondary home-download-app-pill';
+      homeBtn.dataset.webAppDownload = 'true';
+      homeBtn.innerHTML = `${icon('offline')}<span>Tải Ứng Dụng</span>`;
+      homeBtn.onclick = openAppDownloadDialog;
+      heroActions.append(homeBtn);
+    }
+
+    // 4. Canons Bottom Sheet entry
+    const canonsGrid = document.querySelector('#dharma-canons-sheet .canons-sheet-grid');
+    if (canonsGrid && !$('canons-sheet-download-app')) {
+      const card = document.createElement('button');
+      card.type = 'button';
+      card.id = 'canons-sheet-download-app';
+      card.className = 'canon-sheet-card canon-offline-wide';
+      card.dataset.webAppDownload = 'true';
+      card.innerHTML = `
+        <span class="canon-sheet-icon">${icon('offline')}</span>
+        <span class="canon-sheet-copy">
+          <strong>Tải Ứng Dụng Điện Thoại &amp; Máy Tính (Miễn Phí)</strong>
+          <small>Bộ cài Android (.apk), iPhone/iPad &amp; Windows 10/11 (.exe)</small>
+        </span>
+      `;
+      card.onclick = openAppDownloadDialog;
+      canonsGrid.append(card);
+    }
+
+    // 5. Offline Tab explicit installer launcher button
+    const offlineInstallBtn = $('offline-install');
+    if (offlineInstallBtn && !$('offline-open-app-downloads')) {
+      const dlBtn = document.createElement('button');
+      dlBtn.type = 'button';
+      dlBtn.id = 'offline-open-app-downloads';
+      dlBtn.className = 'r-button';
+      dlBtn.dataset.webAppDownload = 'true';
+      dlBtn.textContent = 'Tải bộ cài .apk / iPhone / .exe';
+      dlBtn.onclick = openAppDownloadDialog;
+      offlineInstallBtn.after(dlBtn);
+    }
+
+    syncAppDownloadVisibility();
+    window.addEventListener('chanhphap-vault-updated', syncAppDownloadVisibility);
   }
 
   function setReaderZen(enable) {
@@ -757,6 +1022,7 @@
     installSidebarDrawer();
     installDrawerGestures();
     installBottomNavAndCanonsSheet();
+    installAppDownloadExperience();
     installScrollAndSheetGestures();
     installReaderGestures();
     syncNativeStatusBar();
@@ -770,6 +1036,8 @@
     closeDrawer,
     toggleDrawer,
     openCanonsSheet,
+    openAppDownloadDialog,
+    syncAppDownloadVisibility,
     setReaderZen,
     handleBackButton,
     refreshOfflineBadge,

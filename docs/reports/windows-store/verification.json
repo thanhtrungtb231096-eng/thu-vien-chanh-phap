@@ -2,7 +2,7 @@
   "result": "passed",
   "icoFrames": 7,
   "msixTiles": 10,
-  "stagedWwwMiB": 27.5,
+  "stagedWwwMiB": 27.52,
   "ipcCallsVerified": 19,
   "checks": [
     "Clean workspace, Rust Tauri v2 contracts, 7-frame icon.ico, 10 MSIX PNG tiles & AppxManifest.xml verified",

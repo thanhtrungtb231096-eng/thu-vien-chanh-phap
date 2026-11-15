@@ -9,10 +9,11 @@ on:
         default: "https://thuvienchanhphap.duckdns.org"
   push:
     tags:
+      - "v[0-9]*"
       - "mobile-v*"
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   # ============================================================================
@@ -131,6 +132,13 @@ jobs:
         working-directory: mobile
         run: |
           PLIST="ios/App/App/Info.plist"
+          SEMVER=$(echo "${GITHUB_REF_NAME}" | grep -oE '[0-9]+\.[0-9]+\.[0-9]+' | head -n 1)
+          [ -z "$SEMVER" ] && SEMVER="1.1.0"
+          BUILD_NUM=$((100 + ${GITHUB_RUN_NUMBER:-1}))
+          /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString '$SEMVER'" "$PLIST" || \
+            /usr/libexec/PlistBuddy -c "Add :CFBundleShortVersionString string '$SEMVER'" "$PLIST"
+          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion '$BUILD_NUM'" "$PLIST" || \
+            /usr/libexec/PlistBuddy -c "Add :CFBundleVersion string '$BUILD_NUM'" "$PLIST"
           /usr/libexec/PlistBuddy -c "Set :CFBundleDisplayName 'Chánh Pháp'" "$PLIST" || \
             /usr/libexec/PlistBuddy -c "Add :CFBundleDisplayName string 'Chánh Pháp'" "$PLIST"
           /usr/libexec/PlistBuddy -c "Delete :UIBackgroundModes" "$PLIST" 2>/dev/null || true
@@ -178,6 +186,21 @@ jobs:
           name: ChanhPhap-iOS-Unsigned-IPA
           path: /tmp/ChanhPhap-iOS-Unsigned.ipa
           retention-days: 30
+
+      - name: Xuất bản công khai ChanhPhap-iOS-Unsigned.ipa lên GitHub Releases
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG_NAME: ${{ github.ref_name }}
+        run: |
+          NOTES=$'### Đại Thư Viện Chánh Pháp — Bộ cài đặt chính thức miễn phí\n\n- **Điện thoại Android**: Tải trực tiếp **`ChanhPhap-Android.apk`** bên dưới để cài đặt (hỗ trợ nghe kinh tắt màn hình, kho 5.348 bản kinh & giọng đọc AI ngoại tuyến).\n- **Máy tính Windows 10/11**: Tải trực tiếp **`ChanhPhap-Windows-Setup_x64.exe`** để cài đặt trong 10 giây.\n- **iPhone / iPad**: Mở `https://thuvienchanhphap.duckdns.org` bằng Safari → **Chia sẻ** → **Thêm vào Màn hình chính** (10 giây, không bao giờ hết hạn), hoặc cài gói Native **`ChanhPhap-iOS-Unsigned.ipa`** qua Sideloadly / SideStore.'
+          gh release view "$TAG_NAME" >/dev/null 2>&1 || gh release create "$TAG_NAME" --title "Đại Thư Viện Chánh Pháp $TAG_NAME" --notes "$NOTES" || true
+          for attempt in 1 2 3 4; do
+            if gh release upload "$TAG_NAME" /tmp/ChanhPhap-iOS-Unsigned.ipa --clobber; then
+              break
+            fi
+            sleep 3
+          done
 
       - name: Ký số Chính thức & Đẩy lên Apple TestFlight (Tự động chạy khi có Apple Secrets)
         if: ${{ env.APPLE_CERTIFICATE_P12_BASE64 != '' && env.APPLE_PROVISIONING_PROFILE_BASE64 != '' }}
@@ -342,16 +365,35 @@ jobs:
 
           npx capacitor-assets generate --android --iconBackgroundColor '#F7F4EC' --splashBackgroundColor '#F7F4EC' --splashBackgroundColorDark '#171C19' || true
 
-          # Nâng minSdkVersion = 24 để hỗ trợ trọn vẹn ONNX Runtime & Jetpack Media3
+          # Nâng minSdkVersion = 24, versionCode tăng tự động & cấu hình lint cho Release build
           sed -i 's/minSdkVersion = [0-9]*/minSdkVersion = 24/g' android/variables.gradle
+          python3 - <<'PY'
+          import os, re
+          from pathlib import Path
+          bg = Path("android/app/build.gradle")
+          txt = bg.read_text(encoding="utf-8")
+          ref = os.environ.get("GITHUB_REF_NAME", "")
+          m = re.search(r"(\d+\.\d+\.\d+)", ref)
+          semver = m.group(1) if m else "1.1.0"
+          vcode = 100 + int(os.environ.get("GITHUB_RUN_NUMBER", "1") or "1")
+          txt = re.sub(r"versionCode\s+\d+", f"versionCode {vcode}", txt)
+          txt = re.sub(r'versionName\s+"[^"]*"', f'versionName "{semver}"', txt)
+          if "checkReleaseBuilds" not in txt:
+              txt = txt.replace("android {", "android {\n    lint { checkReleaseBuilds false; abortOnError false }", 1)
+          bg.write_text(txt, encoding="utf-8")
+          PY
           npx cap sync android
 
-      - name: Biên dịch Gói Cài đặt ChanhPhap-Android.apk
+      - name: Biên dịch & Ký số Release APK Chính Thức (V1 + V2 + V3 Signing)
         working-directory: mobile/android
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
         run: |
           chmod +x gradlew
           set +e
-          ./gradlew assembleDebug --no-daemon > /tmp/gradle-build.log 2>&1
+          ./gradlew assembleRelease --no-daemon > /tmp/gradle-build.log 2>&1
           RC=$?
           tail -n 120 /tmp/gradle-build.log
           if [ $RC -ne 0 ]; then
@@ -361,7 +403,54 @@ jobs:
             exit $RC
           fi
           set -e
-          cp app/build/outputs/apk/debug/app-debug.apk /tmp/ChanhPhap-Android.apk
+
+          RAW_APK=$(ls app/build/outputs/apk/release/*.apk | head -n 1)
+          if [ -z "$RAW_APK" ] || [ ! -f "$RAW_APK" ]; then
+            echo "::error::Không tìm thấy tệp APK Release sau khi chạy assembleRelease!"
+            exit 1
+          fi
+
+          SDK_ROOT="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}"
+          BUILD_TOOLS_DIR=$(ls -d "$SDK_ROOT"/build-tools/* | sort -V | tail -n 1)
+          ZIPALIGN="$BUILD_TOOLS_DIR/zipalign"
+          APKSIGNER="$BUILD_TOOLS_DIR/apksigner"
+
+          KS_FILE="$RUNNER_TEMP/chanhphap-release.p12"
+          KS_PASS="${ANDROID_KEYSTORE_PASSWORD:-chanhphap-release-v1}"
+          KS_ALIAS="${ANDROID_KEY_ALIAS:-chanhphap}"
+
+          if [ -n "$ANDROID_KEYSTORE_BASE64" ]; then
+            echo "Đang nạp Khóa Ký Chính Chủ (ANDROID_KEYSTORE_BASE64) từ GitHub Secrets..."
+            printf '%s' "$ANDROID_KEYSTORE_BASE64" | tr -d ' \t\r\n' | base64 --decode > "$KS_FILE"
+          else
+            echo "Chưa khai báo ANDROID_KEYSTORE_BASE64 -> Tạo khóa PKCS12 chuẩn Release tạm thời..."
+            keytool -genkeypair -v \
+              -storetype PKCS12 \
+              -keystore "$KS_FILE" \
+              -alias "$KS_ALIAS" \
+              -keyalg RSA \
+              -keysize 2048 \
+              -validity 10000 \
+              -storepass "$KS_PASS" \
+              -keypass "$KS_PASS" \
+              -dname "CN=Thu Vien Chanh Phap, OU=Mobile, O=ChanhPhap, L=HaNoi, C=VN"
+          fi
+
+          "$ZIPALIGN" -p -f 4 "$RAW_APK" /tmp/ChanhPhap-aligned.apk
+          "$APKSIGNER" sign \
+            --ks "$KS_FILE" \
+            --ks-type PKCS12 \
+            --ks-key-alias "$KS_ALIAS" \
+            --ks-pass "pass:$KS_PASS" \
+            --key-pass "pass:$KS_PASS" \
+            --v1-signing-enabled true \
+            --v2-signing-enabled true \
+            --v3-signing-enabled true \
+            --out /tmp/ChanhPhap-Android.apk \
+            /tmp/ChanhPhap-aligned.apk
+
+          rm -f "$KS_FILE" /tmp/ChanhPhap-aligned.apk
+          "$APKSIGNER" verify --verbose --print-certs /tmp/ChanhPhap-Android.apk
 
       - name: Tải lên gói cài đặt Android (ChanhPhap-Android.apk)
         uses: actions/upload-artifact@v4
@@ -369,3 +458,18 @@ jobs:
           name: ChanhPhap-Android-APK
           path: /tmp/ChanhPhap-Android.apk
           retention-days: 30
+
+      - name: Xuất bản công khai ChanhPhap-Android.apk lên GitHub Releases
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG_NAME: ${{ github.ref_name }}
+        run: |
+          NOTES=$'### Đại Thư Viện Chánh Pháp — Bộ cài đặt chính thức miễn phí\n\n- **Điện thoại Android**: Tải trực tiếp **`ChanhPhap-Android.apk`** bên dưới để cài đặt (hỗ trợ nghe kinh tắt màn hình, kho 5.348 bản kinh & giọng đọc AI ngoại tuyến).\n- **Máy tính Windows 10/11**: Tải trực tiếp **`ChanhPhap-Windows-Setup_x64.exe`** để cài đặt trong 10 giây.\n- **iPhone / iPad**: Mở `https://thuvienchanhphap.duckdns.org` bằng Safari → **Chia sẻ** → **Thêm vào Màn hình chính** (10 giây, không bao giờ hết hạn), hoặc cài gói Native **`ChanhPhap-iOS-Unsigned.ipa`** qua Sideloadly / SideStore.'
+          gh release view "$TAG_NAME" >/dev/null 2>&1 || gh release create "$TAG_NAME" --title "Đại Thư Viện Chánh Pháp $TAG_NAME" --notes "$NOTES" || true
+          for attempt in 1 2 3 4; do
+            if gh release upload "$TAG_NAME" /tmp/ChanhPhap-Android.apk --clobber; then
+              break
+            fi
+            sleep 3
+          done

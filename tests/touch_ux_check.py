@@ -278,7 +278,31 @@ def main():
             assert not dpage.locator('#dharma-mobile-nav').is_visible()
             assert dpage.locator('#dharma-sidebar').is_visible()
             assert dpage.locator('#dharma-companion').is_visible()
-            checks.append('Desktop 1680x950 3-column sanctuary zero-regression verified')
+
+            # Smart Cross-Platform App Download Dialog (Web Only -> Auto-Hidden in Native Shells)
+            assert dpage.locator('#dharma-download-toggle').is_visible()
+            assert dpage.locator('#home-download-app-btn').is_visible()
+            dpage.locator('#dharma-download-toggle').click()
+            assert dpage.evaluate("document.getElementById('dharma-app-download-dialog').open")
+            apk_href = dpage.locator('#app-dl-android-apk').get_attribute('href') or ''
+            ipa_href = dpage.locator('#app-dl-ios-ipa').get_attribute('href') or ''
+            exe_href = dpage.locator('#app-dl-win-exe').get_attribute('href') or ''
+            assert apk_href.endswith('/releases/latest/download/ChanhPhap-Android.apk'), apk_href
+            assert ipa_href.endswith('/releases/latest/download/ChanhPhap-iOS-Unsigned.ipa'), ipa_href
+            assert exe_href.endswith('/releases/latest/download/ChanhPhap-Windows-Setup_x64.exe'), exe_href
+            dpage.locator('#app-dl-close').click()
+            assert not dpage.evaluate("document.getElementById('dharma-app-download-dialog').open")
+
+            dpage.evaluate(
+                """() => {
+                    document.documentElement.classList.add('cp-native-app');
+                    window.TouchUX.syncAppDownloadVisibility();
+                }"""
+            )
+            assert not dpage.locator('#dharma-download-toggle').is_visible()
+            assert not dpage.locator('#home-download-app-btn').is_visible()
+            assert dpage.evaluate('window.TouchUX.openAppDownloadDialog()') is False
+            checks.append('Desktop 1680x950 sanctuary + Smart App Download Dialog (Web-only, Native-hidden) verified')
             desk_ctx.close()
 
             browser.close()

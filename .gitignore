@@ -28,3 +28,12 @@ desktop-windows/staging/
 desktop-windows/dist/
 desktop-windows/src-tauri/target/
 desktop-windows/src-tauri/gen/
+
+# Signing keys & certificates (never commit private keys)
+*.p12
+*.jks
+*.keystore
+*.pfx
+*.mobileprovision
+*.p8
+signing/

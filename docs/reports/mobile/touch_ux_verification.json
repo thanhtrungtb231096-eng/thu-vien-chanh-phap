@@ -10,6 +10,6 @@
     "Compact floating Mini-Player & Swipe-Up Now Playing sheet verified",
     "Reader Aa Bottom Sheet, Tap-Center Zen Mode & Hardware Back Stack verified",
     "iPad Portrait Drawer & Landscape Collapsible Labeled Rail (214px <-> 82px) verified",
-    "Desktop 1680x950 3-column sanctuary zero-regression verified"
+    "Desktop 1680x950 sanctuary + Smart App Download Dialog (Web-only, Native-hidden) verified"
   ]
 }

@@ -1,5 +1,5 @@
 /* Only public assets and explicitly selected editions are cached. Personal APIs stay private. */
-const SHELL = 'cp-shell-ux-20261010-75edef202ca3', BOOKS = 'cp-offline-books-v1';
+const SHELL = 'cp-shell-ux-20261010-f9597895c615', BOOKS = 'cp-offline-books-v1';
 self.addEventListener('install', event => event.waitUntil((async () => {
   const staging=SHELL+'-install';
   try {
