@@ -1,6 +1,6 @@
 {
-  "version": "ux-20261010-f9597895c615",
-  "generatedAt": "2026-11-15T18:09:41.501749+00:00",
+  "version": "ux-20261010-0a8c16d2a773",
+  "generatedAt": "2026-11-18T14:25:09.825732+00:00",
   "documents": 5348,
   "passages": 3395798,
   "indexGeneratedAt": "2026-10-09T18:25:18.029589+00:00",
@@ -62,7 +62,7 @@
     "js/reader.js": "3abefb7d7fba89d7dbb0011a8116673bcf97292b3826eaca3306489051ff7d61",
     "js/sutra-context.js": "b8d19f98e227a1e8594e55c8ce85c303444a84dd0aed6880a7786b86825a6af3",
     "js/sutra-formatter.js": "4cdd49e8514cdd8c53c21057e62bd56de1e4948bc5fd275798e2cb25f2b57902",
-    "js/touch-ux.js": "b640972ffe65ca6314fb527f591adf5a304d39835a8c83820f76bd005248171b",
+    "js/touch-ux.js": "e5064f0adfc8b7ffd4669a23f5daf47f49743c6d82ccd14c6d0d600b2c386edc",
     "css/buddhist-sanctuary.css": "062a892a0e8bc0b87c97057f9a3e9914d13b753f6833638e56eb2a43832823e8",
     "css/canon-gallery.css": "b65b753af131f17d301e214a29538f3f8af86ee175c1210a18bc868de60ba7c5",
     "css/content-modules.css": "034e8020815113d634ae3e3459bf284f4f3948f9dffe31a4185d70ceccf441eb",
@@ -73,7 +73,7 @@
     "css/learning-path.css": "b451f7fd7aa1f9677c130f070f2ba89cc28618e66f180f4d3950db6cd5def3b3",
     "css/library-design.css": "2a475699db0a62bcc0c6d4e5ffdbae9ab2eaee0144152754b3044b7af1f87b0a",
     "css/library-upgrades.css": "b309a7d0573b85f9398e0e04bf56e0f14e859176baf617c0dbb5343761fbf285",
-    "css/library.bundle.css": "740b3d4a403f80a0a86f1a1b05d5ca881f31bc9e65b0360d8293c31454830342",
+    "css/library.bundle.css": "bc4dda787f14f2cdcddddbbe92d8b60ebf6f069ee788f06436a431fbcd7f1c5e",
     "css/listening-history.css": "ebac06ef68206fa6c68688088d8792dd3030ce8cc90e8af1adc30d42d386b229",
     "css/main.css": "0c2c88c6561dabdaf05c2681c1eea2747db8c8c21e08ef1a3eb8b06e29fcd15e",
     "css/mobile-safe-area.css": "85eefe1e35a350df9382c41987e6ff2cc6ed4db8e5f2aa4b8e9917d863d73cdf",
@@ -85,9 +85,9 @@
     "css/sanctuary.css": "ff9ab697d30cc4000edf9906bc44665426ab86ea527a5336179cb4c6165518a7",
     "css/spotify-theme.css": "d9e49d213aeee87eb0d44d120d50b8343ee62bc0c968ed4246e68b63b48201b4",
     "css/tokens.css": "f35c10f7fffc9d45fd8ccd2d6d885957dd325cfc51d3367e766afa801b27960a",
-    "css/touch-ux.css": "54472d1b357a69d99bf48cf61779fb9e9f0501ec6328d4fa259e4d688fb38806",
+    "css/touch-ux.css": "b4eff958587f48a9001c35752e98b582dbadd18a9671c09fcb11d9ba0a5ead35",
     "css/unified-player.css": "549b66ceb8b035b9c3e8e9c73c771c0ce7729240fff3dcdc8de53b66e14291df",
-    "index.html": "bc83992c4fe37c12da75009cb5c10e69ce503a0dbbf44efdfac4add84bfb6525",
-    "sw.js": "8c8f720f9e13748eec309f10e19a0259ae9fb62b9df941fc15b5ec9e807925f6"
+    "index.html": "8619f62dc96e648d7365194992eb811fa61a4ed66d3119e1a55a2ba1104cdc71",
+    "sw.js": "5739f23b64362bfb7cf0daed5cc4d3b704c13768728aa19e05642001e182dbca"
   }
 }

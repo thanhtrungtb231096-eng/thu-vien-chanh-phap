@@ -290,6 +290,18 @@ def main():
             assert apk_href.endswith('/releases/latest/download/ChanhPhap-Android.apk'), apk_href
             assert ipa_href.endswith('/releases/latest/download/ChanhPhap-iOS-Unsigned.ipa'), ipa_href
             assert exe_href.endswith('/releases/latest/download/ChanhPhap-Windows-Setup_x64.exe'), exe_href
+
+            # Smart Interactive iOS Installation Guide & In-App Webview Handling
+            assert dpage.locator('#app-dl-ios-visual-btn').is_visible()
+            dpage.locator('#app-dl-ios-visual-btn').click()
+            assert not dpage.evaluate("document.getElementById('dharma-app-download-dialog').open")
+            assert dpage.evaluate("!document.getElementById('ios-install-guide-overlay').hasAttribute('hidden')")
+            assert dpage.locator('#ios-guide-safari-box').is_visible()
+            assert dpage.locator('.ios-bottom-arrow-bounce').is_visible()
+            assert dpage.evaluate('TouchUX.handleBackButton()') is True
+            assert dpage.evaluate("document.getElementById('ios-install-guide-overlay').hasAttribute('hidden')")
+
+            dpage.locator('#dharma-download-toggle').click()
             dpage.locator('#app-dl-close').click()
             assert not dpage.evaluate("document.getElementById('dharma-app-download-dialog').open")
 

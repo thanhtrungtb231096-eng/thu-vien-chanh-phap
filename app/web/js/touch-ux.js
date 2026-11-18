@@ -227,9 +227,15 @@
     });
 
     document.addEventListener('keydown', e => {
-      if (e.key === 'Escape' && document.body.classList.contains('dharma-drawer-open')) {
-        e.preventDefault();
-        closeDrawer({ restoreFocus: true });
+      if (e.key === 'Escape') {
+        if (closeIosInstallGuide()) {
+          e.preventDefault();
+          return;
+        }
+        if (document.body.classList.contains('dharma-drawer-open')) {
+          e.preventDefault();
+          closeDrawer({ restoreFocus: true });
+        }
       }
     });
 
@@ -582,6 +588,7 @@
   function openAppDownloadDialog() {
     if (isNativeAppShell()) return false;
     closeDrawer({ restoreFocus: false });
+    closeIosInstallGuide();
     document.querySelectorAll('dialog[open]').forEach(d => {
       if (d.id !== 'dharma-app-download-dialog') d.close();
     });
@@ -615,6 +622,34 @@
     if (pwaNote) pwaNote.hidden = !pwaInstalled;
 
     if (!dlg.open) dlg.showModal();
+    return true;
+  }
+
+  function openIosInstallGuide() {
+    if (isNativeAppShell()) return false;
+    const dlg = $('dharma-app-download-dialog');
+    if (dlg?.open) dlg.close();
+    closeDrawer({ restoreFocus: false });
+
+    const overlay = $('ios-install-guide-overlay');
+    if (!overlay) return false;
+
+    const inApp = isInAppWebView();
+    const inAppCard = $('ios-guide-inapp-box');
+    const safariCard = $('ios-guide-safari-box');
+    if (inAppCard) inAppCard.hidden = !inApp;
+    if (safariCard) safariCard.hidden = inApp;
+
+    overlay.removeAttribute('hidden');
+    overlay.classList.add('active');
+    return true;
+  }
+
+  function closeIosInstallGuide() {
+    const overlay = $('ios-install-guide-overlay');
+    if (!overlay || overlay.hasAttribute('hidden')) return false;
+    overlay.classList.remove('active');
+    overlay.setAttribute('hidden', '');
     return true;
   }
 
@@ -665,12 +700,44 @@
                 <span class="app-dl-os-tag">IPHONE &amp; IPAD · iOS / iPadOS</span>
                 <span class="app-dl-device-badge" hidden>Thiết bị của bạn</span>
               </div>
-              <h3>Cài lên Màn hình chính iPhone (10 giây · Không hết hạn)</h3>
-              <ol class="app-dl-steps">
-                <li>Mở trang này bằng trình duyệt <strong>Safari</strong> trên iPhone hoặc iPad.</li>
-                <li>Chạm nút <strong>Chia sẻ</strong> (ô vuông có mũi tên lên <strong>↑</strong> ở thanh dưới).</li>
-                <li>Cuộn xuống chọn <strong>Thêm vào Màn hình chính</strong> → bấm <strong>Thêm</strong>.</li>
-              </ol>
+              <h3>Cài Đặt Lên Màn Hình iPhone (10 Giây · Không Hết Hạn)</h3>
+              <p>Chạy toàn màn hình như App bản địa, mở đọc và nghe kinh ngoại tuyến không cần mạng, không bị giới hạn 7 ngày.</p>
+              
+              <div class="app-dl-actions">
+                <button type="button" id="app-dl-ios-visual-btn" class="r-primary app-dl-btn ios-visual-guide-btn">
+                  📲 Bấm Xem Hướng Dẫn Cài Trực Tiếp (3 Giây)
+                </button>
+              </div>
+
+              <div class="ios-card-visual-preview" role="button" tabindex="0" aria-label="Xem chỉ dẫn cài đặt trực tiếp lên iPhone">
+                <div class="ios-preview-step">
+                  <span class="ios-preview-icon">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+                      <polyline points="16 6 12 2 8 6"/>
+                      <line x1="12" y1="2" x2="12" y2="15"/>
+                    </svg>
+                  </span>
+                  <span>1. Nút Chia sẻ</span>
+                </div>
+                <span class="ios-preview-arrow" aria-hidden="true">→</span>
+                <div class="ios-preview-step">
+                  <span class="ios-preview-icon">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="3" y="3" width="18" height="18" rx="4"/>
+                      <line x1="12" y1="8" x2="12" y2="16"/>
+                      <line x1="8" y1="12" x2="16" y2="12"/>
+                    </svg>
+                  </span>
+                  <span>2. Thêm vào MH chính</span>
+                </div>
+                <span class="ios-preview-arrow" aria-hidden="true">→</span>
+                <div class="ios-preview-step">
+                  <span class="ios-preview-icon">✓</span>
+                  <span>3. Bấm Thêm</span>
+                </div>
+              </div>
+
               <details class="app-dl-ipa-more">
                 <summary>Tùy chọn nâng cao: Tải gói Native <code>.ipa</code> (chạy chip AI nội bộ)</summary>
                 <p>Dành cho Phật tử dùng máy tính cài miễn phí qua <a href="https://sideloadly.io/" target="_blank" rel="noopener">Sideloadly</a> hoặc <a href="https://sidestore.io/" target="_blank" rel="noopener">SideStore</a> bằng Apple ID cá nhân:</p>
@@ -724,6 +791,135 @@
       });
       attachSheetSwipeDismiss(dlg, () => dlg.close());
     }
+
+    if (!$('ios-install-guide-overlay')) {
+      document.body.insertAdjacentHTML('beforeend', `
+        <div id="ios-install-guide-overlay" class="ios-install-guide-overlay" hidden aria-modal="true" role="dialog" aria-label="Chỉ dẫn cài đặt Chánh Pháp lên iPhone">
+          <!-- Card when inside Zalo / Facebook In-App Browser -->
+          <div id="ios-guide-inapp-box" class="ios-guide-box ios-guide-inapp" hidden>
+            <div class="ios-guide-top-pointer" aria-hidden="true">
+              <span>Nhìn lên góc trên bên phải</span>
+              <svg class="ios-top-arrow" viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="7" y1="17" x2="17" y2="7"/>
+                <polyline points="7 7 17 7 17 17"/>
+              </svg>
+            </div>
+            <div class="ios-guide-card-content">
+              <div class="ios-guide-card-head">
+                <span class="ios-guide-badge warning">ĐANG MỞ TRONG ZALO / FACEBOOK</span>
+                <button type="button" class="dp-icon ios-guide-close-btn" aria-label="Đóng hướng dẫn">${icon('close')}</button>
+              </div>
+              <h3>Mở Bằng Safari Để Thêm Vào Màn Hình iPhone</h3>
+              <p>Trình duyệt nhúng trong Zalo / Facebook không cho phép thêm ứng dụng. Bạn chỉ cần 2 thao tác:</p>
+              <ol class="ios-guide-inapp-steps">
+                <li>Nhìn lên góc trên bên phải, chạm nút <strong>⋯</strong> (hoặc biểu tượng La bàn / Chia sẻ).</li>
+                <li>Chọn <strong>"Mở bằng trình duyệt" (Safari)</strong>.</li>
+              </ol>
+              <div class="ios-guide-inapp-actions">
+                <button type="button" id="ios-copy-link-btn" class="r-primary app-dl-btn">📋 Sao Chép Link Để Dán Vào Safari</button>
+                <button type="button" class="r-button ios-guide-close-btn">Đóng</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card when in normal Safari browser -->
+          <div id="ios-guide-safari-box" class="ios-guide-box ios-guide-safari">
+            <div class="ios-guide-card-content">
+              <div class="ios-guide-card-head">
+                <div class="ios-guide-brand">
+                  <span class="ios-guide-badge">CHỈ DẪN IPHONE (10 GIÂY)</span>
+                </div>
+                <button type="button" class="dp-icon ios-guide-close-btn" aria-label="Đóng hướng dẫn">${icon('close')}</button>
+              </div>
+              <h3>Thêm Chánh Pháp Vào Màn Hình Chính</h3>
+              <p class="ios-guide-desc">Cài đặt trực tiếp miễn phí, mở đọc &amp; nghe kinh toàn màn hình như App bản địa:</p>
+              
+              <div class="ios-guide-steps-list">
+                <div class="ios-guide-step-row">
+                  <div class="ios-step-badge">1</div>
+                  <div class="ios-step-icon-wrap">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+                      <polyline points="16 6 12 2 8 6"/>
+                      <line x1="12" y1="2" x2="12" y2="15"/>
+                    </svg>
+                  </div>
+                  <div class="ios-step-info">
+                    <strong>Chạm nút Chia sẻ</strong>
+                    <span>Biểu tượng ô vuông có mũi tên lên ở thanh dưới Safari</span>
+                  </div>
+                </div>
+
+                <div class="ios-guide-step-row">
+                  <div class="ios-step-badge">2</div>
+                  <div class="ios-step-icon-wrap">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="3" y="3" width="18" height="18" rx="4"/>
+                      <line x1="12" y1="8" x2="12" y2="16"/>
+                      <line x1="8" y1="12" x2="16" y2="12"/>
+                    </svg>
+                  </div>
+                  <div class="ios-step-info">
+                    <strong>Thêm vào Màn hình chính</strong>
+                    <span>Cuộn xuống dưới danh sách chọn "Thêm vào MH chính"</span>
+                  </div>
+                </div>
+
+                <div class="ios-guide-step-row">
+                  <div class="ios-step-badge">3</div>
+                  <div class="ios-step-icon-wrap check">✓</div>
+                  <div class="ios-step-info">
+                    <strong>Bấm nút "Thêm"</strong>
+                    <span>Ở góc trên bên phải màn hình để hoàn tất</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Animated pointer bouncing toward Safari's bottom toolbar -->
+              <div class="ios-guide-bottom-pointer" aria-hidden="true">
+                <div class="ios-bottom-arrow-bounce">
+                  <span>Nhìn xuống thanh công cụ Safari bên dưới</span>
+                  <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19"/>
+                    <polyline points="19 12 12 19 5 12"/>
+                  </svg>
+                </div>
+              </div>
+
+              <div class="ios-guide-safari-footer">
+                <button type="button" class="r-primary app-dl-btn ios-guide-close-btn" style="width:100%;">
+                  Đã Hiểu, Tôi Sẽ Làm Ngay
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `);
+
+      const overlay = $('ios-install-guide-overlay');
+      overlay.querySelectorAll('.ios-guide-close-btn').forEach(b => {
+        b.onclick = closeIosInstallGuide;
+      });
+      overlay.addEventListener('click', e => {
+        if (e.target === overlay) closeIosInstallGuide();
+      });
+      $('ios-copy-link-btn')?.addEventListener('click', async e => {
+        const btn = e.currentTarget;
+        try {
+          await navigator.clipboard.writeText(window.location.href);
+          btn.textContent = '✓ Đã Sao Chép! Hãy Mở Safari';
+          window.DharmaPlayerStore?.message?.('Đã sao chép liên kết! Bạn hãy mở Safari và dán vào thanh địa chỉ.');
+        } catch {
+          window.DharmaPlayerStore?.message?.('Liên kết thư viện: ' + window.location.href);
+        }
+      });
+    }
+
+    $('app-dl-ios-visual-btn')?.addEventListener('click', openIosInstallGuide);
+    document.querySelector('.ios-card-visual-preview')?.addEventListener('click', openIosInstallGuide);
+    document.querySelector('.ios-card-visual-preview')?.addEventListener('keydown', e => {
+      if (['Enter', ' '].includes(e.key)) { e.preventDefault(); openIosInstallGuide(); }
+    });
 
     // 1. Header quick button (Desktop / Tablet >= 768px)
     const headerContainer = document.querySelector('.header-container');
@@ -964,6 +1160,11 @@
   }
 
   function handleBackButton() {
+    // 0. Active iOS Install Guide Overlay
+    if (closeIosInstallGuide()) {
+      return true;
+    }
+
     // 1. Open modal dialog / Bottom Sheet
     const openDialog = document.querySelector('dialog[open]');
     if (openDialog) {
@@ -1037,6 +1238,8 @@
     toggleDrawer,
     openCanonsSheet,
     openAppDownloadDialog,
+    openIosInstallGuide,
+    closeIosInstallGuide,
     syncAppDownloadVisibility,
     setReaderZen,
     handleBackButton,

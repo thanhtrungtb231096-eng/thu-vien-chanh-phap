@@ -1,4 +1,4 @@
-﻿# Dong bo ma nguon len GitHub de kich hoat Cloud Build (iOS .ipa, Android .apk, Windows .exe & Microsoft Store .msix)
+# Dong bo ma nguon len GitHub de kich hoat Cloud Build (iOS .ipa, Android .apk, Windows .exe & Microsoft Store .msix)
 param(
     [string]$RepoUrl = '',
     [switch]$NoReleaseTag
