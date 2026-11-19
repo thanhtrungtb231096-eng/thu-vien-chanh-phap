@@ -2,19 +2,19 @@
 (() => {
   'use strict';
   const root = globalThis;
-  const config = {prefetchDepth:3, stallTimeoutMs:15000, progressive:true, buffered:true,
-    bufferSeconds:45, prefetchMax:12, prefetchConcurrency:2, startupBufferSeconds:6, startupWaitMs:1500,
+  const config = {prefetchDepth:4, stallTimeoutMs:15000, progressive:true, buffered:true,
+    bufferSeconds:90, prefetchMax:24, prefetchConcurrency:2, startupBufferSeconds:6, startupWaitMs:1500,
     offlineFallback:true, streamLongForeground:false, packCdnUrl:''};
   function configure(value={}) {
     if (!value || typeof value !== 'object') return;
-    if (Number.isInteger(value.prefetchDepth) && value.prefetchDepth>=0 && value.prefetchDepth<=5) config.prefetchDepth=value.prefetchDepth;
+    if (Number.isInteger(value.prefetchDepth) && value.prefetchDepth>=0 && value.prefetchDepth<=10) config.prefetchDepth=value.prefetchDepth;
     if (Number.isFinite(value.stallTimeoutMs) && value.stallTimeoutMs>=1000 && value.stallTimeoutMs<=60000) config.stallTimeoutMs=value.stallTimeoutMs;
     if (typeof value.progressive==='boolean') config.progressive=value.progressive;
     if (typeof value.buffered==='boolean') config.buffered=value.buffered;
     if (typeof value.offlineFallback==='boolean') config.offlineFallback=value.offlineFallback;
     if (typeof value.streamLongForeground==='boolean') config.streamLongForeground=value.streamLongForeground;
     if (typeof value.packCdnUrl==='string') config.packCdnUrl=value.packCdnUrl.trim().replace(/\/+$/,'');
-    for (const [key,min,max] of [['bufferSeconds',5,120],['prefetchMax',3,20],['prefetchConcurrency',1,3],['startupBufferSeconds',0,45],['startupWaitMs',0,20000]]) {
+    for (const [key,min,max] of [['bufferSeconds',5,300],['prefetchMax',3,60],['prefetchConcurrency',1,3],['startupBufferSeconds',0,45],['startupWaitMs',0,20000]]) {
       if(Number.isInteger(value[key]) && value[key]>=min && value[key]<=max) config[key]=value[key];
     }
   }
@@ -298,11 +298,284 @@
     }
     return null;
   }
+  const MP3_BITRATES_V1 = [0, 32, 40, 48, 56, 64, 80, 96, 112, 128, 160, 192, 224, 256, 320, 0];
+  const MP3_BITRATES_V2 = [0, 8, 16, 24, 32, 40, 48, 56, 64, 80, 96, 112, 128, 144, 160, 0];
+  const MP3_RATES = { 3: [44100, 48000, 32000], 2: [22050, 24000, 16000], 0: [11025, 12000, 8000] };
+  let cachedKeepAliveUrl = null;
+
+  function buildWavHeader(dataBytes, sampleRate, channels, bitsPerSample) {
+    const blockAlign = channels * (bitsPerSample >> 3);
+    const byteRate = sampleRate * blockAlign;
+    const hdr = new ArrayBuffer(44);
+    const v = new DataView(hdr);
+    const w = (off, str) => { for (let i = 0; i < str.length; i++) v.setUint8(off + i, str.charCodeAt(i)); };
+    w(0, 'RIFF'); v.setUint32(4, 36 + dataBytes, true); w(8, 'WAVE');
+    w(12, 'fmt '); v.setUint32(16, 16, true); v.setUint16(20, 1, true);
+    v.setUint16(22, channels, true); v.setUint32(24, sampleRate, true);
+    v.setUint32(28, byteRate, true); v.setUint16(32, blockAlign, true);
+    v.setUint16(34, bitsPerSample, true);
+    w(36, 'data'); v.setUint32(40, dataBytes, true);
+    return new Uint8Array(hdr);
+  }
+
+  function silentKeepAliveUrl() {
+    if (cachedKeepAliveUrl) return cachedKeepAliveUrl;
+    if (typeof URL === 'undefined' || typeof URL.createObjectURL !== 'function') return null;
+    const sampleRate = 8000, seconds = 2, dataBytes = sampleRate * seconds * 2;
+    const hdr = buildWavHeader(dataBytes, sampleRate, 1, 16);
+    const pcm = new Uint8Array(dataBytes);
+    cachedKeepAliveUrl = URL.createObjectURL(new Blob([hdr, pcm], { type: 'audio/wav' }));
+    return cachedKeepAliveUrl;
+  }
+
+  function hasAsciiToken(bytes, start, end, token) {
+    const lim = Math.min(bytes.length, end) - token.length;
+    for (let i = start; i <= lim; i++) {
+      let ok = true;
+      for (let k = 0; k < token.length; k++) {
+        if (bytes[i + k] !== token.charCodeAt(k)) { ok = false; break; }
+      }
+      if (ok) return true;
+    }
+    return false;
+  }
+
+  function inspectAudioBytes(bytes) {
+    if (!(bytes instanceof Uint8Array) || bytes.length < 44) return null;
+    // 1. RIFF WAVE PCM parser
+    if (bytes[0] === 0x52 && bytes[1] === 0x49 && bytes[2] === 0x46 && bytes[3] === 0x46
+        && bytes[8] === 0x57 && bytes[9] === 0x41 && bytes[10] === 0x56 && bytes[11] === 0x45) {
+      const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+      let pos = 12, fmt = null, dataOffset = -1, dataLen = 0;
+      while (pos + 8 <= bytes.length) {
+        const id = String.fromCharCode(bytes[pos], bytes[pos + 1], bytes[pos + 2], bytes[pos + 3]);
+        const sz = view.getUint32(pos + 4, true);
+        if (id === 'fmt ' && pos + 8 + 16 <= bytes.length) {
+          const audioFormat = view.getUint16(pos + 8, true);
+          const channels = view.getUint16(pos + 10, true);
+          const sampleRate = view.getUint32(pos + 12, true);
+          const byteRate = view.getUint32(pos + 16, true);
+          const blockAlign = view.getUint16(pos + 20, true);
+          const bitsPerSample = view.getUint16(pos + 22, true);
+          if (audioFormat === 1 && sampleRate >= 4000 && channels >= 1 && (bitsPerSample === 16 || bitsPerSample === 8) && byteRate > 0 && blockAlign > 0) {
+            fmt = { channels, sampleRate, byteRate, blockAlign, bitsPerSample };
+          }
+        } else if (id === 'data') {
+          dataOffset = pos + 8;
+          dataLen = Math.min(sz, bytes.length - dataOffset);
+          break;
+        }
+        pos += 8 + sz + (sz & 1);
+      }
+      if (fmt && dataOffset >= 0 && dataLen >= fmt.blockAlign) {
+        const aligned = dataLen - (dataLen % fmt.blockAlign);
+        return {
+          kind: 'wav',
+          mime: 'audio/wav',
+          duration: aligned / fmt.byteRate,
+          sampleRate: fmt.sampleRate,
+          channels: fmt.channels,
+          bitsPerSample: fmt.bitsPerSample,
+          blockAlign: fmt.blockAlign,
+          byteRate: fmt.byteRate,
+          slices: [bytes.subarray(dataOffset, dataOffset + aligned)],
+        };
+      }
+    }
+
+    // 2. MPEG-1/2/2.5 Layer III frame scanner
+    let pos = 0, limit = bytes.length;
+    if (bytes[0] === 0x49 && bytes[1] === 0x44 && bytes[2] === 0x33 && bytes.length >= 10) {
+      const id3Size = ((bytes[6] & 0x7f) << 21) | ((bytes[7] & 0x7f) << 14) | ((bytes[8] & 0x7f) << 7) | (bytes[9] & 0x7f);
+      pos = Math.min(limit, 10 + id3Size);
+    }
+    if (limit - pos >= 128 && bytes[limit - 128] === 0x54 && bytes[limit - 127] === 0x41 && bytes[limit - 126] === 0x47) {
+      limit -= 128;
+    }
+
+    let totalSamples = 0, frames = 0, refVer = -1, refRate = 0, refCh = 0, refKbps = 0, refH = null;
+    const slices = [];
+    let runStart = -1, runEnd = -1;
+
+    while (pos + 4 <= limit) {
+      if (bytes[pos] !== 0xFF || (bytes[pos + 1] & 0xE0) !== 0xE0) {
+        pos++;
+        continue;
+      }
+      const b1 = bytes[pos + 1], b2 = bytes[pos + 2], b3 = bytes[pos + 3];
+      const ver = (b1 >> 3) & 3;
+      const layer = (b1 >> 1) & 3;
+      const brIdx = (b2 >> 4) & 0x0F;
+      const srIdx = (b2 >> 2) & 3;
+      const padding = (b2 >> 1) & 1;
+      if (ver === 1 || layer !== 1 || brIdx === 0 || brIdx === 15 || srIdx === 3) {
+        pos++;
+        continue;
+      }
+      const kbps = ver === 3 ? MP3_BITRATES_V1[brIdx] : MP3_BITRATES_V2[brIdx];
+      const sampleRate = MP3_RATES[ver]?.[srIdx] || 0;
+      if (!kbps || !sampleRate) { pos++; continue; }
+      const samplesPerFrame = ver === 3 ? 1152 : 576;
+      const frameLen = Math.floor(((samplesPerFrame / 8) * kbps * 1000) / sampleRate) + padding;
+      if (frameLen < 24 || pos + frameLen > limit) break;
+      const ch = ((b3 >> 6) & 3) === 3 ? 1 : 2;
+      if (refRate && (sampleRate !== refRate || ver !== refVer)) { pos++; continue; }
+
+      // Skip VBR Xing/Info/VBRI header frame so stitched streams never report truncated frame counts on iOS
+      if (frames === 0 && (hasAsciiToken(bytes, pos + 4, pos + frameLen, 'Xing')
+          || hasAsciiToken(bytes, pos + 4, pos + frameLen, 'Info')
+          || hasAsciiToken(bytes, pos + 4, pos + frameLen, 'VBRI'))) {
+        pos += frameLen;
+        continue;
+      }
+
+      if (!refRate) {
+        refVer = ver; refRate = sampleRate; refCh = ch; refKbps = kbps;
+        refH = [0xFF, b1 | 0x01, b2 & 0xFD, b3];
+      }
+      if (runStart < 0) { runStart = pos; runEnd = pos + frameLen; }
+      else if (pos === runEnd) { runEnd = pos + frameLen; }
+      else { slices.push(bytes.subarray(runStart, runEnd)); runStart = pos; runEnd = pos + frameLen; }
+
+      totalSamples += samplesPerFrame;
+      frames++;
+      pos += frameLen;
+    }
+    if (runStart >= 0 && runEnd > runStart) slices.push(bytes.subarray(runStart, runEnd));
+    if (frames < 2 || !refRate) return null;
+
+    const samplesPerFrame = refVer === 3 ? 1152 : 576;
+    const silentFrameLen = Math.max(24, Math.floor(((samplesPerFrame / 8) * refKbps * 1000) / refRate));
+    const silentFrame = new Uint8Array(silentFrameLen);
+    silentFrame[0] = refH[0]; silentFrame[1] = refH[1]; silentFrame[2] = refH[2]; silentFrame[3] = refH[3];
+
+    return {
+      kind: 'mp3',
+      mime: 'audio/mpeg',
+      duration: totalSamples / refRate,
+      totalSamples,
+      sampleRate: refRate,
+      channels: refCh,
+      samplesPerFrame,
+      silentFrame,
+      slices,
+    };
+  }
+
+  async function inspectBlob(blob) {
+    if (!(blob instanceof Blob) || blob.size < 44) return null;
+    try {
+      const buf = await blob.arrayBuffer();
+      return inspectAudioBytes(new Uint8Array(buf));
+    } catch {
+      return null;
+    }
+  }
+
+  async function padSilence(blob, pauseBeforeMs = 0) {
+    const info = await inspectBlob(blob);
+    if (!info) return { blob, duration: 0, speechOffset: 0 };
+    const ms = Math.max(0, Number(pauseBeforeMs) || 0);
+    if (ms < 25) return { blob, duration: info.duration, speechOffset: 0 };
+
+    if (info.kind === 'wav') {
+      const gapSamples = Math.round((ms / 1000) * info.sampleRate);
+      const gapBytes = gapSamples * info.blockAlign;
+      const speechBytes = info.slices.reduce((s, a) => s + a.byteLength, 0);
+      const totalData = gapBytes + speechBytes;
+      const hdr = buildWavHeader(totalData, info.sampleRate, info.channels, info.bitsPerSample);
+      const silence = new Uint8Array(gapBytes);
+      const padded = new Blob([hdr, silence, ...info.slices], { type: 'audio/wav' });
+      return { blob: padded, duration: totalData / info.byteRate, speechOffset: gapBytes / info.byteRate };
+    }
+
+    const frameSec = info.samplesPerFrame / info.sampleRate;
+    const frameCount = Math.max(1, Math.round((ms / 1000) / frameSec));
+    const parts = [];
+    for (let i = 0; i < frameCount; i++) parts.push(info.silentFrame);
+    parts.push(...info.slices);
+    const addedSec = frameCount * frameSec;
+    return {
+      blob: new Blob(parts, { type: 'audio/mpeg' }),
+      duration: info.duration + addedSec,
+      speechOffset: addedSec,
+    };
+  }
+
+  async function stitchBlobs(entries) {
+    if (!Array.isArray(entries) || entries.length < 2) return null;
+    const parsed = [];
+    for (const item of entries) {
+      if (!(item?.blob instanceof Blob)) return null;
+      const info = await inspectBlob(item.blob);
+      if (!info) return null;
+      parsed.push({ ...item, info });
+    }
+    const first = parsed[0].info;
+    if (!parsed.every(p => p.info.kind === first.kind && p.info.sampleRate === first.sampleRate && p.info.channels === first.channels)) {
+      return null;
+    }
+
+    const cues = [];
+    if (first.kind === 'wav') {
+      if (!parsed.every(p => p.info.bitsPerSample === first.bitsPerSample)) return null;
+      const parts = [];
+      let totalDataBytes = 0;
+      for (let i = 0; i < parsed.length; i++) {
+        const cur = parsed[i];
+        const speechBytes = cur.info.slices.reduce((s, a) => s + a.byteLength, 0);
+        const nextPauseMs = i + 1 < parsed.length ? Math.max(80, Number(parsed[i + 1].pauseBeforeMs) || 80) : 120;
+        const tailBytes = Math.round((nextPauseMs / 1000) * first.sampleRate) * first.blockAlign;
+        const startSec = Math.round((totalDataBytes / first.byteRate) * 1000) / 1000;
+        const speechEndSec = Math.round(((totalDataBytes + speechBytes) / first.byteRate) * 1000) / 1000;
+        const endSec = Math.round(((totalDataBytes + speechBytes + tailBytes) / first.byteRate) * 1000) / 1000;
+        parts.push(...cur.info.slices, new Uint8Array(tailBytes));
+        totalDataBytes += speechBytes + tailBytes;
+        cues.push({ index: cur.index, start: startSec, speechEnd: speechEndSec, end: endSec });
+      }
+      const hdr = buildWavHeader(totalDataBytes, first.sampleRate, first.channels, first.bitsPerSample);
+      return {
+        blob: new Blob([hdr, ...parts], { type: 'audio/wav' }),
+        duration: Math.round((totalDataBytes / first.byteRate) * 1000) / 1000,
+        startIndex: parsed[0].index,
+        endIndex: parsed[parsed.length - 1].index,
+        cues,
+      };
+    }
+
+    // MP3 lossless frame stitching
+    const parts = [];
+    let cursorSamples = 0;
+    for (let i = 0; i < parsed.length; i++) {
+      const cur = parsed[i];
+      const segSamples = cur.info.totalSamples;
+      const nextPauseMs = i + 1 < parsed.length ? Math.max(80, Number(parsed[i + 1].pauseBeforeMs) || 80) : 120;
+      const gapFrames = Math.max(1, Math.round(((nextPauseMs / 1000) * first.sampleRate) / first.samplesPerFrame));
+      const tailSamples = gapFrames * first.samplesPerFrame;
+
+      const startSec = Math.round((cursorSamples / first.sampleRate) * 1000) / 1000;
+      const speechEndSec = Math.round(((cursorSamples + segSamples) / first.sampleRate) * 1000) / 1000;
+      const endSec = Math.round(((cursorSamples + segSamples + tailSamples) / first.sampleRate) * 1000) / 1000;
+
+      parts.push(...cur.info.slices);
+      for (let g = 0; g < gapFrames; g++) parts.push(first.silentFrame);
+      cursorSamples += segSamples + tailSamples;
+      cues.push({ index: cur.index, start: startSec, speechEnd: speechEndSec, end: endSec });
+    }
+    return {
+      blob: new Blob(parts, { type: 'audio/mpeg' }),
+      duration: Math.round((cursorSamples / first.sampleRate) * 1000) / 1000,
+      startIndex: parsed[0].index,
+      endIndex: parsed[parsed.length - 1].index,
+      cues,
+    };
+  }
+
   function report(event) {
     // Best effort; no manuscript or listening position is sent to telemetry.
     void root.fetch('/api/narration/events',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({event}),keepalive:true}).catch(()=>{});
   }
   async function request(text,voice,options={}) { options={priority:'background',...options};return download(await prepare(text,voice,options),options); }
-  root.AudioService = {request,prepare,download,recover,completion,waitForAudio,packManifest,packCues,report,streamURL,connectionMessage,mediaMessage,configure,config};
+  root.AudioService = {request,prepare,download,recover,completion,waitForAudio,packManifest,packCues,inspectAudioBytes,inspectBlob,padSilence,stitchBlobs,silentKeepAliveUrl,report,streamURL,connectionMessage,mediaMessage,configure,config};
   if (typeof module !== 'undefined' && module.exports) module.exports = root.AudioService;
 })();

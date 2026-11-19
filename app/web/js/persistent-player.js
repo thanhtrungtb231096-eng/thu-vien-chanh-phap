@@ -29,7 +29,7 @@
   function fmt(s) { return `${Math.floor((s || 0) / 60)}:${String(Math.floor((s || 0) % 60)).padStart(2, '0')}`; }
   let lyricKey = '', lyricStart = -1, lastIndex = -1, captured = null, noteSignature = '', contextKey = '', queueSignature = '';
   let audioContext, rainSource, rainGain, lastVolume = 1;
-  let lastMessage = '', noticeTimer;
+  let lastMessage = '', noticeTimer, scrubbingSeek = false;
   let glossaryText = '';
   let readerExpanded = false, readerMounted = false;
   const compactReader = matchMedia('(max-width: 767px)');
@@ -102,9 +102,21 @@
     $('dp-prev').onclick = $('dp-now-prev').onclick = () => Audiobook.seekChunk(Audiobook.state.index - 1, 0, ['playing', 'loading'].includes(Audiobook.state.status));
     $('dp-next').onclick = $('dp-now-next').onclick = () => P.next();
     $('dp-now-play').onclick = () => P.toggle();
-    $('dp-back').onclick = () => Audiobook.seekTime(Audiobook.state.currentTime - 10);
-    $('dp-forward').onclick = () => Audiobook.seekTime(Audiobook.state.currentTime + 10);
-    $('dp-seek').oninput = e => Audiobook.seekTime(Number(e.target.value));
+    $('dp-back').onclick = () => Audiobook.skipSeconds ? Audiobook.skipSeconds(-10) : Audiobook.seekTime(Audiobook.state.currentTime - 10);
+    $('dp-forward').onclick = () => Audiobook.skipSeconds ? Audiobook.skipSeconds(10) : Audiobook.seekTime(Audiobook.state.currentTime + 10);
+    $('dp-seek').addEventListener('pointerdown', () => { scrubbingSeek = true; });
+    $('dp-seek').oninput = e => {
+      const val = Number(e.target.value) || 0, max = Number($('dp-seek').max) || 1;
+      $('dp-time').textContent = fmt(val);
+      $('dp-seek').style.setProperty('--progress', `${max ? (val / max) * 100 : 0}%`);
+    };
+    $('dp-seek').onchange = e => {
+      scrubbingSeek = false;
+      const val = Number(e.target.value) || 0;
+      if (Audiobook.seekChapterTime) Audiobook.seekChapterTime(val);
+      else Audiobook.seekTime(val);
+    };
+    window.addEventListener('pointerup', () => { if (scrubbingSeek) scrubbingSeek = false; }, { passive: true });
     $('dp-mute').onclick = () => { const volume = Audiobook.state.volume; if (volume) lastVolume = volume; Audiobook.setVolume(volume ? 0 : lastVolume); };
     $('dp-repeat').onclick = () => { const modes = ['off', 'all', 'one']; Audiobook.setRepeat(modes[(modes.indexOf(Audiobook.state.repeatMode) + 1) % 3], $('dp-mala').value); };
     $('dp-ab').onclick = () => Audiobook.toggleRepeat();
@@ -215,9 +227,10 @@
   function openNow() { if (!$('dp-now').open) $('dp-now').showModal(); renderLyrics(P.state, true); }
   function renderLyrics(state, force = false) {
     if (!$('dp-now').open) return;
-    const index = state.playback.index || 0, start = Math.max(0, index - 8);
+    const s = state.playback || {}, index = s.index || 0, start = Math.max(0, index - 8);
     $('dp-now-title').textContent = state.item?.title || 'Lắng lại cùng một lời kinh';
-    $('dp-now-meta').textContent = state.playback.voiceLabel ? state.playback.voiceLabel + ' · Bản tiếng Việt' : 'Chọn một bản kinh và nhấn phát để bắt đầu.';
+    const chMeta = s.chapterCount > 1 && s.chapterTitle ? `${s.chapterTitle} (Phần ${(s.chapterIndex || 0) + 1}/${s.chapterCount})` : (s.chapterTitle || 'Bản tiếng Việt');
+    $('dp-now-meta').textContent = s.voiceLabel ? `${chMeta} · ${s.voiceLabel}` : 'Chọn một bản kinh và nhấn phát để bắt đầu.';
     if (force || lyricKey !== state.item?.key || index < lyricStart || index >= lyricStart + 30) {
       lyricKey = state.item?.key; lyricStart = start;
       $('dp-verses').replaceChildren();
@@ -227,7 +240,8 @@
     $('dp-verses').querySelectorAll('.dp-verse').forEach(b => { const active = Number(b.dataset.index) === index; b.classList.toggle('is-reading', active); b.setAttribute('aria-current', String(active)); });
     if (force || lastIndex !== index) $('dp-verses').querySelector('.is-reading')?.scrollIntoView({ block: 'start', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
     lastIndex = index;
-    $('dp-now-position').textContent = `Đoạn ${state.chunks.length ? index + 1 : 0} / ${state.chunks.length}${state.playback.repeatTarget ? ` · Biến ${Math.min(state.playback.repeatCount + 1, state.playback.repeatTarget)}/${state.playback.repeatTarget}` : ''}`;
+    const chDurText = s.chapterDuration > 0 ? ` · ${fmt(s.chapterTime)}/${s.chapterEstimated ? '~' : ''}${fmt(s.chapterDuration)}` : '';
+    $('dp-now-position').textContent = `${s.chapterCount > 1 ? `Phần ${(s.chapterIndex || 0) + 1}/${s.chapterCount} · ` : ''}Đoạn ${state.chunks.length ? index + 1 : 0}/${state.chunks.length}${chDurText}${s.repeatTarget ? ` · Biến ${Math.min(s.repeatCount + 1, s.repeatTarget)}/${s.repeatTarget}` : ''}`;
   }
   function paint(state) {
     if (!$('dp-play')) return;
@@ -242,26 +256,38 @@
       $('dp-cover').innerHTML = LibraryDesign.jacket(state.item, { mini: true, title: state.item?.title || 'Chánh Pháp', tone: state.item ? undefined : 0 });
     }
     const status = state.loading ? 'Đang mở kinh…' : s.status === 'loading' && /^(Kết nối giọng đọc|Đang tải lại|Đang tải tiếp|Đang chuyển|Chuyển sang|Đang đệm)/.test(s.message || '') ? s.message : { playing: 'Đang nghe', loading: 'Đang chuẩn bị giọng đọc…', paused: 'Đã tạm dừng', error: 'Chưa phát được', idle: 'Sẵn sàng' }[s.status] || 'Thính pháp mỗi ngày';
-    $('dp-subtitle').textContent = `${status}${s.count ? ` · Đoạn ${s.index + 1}/${s.count}` : ''}${s.voiceLabel ? ' · ' + s.voiceLabel : ''}`;
+    const chTag = s.chapterCount > 1 && s.chapterTitle
+      ? ` · Phần ${(s.chapterIndex || 0) + 1}/${s.chapterCount}: ${s.chapterTitle}`
+      : (s.count ? ` · Đoạn ${s.index + 1}/${s.count}` : '');
+    $('dp-subtitle').textContent = `${status}${chTag}${s.voiceLabel ? ' · ' + s.voiceLabel : ''}`;
     const sameBook = !Reader.state.item || s.key === Reader.state.key;
     const briefStatus = state.loading ? 'Đang mở' : { playing: 'Đang nghe', loading: 'Đang tải', paused: 'Tạm dừng', error: 'Lỗi phát', idle: 'Sẵn sàng' }[s.status] || 'Sẵn sàng';
     $('dp-reader-status').classList.toggle('different-book', !sameBook);
-    $('dp-reader-status').textContent = `${sameBook ? '' : (state.item?.title || 'NGHE') + ' · '}${briefStatus}${s.count ? ' · Đoạn ' + (s.index + 1) + '/' + s.count : ''}`;
+    $('dp-reader-status').textContent = `${sameBook ? '' : (state.item?.title || 'NGHE') + ' · '}${briefStatus}${s.chapterCount > 1 ? ' · Phần ' + ((s.chapterIndex || 0) + 1) + '/' + s.chapterCount : (s.count ? ' · Đoạn ' + (s.index + 1) + '/' + s.count : '')}`;
     $('dp-reader-status').title = $('dp-subtitle').textContent;
     $('audio-follow').disabled = !!s.recorded || readerMounted && (!sameBook || !['viet', 'dual'].includes(Reader.state.mode));
     $('audio-follow').closest('label').title = s.recorded ? 'Bản thu chưa có vị trí đồng bộ với văn bản.' : !sameBook && readerMounted ? 'Mở bản kinh đang nghe để theo lời kinh.' : readerMounted && !['viet', 'dual'].includes(Reader.state.mode) ? 'Chọn bản Việt hoặc đối chiếu để theo lời kinh.' : 'Tự chuyển trang theo đoạn đang nghe';
     const playLabel = active ? 'Tạm dừng nghe kinh' : state.error || s.status === 'error' ? 'Thử lại nghe kinh' : s.status === 'paused' ? 'Nghe tiếp' : 'Phát kinh';
     for (const id of ['dp-play', 'dp-now-play']) { const html = icon(active ? 'pause' : 'play'); if ($(id).innerHTML !== html) $(id).innerHTML = html; $(id).setAttribute('aria-label', playLabel); $(id).title = playLabel; $(id).setAttribute('aria-pressed', String(active)); }
-    const seekable = s.recorded || s.voice?.startsWith('online:');
-    $('dp-seek').max = s.duration || 1; if (document.activeElement !== $('dp-seek')) $('dp-seek').value = s.currentTime || 0; $('dp-seek').disabled = !s.duration || !seekable;
-    $('dp-seek').setAttribute('aria-valuetext', fmt(s.currentTime) + ' / ' + fmt(s.duration) + ' trong đoạn nghe hiện tại');
+    const seekable = s.recorded || s.voice?.startsWith('offline:') || s.voice?.startsWith('online:');
+    const chDur = s.count ? (s.chapterDuration > 0 ? s.chapterDuration : (s.duration || 1)) : 0;
+    const chTime = s.count ? (s.chapterDuration > 0 ? Math.min(chDur, s.chapterTime || 0) : (s.currentTime || 0)) : 0;
+    const chEst = s.count ? (s.chapterDuration > 0 ? s.chapterEstimated : s.durationEstimated) : false;
+    $('dp-seek').max = chDur || 1;
+    if (!scrubbingSeek && document.activeElement !== $('dp-seek')) $('dp-seek').value = chTime || 0;
+    $('dp-seek').disabled = !s.count || !chDur || !seekable;
+    $('dp-seek').setAttribute('aria-valuetext', fmt(chTime) + ' / ' + fmt(chDur) + (s.chapterCount > 1 ? ` trong phần ${(s.chapterIndex || 0) + 1}/${s.chapterCount}` : ' trong bản kinh đang nghe'));
     let segment=$('dp-segment-progress');if(!segment){segment=document.createElement('span');segment.id='dp-segment-progress';segment.className='dp-segment-progress';$('persistent-player').querySelector('.dp-center').append(segment);}
-    segment.textContent=s.count?(s.recorded?'Chương ':'Đoạn ')+(s.index+1)+'/'+s.count+' · '+fmt(s.currentTime)+'/'+(s.durationEstimated?'~':'')+fmt(s.duration):'';
-    segment.title='Thời gian của đoạn hiện tại; tiến độ toàn bản tính theo số đoạn.';
+    const partPrefix = !s.recorded && s.chapterCount > 1 ? `Phần ${(s.chapterIndex || 0) + 1}/${s.chapterCount} · ` : '';
+    segment.textContent=s.count?partPrefix+(s.recorded?'Chương ':'Đoạn ')+(s.index+1)+'/'+s.count+' · '+fmt(chTime)+'/'+(chEst?'~':'')+fmt(chDur):'';
+    segment.title='Tổng thời lượng của phần kinh hiện tại và vị trí đoạn văn đồng bộ.';
     let whole=$('dp-whole-progress');if(!whole){whole=document.createElement('progress');whole.id='dp-whole-progress';whole.setAttribute('aria-label','Tiến độ toàn bản theo số đoạn');$('dp-options-book').after(whole);}
     whole.max=s.count||1;whole.value=s.count?s.index+Math.min(1,(s.currentTime||0)/(s.duration||1)):0;
-    $('dp-seek').style.setProperty('--progress', `${s.duration ? s.currentTime / s.duration * 100 : 0}%`);
-    $('dp-time').textContent = fmt(s.currentTime); $('dp-duration').textContent = (s.durationEstimated ? '~' : '') + fmt(s.duration);
+    if (!scrubbingSeek) {
+      $('dp-seek').style.setProperty('--progress', `${chDur ? chTime / chDur * 100 : 0}%`);
+      $('dp-time').textContent = fmt(chTime);
+    }
+    $('dp-duration').textContent = (chEst ? '~' : '') + fmt(chDur);
     if (document.activeElement !== $('dp-options-volume')) $('dp-options-volume').value = s.volume ?? 1;
     if (document.activeElement !== $('dp-options-repeat')) $('dp-options-repeat').value = s.repeatMode || 'off';
     if (document.activeElement !== $('dp-mala')) $('dp-mala').value = String(s.repeatTarget || 0);
@@ -275,7 +301,7 @@
     $('dp-prev').disabled = $('dp-now-prev').disabled = !s.count || state.loading || s.index === 0;
     const collection = CollectionPlayer.state;
     $('dp-next').disabled = $('dp-now-next').disabled = !s.count || state.loading || (s.index + 1 >= s.count && !state.queue.length && !(collection.active && collection.current + 1 < collection.total));
-    $('dp-back').disabled = $('dp-forward').disabled = !s.duration || !seekable;
+    $('dp-back').disabled = $('dp-forward').disabled = !s.count || !chDur || !seekable;
     $('dp-save').setAttribute('aria-pressed', String(LibraryStore.read('favorites', []).some(x => x.key === state.item?.key)));
     const notice = state.error || (s.status === 'error' ? s.message : /^(Đã đánh dấu|Điểm B|Lặp đoạn|Đã bỏ lặp|Đã hoàn tất|Đã dừng theo)/.test(s.message || '') ? s.message : '');
     $('dp-notice-actions').hidden = !state.error && s.status !== 'error';

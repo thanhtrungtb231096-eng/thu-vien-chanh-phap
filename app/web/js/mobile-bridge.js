@@ -76,13 +76,16 @@
       repeatB: -1,
       sleepDeadlineMs: 0,
       segments: [],
+      chapters: [],
     };
+    const tauriDurations = new Map();
 
     const voiceDisplayName = v => (
       String(v || '').includes('thuc-doan') ? 'Thục Đoan · AI Nội Bộ' : 'Thiền Tâm Đức · AI Nội Bộ'
     );
 
     const clearBlobCache = () => {
+      tauriDurations.clear();
       for (const p of blobCache.values()) {
         Promise.resolve(p).then(entry => {
           if (entry?.url?.startsWith('blob:')) URL.revokeObjectURL(entry.url);
@@ -91,13 +94,27 @@
       blobCache.clear();
     };
 
+    const currentChapterProgress = () => {
+      if (!window.NarrationModel?.chapterProgress || !q.segments.length) {
+        return { chapterIndex: 0, chapterCount: 1, chapterTitle: q.bookTitle, chapterTime: q.currentTime, chapterDuration: q.duration, chapterEstimated: false };
+      }
+      return window.NarrationModel.chapterProgress(q.segments, q.chapters, q.index, q.currentTime, tauriDurations);
+    };
+
     const emitPlayback = (extra = {}) => {
+      const ch = currentChapterProgress();
       const payload = {
         bookKey: q.bookKey,
         status: q.status,
         index: q.index,
         currentTime: q.currentTime,
         duration: q.duration,
+        chapterIndex: ch.chapterIndex,
+        chapterCount: ch.chapterCount,
+        chapterTitle: ch.chapterTitle,
+        chapterTime: ch.chapterTime,
+        chapterDuration: ch.chapterDuration,
+        chapterEstimated: ch.chapterEstimated,
         voice: q.voice,
         voiceLabel: voiceDisplayName(q.voice),
         packActive: q.packActive,
@@ -108,14 +125,22 @@
 
     const syncWindowsMediaSession = () => {
       if (!('mediaSession' in navigator)) return;
-      const seg = q.segments[q.index];
+      const ch = currentChapterProgress();
+      const partBadge = ch.chapterCount > 1 ? `Phần ${ch.chapterIndex + 1}/${ch.chapterCount} · ` : '';
       try {
         navigator.mediaSession.metadata = new MediaMetadata({
-          title: seg?.heading || q.bookTitle || 'Thư Viện Chánh Pháp',
-          artist: voiceDisplayName(q.voice),
+          title: ch.chapterCount > 1 && ch.chapterTitle ? `${ch.chapterTitle} — ${q.bookTitle}` : (q.bookTitle || ch.chapterTitle || 'Thư Viện Chánh Pháp'),
+          artist: `${partBadge}${voiceDisplayName(q.voice)}`,
           album: q.bookTitle ? `${q.bookTitle} · Đại Thư Viện Chánh Pháp` : 'Đại Thư Viện Chánh Pháp',
         });
-        navigator.mediaSession.playbackState = q.status === 'playing' ? 'playing' : q.status === 'paused' ? 'paused' : 'none';
+        navigator.mediaSession.playbackState = ['playing', 'loading'].includes(q.status) ? 'playing' : q.status === 'paused' ? 'paused' : 'none';
+        if (ch.chapterDuration > 0 && navigator.mediaSession.setPositionState) {
+          navigator.mediaSession.setPositionState({
+            duration: ch.chapterDuration,
+            playbackRate: q.rate || 1,
+            position: Math.max(0, Math.min(ch.chapterTime || 0, ch.chapterDuration)),
+          });
+        }
       } catch { /* ignore unsupported metadata fields */ }
     };
 
@@ -147,16 +172,22 @@
             return { url: URL.createObjectURL(savedBlob), packActive: true };
           }
         }
-        // Tier 2: Remote VPS /api/tts stream
+        // Tier 2: Remote VPS /api/tts stream with bounded retries to preserve warm AI voice
         if (navigator.onLine !== false) {
-          const resp = await nativeFetch(`${q.remoteBaseUrl}/api/tts`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ text: seg.text, voice: q.voice, stream: false }),
-          });
-          if (resp.ok) {
-            const blob = await resp.blob();
-            return { url: URL.createObjectURL(blob), packActive: false };
+          for (let attempt = 0; attempt < 3; attempt++) {
+            try {
+              const resp = await nativeFetch(`${q.remoteBaseUrl}/api/tts`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ text: seg.text, voice: q.voice, stream: false }),
+              });
+              if (resp.ok) {
+                const blob = await resp.blob();
+                if (blob.size > 256) return { url: URL.createObjectURL(blob), packActive: false };
+              }
+              if (resp.status >= 400 && resp.status < 500 && resp.status !== 429) break;
+            } catch { /* retry transient network blip */ }
+            if (attempt < 2) await new Promise(r => setTimeout(r, 800 * (attempt + 1)));
           }
         }
         return null;
@@ -218,14 +249,17 @@
           if (gen !== runGeneration) return;
           q.status = 'playing';
           q.duration = Number.isFinite(audioEl.duration) && audioEl.duration > 0 ? audioEl.duration : 1;
+          if (q.duration > 0.1) tauriDurations.set(idx, q.duration);
           syncWindowsMediaSession();
           emitPlayback();
           return;
-        } catch { /* fallback to SAPI5 below if blocked */ }
+        } catch { /* fallback below only if device voice requested */ }
+      } else {
+        blobCache.delete(`${q.voice}|${q.rate.toFixed(2)}|${idx}|${q.segments[idx]?.text?.slice(0, 48) || ''}`);
       }
 
-      // Tier 3: Windows built-in SpeechSynthesis (OneCore/SAPI5) offline fallback
-      if ('speechSynthesis' in window) {
+      // Only use system SpeechSynthesis if explicitly selected; keep AI voice consistent otherwise
+      if (String(q.voice || '').startsWith('device:') && 'speechSynthesis' in window) {
         window.speechSynthesis.cancel();
         const u = new SpeechSynthesisUtterance(q.segments[idx].text);
         u.lang = 'vi-VN';
@@ -239,7 +273,7 @@
         window.speechSynthesis.speak(u);
       } else {
         q.status = 'error';
-        emitPlayback({ message: 'Hãy tải Gói Giọng Đọc AI Nội Bộ trong Kho Ngoại Tuyến hoặc bật mạng.' });
+        emitPlayback({ message: 'Kết nối giọng đọc đang gián đoạn. Nhấn Thử lại hoặc tải Gói Giọng AI Nội Bộ.' });
       }
     };
 
@@ -274,7 +308,11 @@
     audioEl.addEventListener('timeupdate', () => {
       if (q.status !== 'playing') return;
       q.currentTime = audioEl.currentTime || 0;
-      q.duration = Number.isFinite(audioEl.duration) && audioEl.duration > 0 ? audioEl.duration : q.duration;
+      if (Number.isFinite(audioEl.duration) && audioEl.duration > 0.1) {
+        q.duration = audioEl.duration;
+        tauriDurations.set(q.index, audioEl.duration);
+      }
+      syncWindowsMediaSession();
       emitPlayback();
     });
     audioEl.addEventListener('ended', () => advanceSegment());
@@ -285,10 +323,29 @@
       };
       safeSet('play', () => void adapter.startQueue(null));
       safeSet('pause', () => void adapter.pauseQueue());
-      safeSet('previoustrack', () => void playSegmentAt(Math.max(0, q.index - 1), 0));
-      safeSet('nexttrack', () => void playSegmentAt(Math.min(q.segments.length - 1, q.index + 1), 0));
-      safeSet('seekbackward', () => { audioEl.currentTime = Math.max(0, (audioEl.currentTime || 0) - 10); });
-      safeSet('seekforward', () => { audioEl.currentTime = Math.min(audioEl.duration || 0, (audioEl.currentTime || 0) + 10); });
+      safeSet('previoustrack', () => {
+        const ch = currentChapterProgress();
+        if (ch.chapterTime > 5 || ch.chapterIndex === 0) void playSegmentAt(q.chapters[ch.chapterIndex]?.startIndex || 0, 0);
+        else void playSegmentAt(q.chapters[ch.chapterIndex - 1]?.startIndex || 0, 0);
+      });
+      safeSet('nexttrack', () => {
+        const ch = currentChapterProgress();
+        if (ch.chapterIndex + 1 < q.chapters.length) void playSegmentAt(q.chapters[ch.chapterIndex + 1].startIndex, 0);
+        else emitPlayback({ nextBookRequested: true });
+      });
+      safeSet('seekbackward', e => {
+        const target = window.NarrationModel?.locateByDelta?.(q.segments, q.index, q.currentTime, -(e?.seekOffset || 15), tauriDurations);
+        if (target) void playSegmentAt(target.index, target.seconds);
+      });
+      safeSet('seekforward', e => {
+        const target = window.NarrationModel?.locateByDelta?.(q.segments, q.index, q.currentTime, +(e?.seekOffset || 15), tauriDurations);
+        if (target) void playSegmentAt(target.index, target.seconds);
+      });
+      safeSet('seekto', e => {
+        const ch = currentChapterProgress();
+        const target = window.NarrationModel?.locateInChapter?.(q.segments, q.chapters, ch.chapterIndex, e?.seekTime || 0, tauriDurations);
+        if (target) void playSegmentAt(target.index, target.seconds);
+      });
     }
 
     const adapter = {
@@ -332,6 +389,7 @@
           q.repeatB = Number(opts.repeatB ?? -1);
           q.sleepDeadlineMs = Number(opts.sleepDeadlineMs) || 0;
           q.segments = opts.segments;
+          q.chapters = window.NarrationModel?.buildChapters ? window.NarrationModel.buildChapters(q.segments, q.bookTitle) : [];
           await playSegmentAt(Number(opts.startIndex) || 0, Number(opts.startSeconds) || 0);
           return;
         }
@@ -623,6 +681,8 @@
   // 2. Native Background / Lock-Screen Audio Queue Delegation
   let activeDocKey = '';
   let activeSegments = [];
+  let activeChapters = [];
+  const nativeDurationMap = new Map();
   let nativeSnapshot = null;
 
   function setupNativeAudioBridge() {
@@ -634,11 +694,32 @@
     window.addEventListener('dharma-document', e => {
       activeDocKey = e.detail?.key || '';
       activeSegments = Array.isArray(e.detail?.chunks) ? e.detail.chunks : [];
+      activeChapters = Array.isArray(e.detail?.chapters) && e.detail.chapters.length
+        ? e.detail.chapters
+        : (window.NarrationModel?.buildChapters ? window.NarrationModel.buildChapters(activeSegments) : []);
+      nativeDurationMap.clear();
     });
 
+    const getBridgeSegments = () => (ab.segments?.length ? ab.segments : activeSegments);
+    const getBridgeChapters = () => {
+      if (ab.chapters?.length) return ab.chapters;
+      if (activeChapters.length) return activeChapters;
+      const segs = getBridgeSegments();
+      return window.NarrationModel?.buildChapters ? window.NarrationModel.buildChapters(segs) : [];
+    };
+    const computeBridgeChapter = (idx, curSec) => {
+      const segs = getBridgeSegments();
+      const chs = getBridgeChapters();
+      if (window.NarrationModel?.chapterProgress && segs.length) {
+        return window.NarrationModel.chapterProgress(segs, chs, idx, curSec, nativeDurationMap);
+      }
+      return { chapterIndex: 0, chapterCount: 1, chapterTitle: '', startIndex: 0, endIndex: Math.max(0, segs.length - 1), chapterTime: curSec || 0, chapterDuration: 1, chapterEstimated: false };
+    };
+
     const syncQueueAndPlay = async (startIndex, startSeconds = 0) => {
-      const segments = ab.segments?.length ? ab.segments : activeSegments;
+      const segments = getBridgeSegments();
       if (!segments.length) return;
+      const chapters = getBridgeChapters();
       const st = ab.state;
       const itemTitle = window.DharmaPlayerStore?.state?.item?.title || document.getElementById('reader-book-title')?.textContent || 'Thư viện Chánh Pháp';
       const voice = (st.voice || 'offline:vieneu-thien-tam-duc').replace(/^(?:online|offline):/, '');
@@ -655,13 +736,21 @@
         repeatA: Number(st.repeatA ?? -1),
         repeatB: Number(st.repeatB ?? -1),
         sleepDeadlineMs: Number(st.deadline) || 0,
-        segments: segments.map((seg, idx) => ({
-          index: idx,
-          block: seg.block || '',
-          heading: seg.heading || '',
-          sourceOffset: seg.sourceOffset || 0,
-          text: window.LibraryPronunciation?.prepare ? window.LibraryPronunciation.prepare(seg.text || '') : (seg.text || ''),
-        })),
+        segments: segments.map((seg, idx) => {
+          const ch = chapters.find(c => c.startIndex <= idx && idx <= c.endIndex);
+          return {
+            index: idx,
+            block: seg.block || '',
+            heading: seg.heading || '',
+            chapterIndex: ch ? ch.chapterIndex : (seg.chapterIndex ?? 0),
+            chapterCount: chapters.length || (seg.chapterCount ?? 1),
+            chapterTitle: ch ? ch.title : (seg.chapterTitle || seg.heading || ''),
+            baseSeconds: Number(seg.baseSeconds) > 0 ? seg.baseSeconds : (window.NarrationModel?.estimateSeconds?.(seg, 1) || 3.0),
+            pauseBefore: seg.pauseBefore || 0,
+            sourceOffset: seg.sourceOffset || 0,
+            text: window.LibraryPronunciation?.prepare ? window.LibraryPronunciation.prepare(seg.text || '') : (seg.text || ''),
+          };
+        }),
       });
     };
 
@@ -669,11 +758,16 @@
       if (!payload) return;
       nativeSnapshot = payload;
       const key = payload.bookKey || activeDocKey;
-      const seg = (ab.segments || activeSegments)[payload.index];
+      const segs = getBridgeSegments();
+      const idx = payload.index ?? 0;
+      const seg = segs[idx];
+      if (Number.isInteger(idx) && Number.isFinite(payload.duration) && payload.duration > 0.15) {
+        nativeDurationMap.set(idx, payload.duration);
+      }
       if (key && seg && window.LibraryStore) {
         window.LibraryStore.write('listen:' + key, {
           block: seg.block,
-          index: payload.index,
+          index: idx,
           chunk: seg.chunk || 0,
           sourceOffset: seg.sourceOffset || 0,
           segmentation: window.NarrationModel?.VERSION || 2,
@@ -685,23 +779,34 @@
       if (follow && seg && payload.status === 'playing') {
         window.Reader?.followAudio?.(seg.block, seg.sourceOffset || 0);
       }
+      const fallbackCh = computeBridgeChapter(idx, payload.currentTime || 0);
+      const chapterDuration = Number.isFinite(payload.chapterDuration) && payload.chapterDuration > 0 ? payload.chapterDuration : fallbackCh.chapterDuration;
+      const chapterTime = Number.isFinite(payload.chapterTime) ? Math.min(chapterDuration, payload.chapterTime) : fallbackCh.chapterTime;
       window.dispatchEvent(new CustomEvent('dharma-audio', {
         detail: {
           ...ab.state,
           key,
           status: payload.status || 'idle',
-          index: payload.index ?? 0,
-          count: (ab.segments || activeSegments).length,
+          index: idx,
+          count: segs.length,
           currentText: seg?.text || '',
           currentTime: payload.currentTime || 0,
           duration: payload.duration || 1,
+          chapterIndex: Number.isInteger(payload.chapterIndex) ? payload.chapterIndex : fallbackCh.chapterIndex,
+          chapterCount: Number.isInteger(payload.chapterCount) && payload.chapterCount > 0 ? payload.chapterCount : fallbackCh.chapterCount,
+          chapterTitle: payload.chapterTitle || fallbackCh.chapterTitle,
+          chapterTime,
+          chapterDuration,
+          chapterEstimated: payload.chapterEstimated ?? fallbackCh.chapterEstimated,
           voice: 'offline:' + (payload.voice || 'vieneu-thien-tam-duc'),
           voiceLabel: payload.voiceLabel || 'Giọng AI Chánh Pháp',
           packActive: Boolean(payload.packActive),
           message: payload.message || '',
         },
       }));
-      if (payload.finished) {
+      if (payload.nextBookRequested) {
+        void window.DharmaPlayerStore?.nextItem?.() || window.dispatchEvent(new CustomEvent('sutra-finished', { detail: { key } }));
+      } else if (payload.finished) {
         window.dispatchEvent(new CustomEvent('sutra-finished', { detail: { key } }));
       }
     });
@@ -716,16 +821,26 @@
         if (!nativeSnapshot || (base.key && nativeSnapshot.bookKey && base.key !== nativeSnapshot.bookKey)) {
           return base;
         }
-        const segs = ab.segments?.length ? ab.segments : activeSegments;
+        const segs = getBridgeSegments();
         const idx = Number.isInteger(nativeSnapshot.index) ? nativeSnapshot.index : base.index;
+        const curSec = Number.isFinite(nativeSnapshot.currentTime) ? nativeSnapshot.currentTime : base.currentTime;
+        const ch = computeBridgeChapter(idx, curSec);
+        const chapterDuration = Number.isFinite(nativeSnapshot.chapterDuration) && nativeSnapshot.chapterDuration > 0 ? nativeSnapshot.chapterDuration : ch.chapterDuration;
+        const chapterTime = Number.isFinite(nativeSnapshot.chapterTime) ? Math.min(chapterDuration, nativeSnapshot.chapterTime) : ch.chapterTime;
         return {
           ...base,
           status: nativeSnapshot.status || base.status,
           index: idx,
           count: segs.length || base.count,
           currentText: segs[idx]?.text || base.currentText || '',
-          currentTime: Number.isFinite(nativeSnapshot.currentTime) ? nativeSnapshot.currentTime : base.currentTime,
+          currentTime: curSec,
           duration: Number.isFinite(nativeSnapshot.duration) && nativeSnapshot.duration > 0 ? nativeSnapshot.duration : base.duration,
+          chapterIndex: Number.isInteger(nativeSnapshot.chapterIndex) ? nativeSnapshot.chapterIndex : ch.chapterIndex,
+          chapterCount: Number.isInteger(nativeSnapshot.chapterCount) && nativeSnapshot.chapterCount > 0 ? nativeSnapshot.chapterCount : ch.chapterCount,
+          chapterTitle: nativeSnapshot.chapterTitle || ch.chapterTitle,
+          chapterTime,
+          chapterDuration,
+          chapterEstimated: nativeSnapshot.chapterEstimated ?? ch.chapterEstimated,
           packActive: Boolean(nativeSnapshot.packActive),
           message: nativeSnapshot.message ?? base.message,
         };
@@ -738,6 +853,7 @@
         const nextKey = args[1];
         if (nextKey && nativeSnapshot?.bookKey && nextKey !== nativeSnapshot.bookKey) {
           nativeSnapshot = null;
+          nativeDurationMap.clear();
         }
         return origConnect(...args);
       };
@@ -757,7 +873,7 @@
       nativeSnapshot = null;
     };
     ab.seekChunk = (idx, sec = 0, resume = true) => {
-      const clamped = Math.max(0, Math.min((ab.segments?.length || activeSegments.length || 1) - 1, Number(idx) || 0));
+      const clamped = Math.max(0, Math.min((getBridgeSegments().length || 1) - 1, Number(idx) || 0));
       if (resume) return syncQueueAndPlay(clamped, sec);
       if (nativeSnapshot) {
         nativeSnapshot = { ...nativeSnapshot, index: clamped, currentTime: Math.max(0, Number(sec) || 0) };
@@ -767,8 +883,48 @@
     ab.seekTime = sec => plugin.seekQueue?.({
       index: nativeSnapshot?.index ?? ab.state.index,
       seconds: Math.max(0, Number(sec) || 0),
-      resume: (nativeSnapshot?.status || ab.state.status) === 'playing',
+      resume: ['playing', 'loading'].includes(nativeSnapshot?.status || ab.state.status),
     });
+    ab.seekChapterTime = (chapterSec, resume = ['playing', 'loading'].includes(nativeSnapshot?.status || ab.state.status)) => {
+      const segs = getBridgeSegments(), chs = getBridgeChapters();
+      if (!segs.length || !window.NarrationModel?.locateInChapter) return ab.seekTime(chapterSec);
+      const curCh = computeBridgeChapter(nativeSnapshot?.index ?? ab.state.index, nativeSnapshot?.currentTime ?? ab.state.currentTime);
+      const target = window.NarrationModel.locateInChapter(segs, chs, curCh.chapterIndex, chapterSec, nativeDurationMap);
+      if (target.index === (nativeSnapshot?.index ?? ab.state.index)) return ab.seekTime(target.seconds);
+      return ab.seekChunk(target.index, target.seconds, resume);
+    };
+    ab.skipSeconds = deltaSec => {
+      const segs = getBridgeSegments();
+      if (!segs.length || !window.NarrationModel?.locateByDelta) return ab.seekTime((ab.state.currentTime || 0) + (Number(deltaSec) || 0));
+      const curIdx = nativeSnapshot?.index ?? ab.state.index;
+      const curSec = nativeSnapshot?.currentTime ?? ab.state.currentTime;
+      const target = window.NarrationModel.locateByDelta(segs, curIdx, curSec, deltaSec, nativeDurationMap);
+      const resume = ['playing', 'loading'].includes(nativeSnapshot?.status || ab.state.status);
+      if (target.index === curIdx) return ab.seekTime(target.seconds);
+      return ab.seekChunk(target.index, target.seconds, resume);
+    };
+    ab.nextChapter = () => {
+      const chs = getBridgeChapters();
+      if (!chs.length) return false;
+      const curCh = computeBridgeChapter(nativeSnapshot?.index ?? ab.state.index, nativeSnapshot?.currentTime ?? ab.state.currentTime);
+      if (curCh.chapterIndex + 1 < chs.length) {
+        void ab.seekChunk(chs[curCh.chapterIndex + 1].startIndex, 0, ['playing', 'loading'].includes(nativeSnapshot?.status || ab.state.status));
+        return true;
+      }
+      return false;
+    };
+    ab.prevChapter = () => {
+      const chs = getBridgeChapters();
+      if (!chs.length) return false;
+      const curCh = computeBridgeChapter(nativeSnapshot?.index ?? ab.state.index, nativeSnapshot?.currentTime ?? ab.state.currentTime);
+      const resume = ['playing', 'loading'].includes(nativeSnapshot?.status || ab.state.status);
+      if (curCh.chapterTime > 5 || curCh.chapterIndex === 0) {
+        void ab.seekChunk(chs[curCh.chapterIndex]?.startIndex || 0, 0, resume);
+        return true;
+      }
+      void ab.seekChunk(chs[curCh.chapterIndex - 1]?.startIndex || 0, 0, resume);
+      return true;
+    };
     ab.setRepeat = (mode, target = 0) => {
       origSetRepeat?.(mode, target);
       return plugin.updateQueueOptions?.({ repeatMode: mode, repeatTarget: Number(target) || 0 });

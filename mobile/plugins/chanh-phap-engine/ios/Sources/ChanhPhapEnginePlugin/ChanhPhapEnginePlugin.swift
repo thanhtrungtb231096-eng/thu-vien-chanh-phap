@@ -161,10 +161,20 @@ public class ChanhPhapEnginePlugin: CAPPlugin, CAPBridgedPlugin {
             guard let obj = rawItem as? JSObject else { return nil }
             let segIdx = (obj["index"] as? NSNumber)?.intValue ?? idx
             let srcOff = (obj["sourceOffset"] as? NSNumber)?.intValue ?? 0
+            let chIdx = (obj["chapterIndex"] as? NSNumber)?.intValue ?? -1
+            let chCnt = (obj["chapterCount"] as? NSNumber)?.intValue ?? 0
+            let chTitle = (obj["chapterTitle"] as? String) ?? ""
+            let baseSec = (obj["baseSeconds"] as? NSNumber)?.doubleValue ?? 0.0
+            let pauseMs = (obj["pauseBefore"] as? NSNumber)?.intValue ?? 0
             return QueueSegmentItem(
                 index: segIdx,
                 block: (obj["block"] as? String) ?? "",
                 heading: (obj["heading"] as? String) ?? "",
+                chapterIndex: chIdx,
+                chapterCount: chCnt,
+                chapterTitle: chTitle,
+                baseSeconds: baseSec,
+                pauseBefore: pauseMs,
                 sourceOffset: srcOff,
                 text: (obj["text"] as? String) ?? ""
             )

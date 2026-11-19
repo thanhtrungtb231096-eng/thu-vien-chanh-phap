@@ -186,6 +186,11 @@ class ChanhPhapEnginePlugin : Plugin() {
                         index = obj.optInt("index", i),
                         block = obj.optString("block", ""),
                         heading = obj.optString("heading", ""),
+                        chapterIndex = obj.optInt("chapterIndex", -1),
+                        chapterCount = obj.optInt("chapterCount", 0),
+                        chapterTitle = obj.optString("chapterTitle", ""),
+                        baseSeconds = obj.optDouble("baseSeconds", 0.0),
+                        pauseBefore = obj.optInt("pauseBefore", 0),
                         sourceOffset = obj.optInt("sourceOffset", 0),
                         text = obj.optString("text", "")
                     )

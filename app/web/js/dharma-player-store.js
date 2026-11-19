@@ -62,6 +62,14 @@
     if (audio.index + 1 < audio.count) return Audiobook.seekChunk(audio.index + 1, 0, ['playing', 'loading'].includes(audio.status));
     return nextItem();
   }
+  async function nextChapter() {
+    if (Audiobook.nextChapter?.()) return true;
+    return nextItem();
+  }
+  function prevChapter() {
+    if (Audiobook.prevChapter) return Audiobook.prevChapter();
+    return Audiobook.seekChunk(Audiobook.state.index - 1);
+  }
   async function nextItem() {
     if (state.queue.length) { const item = state.queue.shift(); persistQueue(); return playItem(item, {restart:true}); }
     if (CollectionPlayer.isActive) { const s = CollectionPlayer.state; if (s.current + 1 < s.total) return CollectionPlayer.jump(s.current + 1); }
@@ -99,14 +107,51 @@
     storage.write('favorites', list.some(x => x.key === key) ? list.filter(x => x.key !== key) : [{ type, id, key, title }, ...list]);
     LibraryUI.refreshShelf(); LibraryUI.decorate(); emit();
   }
+  let lastMediaMetaSig = '';
+  function syncLockScreenMetadata(detail = {}) {
+    if (!('mediaSession' in navigator) || !('MediaMetadata' in window)) return;
+    const bookTitle = state.item?.title || 'Thư Viện Chánh Pháp';
+    const chCount = Number(detail.chapterCount) || 0;
+    const chIdx = Number(detail.chapterIndex) || 0;
+    const chTitle = String(detail.chapterTitle || '').trim();
+    const title = chCount > 1 && chTitle && chTitle.toLowerCase() !== bookTitle.toLowerCase()
+      ? `${chTitle} — ${bookTitle}`
+      : bookTitle;
+    const partBadge = chCount > 1 ? `Phần ${chIdx + 1}/${chCount}` : (detail.count ? 'Trọn bản kinh' : 'Thư viện Chánh Pháp');
+    const cleanVoice = String(detail.voiceLabel || '').replace(/\s*·\s*Giọng tổng hợp$/u, '').trim();
+    const artist = cleanVoice ? `${partBadge} · ${cleanVoice}` : partBadge;
+    const album = state.item?.title ? `${state.item.title} · Đại Thư Viện Chánh Pháp` : 'Đại Thư Viện Chánh Pháp';
+    const sig = `${title}|${artist}|${album}`;
+    if (sig === lastMediaMetaSig) return;
+    lastMediaMetaSig = sig;
+    try {
+      const artwork = typeof location !== 'undefined' && /^https?:/i.test(location.protocol || '')
+        ? [
+            { src: new URL('/web-thuvien/design/library-icon-192.png', location.origin).href, sizes: '192x192', type: 'image/png' },
+            { src: new URL('/web-thuvien/design/library-icon-512.png', location.origin).href, sizes: '512x512', type: 'image/png' },
+          ]
+        : [];
+      navigator.mediaSession.metadata = new MediaMetadata({ title, artist, album, ...(artwork.length ? { artwork } : {}) });
+    } catch { /* Optional browser capability */ }
+  }
   function init() {
     state.queue = storage.read('dharma-queue', []).filter(x => x && resolve(x)).slice(0, 500);
     window.addEventListener('dharma-audio', e => {
-      state.playback = e.detail;
+      const d = e.detail || {};
+      state.playback = d;
       if ('mediaSession' in navigator) {
-        navigator.mediaSession.playbackState = e.detail.status === 'playing' ? 'playing' : e.detail.status === 'paused' ? 'paused' : 'none';
-        if (e.detail.duration > 0 && navigator.mediaSession.setPositionState) {
-          try { navigator.mediaSession.setPositionState({ duration: e.detail.duration, playbackRate: e.detail.rate, position: Math.min(e.detail.currentTime, e.detail.duration) }); } catch { /* Unsupported position tracking. */ }
+        syncLockScreenMetadata(d);
+        navigator.mediaSession.playbackState = ['playing', 'loading'].includes(d.status) ? 'playing' : d.status === 'paused' ? 'paused' : 'none';
+        const lockDur = d.chapterDuration > 0 ? d.chapterDuration : d.duration;
+        const lockPos = d.chapterDuration > 0 ? d.chapterTime : d.currentTime;
+        if (lockDur > 0 && navigator.mediaSession.setPositionState) {
+          try {
+            navigator.mediaSession.setPositionState({
+              duration: lockDur,
+              playbackRate: Number(d.rate) > 0 ? Number(d.rate) : 1,
+              position: Math.max(0, Math.min(Number(lockPos) || 0, lockDur)),
+            });
+          } catch { /* Unsupported position tracking. */ }
         }
       }
       emit();
@@ -115,7 +160,8 @@
       state.chunks = e.detail.chunks;
       const split = e.detail.key.indexOf(':');
       state.item = resolve({ type: e.detail.key.slice(0, split), id: e.detail.key.slice(split + 1) });
-      if (state.item && 'mediaSession' in navigator && 'MediaMetadata' in window) navigator.mediaSession.metadata = new MediaMetadata({ title: state.item.title, artist: 'Thư viện Chánh Pháp', album: 'Kinh điển tiếng Việt' });
+      lastMediaMetaSig = '';
+      if (state.item) syncLockScreenMetadata(Audiobook.state || {});
       emit();
     });
     window.addEventListener('sutra-finished', e => {
@@ -125,11 +171,19 @@
       else if (Audiobook.state.repeatMode === 'all') Audiobook.start();
     });
     if ('mediaSession' in navigator) {
-      const handlers = { play: () => Audiobook.start(), pause: () => Audiobook.pause(), nexttrack: next, previoustrack: () => Audiobook.seekChunk(Audiobook.state.index - 1), seekbackward: e => Audiobook.seekTime(Audiobook.state.currentTime - (e.seekOffset || 10)), seekforward: e => Audiobook.seekTime(Audiobook.state.currentTime + (e.seekOffset || 10)), seekto: e => Audiobook.seekTime(e.seekTime) };
+      const handlers = {
+        play: () => Audiobook.start(),
+        pause: () => Audiobook.pause(),
+        nexttrack: () => void nextChapter(),
+        previoustrack: () => prevChapter(),
+        seekbackward: e => Audiobook.skipSeconds ? Audiobook.skipSeconds(-(e.seekOffset || 15)) : Audiobook.seekTime(Audiobook.state.currentTime - (e.seekOffset || 10)),
+        seekforward: e => Audiobook.skipSeconds ? Audiobook.skipSeconds(+(e.seekOffset || 15)) : Audiobook.seekTime(Audiobook.state.currentTime + (e.seekOffset || 10)),
+        seekto: e => Audiobook.seekChapterTime ? Audiobook.seekChapterTime(e.seekTime) : Audiobook.seekTime(e.seekTime),
+      };
       Object.entries(handlers).forEach(([name, fn]) => { try { navigator.mediaSession.setActionHandler(name, fn); } catch { /* Optional browser capability. */ } });
     }
   }
-  window.DharmaPlayerStore = { state, init, resolve, playItem, cancel, toggle, retry, next, enqueue, notes, addNote, removeNote, favorite, message,
+  window.DharmaPlayerStore = { state, init, resolve, playItem, cancel, toggle, retry, next, nextChapter, prevChapter, enqueue, notes, addNote, removeNote, favorite, message,
     playReader: () => playItem(Reader.state.item),
     removeQueue(index) { state.queue.splice(index, 1); persistQueue(); },
     moveQueue(index, delta) { const to = index + delta; if (to < 0 || to >= state.queue.length) return; [state.queue[index], state.queue[to]] = [state.queue[to], state.queue[index]]; persistQueue(); },
